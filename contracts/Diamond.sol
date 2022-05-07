@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity 0.8.13;
 
 /******************************************************************************\
-* Author: Ben Sparks
-* Foundry Diamond Demo
-* 
 * Uses Nick Mudge's diamond-1 as reference: https://github.com/mudgen/diamond-1
 /******************************************************************************/
 
