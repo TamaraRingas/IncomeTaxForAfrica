@@ -1,12 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-interface IERC165 {
-    /// @notice Query if a contract implements an interface
-    /// @param interfaceId The interface identifier, as specified in ERC-165
-    /// @dev Interface identification is specified in ERC-165. This function
-    ///  uses less than 30,000 gas.
-    /// @return `true` if the contract implements `interfaceID` and
-    ///  `interfaceID` is not 0xffffffff, `false` otherwise
-    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+interface ERC173 /* is ERC165 */ {
+    /// @dev This emits when ownership of a contract changes.    
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    /// @notice Get the address of the owner    
+    /// @return The address of the owner.
+    function owner() view external returns(address);
+	
+    /// @notice Set the address of the new owner of the contract
+    /// @dev Set _newOwner to address(0) to renounce any ownership.
+    /// @param _newOwner The address of the new owner of the contract    
+    function transferOwnership(address _newOwner) external;	
 }
