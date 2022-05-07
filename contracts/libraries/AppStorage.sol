@@ -7,11 +7,11 @@ struct User {
     address walletAddress;
 }
 
-struct Project {
-    uint256 projectID;
+struct Tender {
+    uint256 tenderID;
     uint256 sectorID;
     uint256 projectBudget;
-    ProjectState _projectState;
+    TenderState _tenderState;
     uint256 numberOfVotes;
     //Out of 10: 10 being high priority
     uint256 priorityPoints;
@@ -43,8 +43,8 @@ struct Sector {
     string sectorName;
 }
 
-struct Tender {
-    uint256 tenderID;
+struct Porposal {
+    uint256 proposalID;
     uint256 projectID;
     uint256 sectorID;
     uint256 priceCharged;
@@ -54,13 +54,13 @@ struct Tender {
     string companyName;
 }
 
-enum ProjectState {
+enum TenderState {
     VOTING,
     APPROVED,
     DECLINED,
-    TENDERING,
-    TENDER_VOTING,
-    GOVERNMENT_VOTING,
+    PROPOSALS_OPEN,
+    PROPOSALS_VOTING,
+    GOVERNMENT_PROPOSAL_VOTING,
     AWARDED,
     DEVELOPMENT,
     CLOSED
