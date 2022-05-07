@@ -1,6 +1,64 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
+enum TenderState {
+    VOTING,
+    APPROVED,
+    DECLINED,
+    TENDERING,
+    TENDER_VOTING,
+    GOVERNMENT_VOTING,
+    AWARDED,
+    DEVELOPMENT,
+    CLOSED
+}
+
+struct Tender {
+    uint256 tenderID;
+    uint256 sectorID;
+    uint256 projectBudget;
+    TenderState _tenderState;
+    uint256 numberOfVotes;
+    //Out of 10: 10 being high priority
+    uint256 priorityPoints;
+}
+
+struct TaxPayerCompany {
+    uint256 companyID;
+    address wallet;
+    string name;
+}
+
+struct Citizen {
+    uint256 citizenID;
+    uint256 citizenIdNumber;
+    uint256 taxPercentage;
+    uint256 primarySectoryID;
+    uint256 secondarySectorID;
+    uint256 totalTaxPaid;
+    //Total taxPaid / 1000
+    uint256 totalPriorityPoints;
+    string firstName;
+    string secondName;
+}
+
+struct Sector {
+    uint256 sectorID;
+    uint256 numberOfProjects;
+    string sectorName;
+}
+
+struct Proposal {
+    uint256 proposalID;
+    uint256 projectID;
+    uint256 sectorID;
+    uint256 priceCharged;
+    uint256 numberOfPublicVotes;
+    uint256 numberOfGovernmentVotes;
+    address headOfProject;
+    string companyName;
+}
+
 struct User {
     string name;
     uint96 age; // uint96 = 8 bytes, to pack with 20 byte address below
