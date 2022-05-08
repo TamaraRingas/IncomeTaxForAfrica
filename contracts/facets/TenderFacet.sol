@@ -49,15 +49,10 @@ contract TenderFacet is ITenderFacet {
 
     }
 
-    function voteForTender(uint256 _tenderID, uint256 _citizenID) public onlyCitizen(_citizenID) {
-        require(
-            tenders[_tenderID]._tenderState == TenderState.VOTING,
-            "TENDER NOT IN VOTING STAGE"
-        );
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         VIEW FUNCTIONS        --------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
 
-        tenders[_tenderID].numberOfVotes++;
-        
-    }
 
     function viewAllTenders() public view returns (Tender[] memory) {
         
@@ -86,17 +81,30 @@ contract TenderFacet is ITenderFacet {
         return tempTender;
     }
 
-    function getTender(uint256 _tenderID)
-        external
-        view
-        returns (Tender memory)
-    {
+    function getTender(uint256 _tenderID) external view returns (Tender memory){
         return tenders[_tenderID];
     }
 
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+    function voteForTender(uint256 _tenderID, uint256 _citizenID) public onlyCitizen(_citizenID) {
+        require(
+            tenders[_tenderID]._tenderState == TenderState.VOTING,
+            "TENDER NOT IN VOTING STAGE"
+        );
+
+        tenders[_tenderID].numberOfVotes++;
+        
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         ONLY-ADMIN FUNCTIONALITY        ------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
     /** 
         Calculating whether a project should progress to next voting stage based on how many votes it recieved
-    
      */
     function closeVoting(uint256 _tenderID) public onlyAdmin(_tenderID) {
 
@@ -163,6 +171,10 @@ contract TenderFacet is ITenderFacet {
         tenders[_tenderID]._tenderState == TenderState.CLOSED;
 
     }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         MODIFIERS       ----------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
 
 
     modifier onlyAdmin(uint256 _tenderID) {
