@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
+mapping(uint256 => Proposal) proposals;
+mapping(uint256 => Citizen) citizens;
+mapping(uint256 => Sector) sectors;
+mapping(uint256 => TaxPayerCompany) companies;
+
+uint256 numberOfProjects;
+uint256 numberOfCitizens;
+uint256 numberOfSectors;
+uint256 numberOfCompanies;
+
+
 enum TenderState {
     VOTING,
     APPROVED,
@@ -13,14 +24,34 @@ enum TenderState {
     CLOSED
 }
 
+enum Province {
+    EASTERN_CAPE,
+    WESTERN_CAPE,
+    GAUTENG,
+    KWA_ZULU_NATAL,
+    NORTHERN_CAPE,
+    LIMPOPO,
+    MPUMALANGA,
+    NORTH_WEST,
+    FREESTATE
+}
+
 struct Tender {
     uint256 tenderID;
     uint256 sectorID;
-    uint256 projectBudget;
+    uint256 dateCreated;
+    uint256 closingDate;
+    Province _province;
     TenderState _tenderState;
     uint256 numberOfVotes;
+    uint256 threshold;
+
     //Out of 10: 10 being high priority
     uint256 priorityPoints;
+
+    address admin;
+
+    string placeOfTender;
 }
 
 struct TaxPayerCompany {
@@ -36,14 +67,17 @@ struct Citizen {
     uint256 primarySectoryID;
     uint256 secondarySectorID;
     uint256 totalTaxPaid;
+
     //Total taxPaid / 1000
     uint256 totalPriorityPoints;
+    address walletAddress;
     string firstName;
     string secondName;
 }
 
 struct Sector {
     uint256 sectorID;
+    Citizen[] sectorAdmins;
     uint256 numberOfProjects;
     string sectorName;
 }
