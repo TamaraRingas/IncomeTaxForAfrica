@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/ITenderFacet.sol";
-import "../libraries/AppStorage.sol";
+import {ITenderFacet} from "../interfaces/ITenderFacet.sol";
+import {AppStorage} from "../libraries/AppStorage.sol";
 
 contract TenderFacet is ITenderFacet {
 
     mapping(uint256 => Tender) public tenders;
 
-    uint256 public numberOfTenders;
+    uint256 numberOfTenders;
 
     TenderState public _tenderState;
     Province public _province;
@@ -21,11 +21,17 @@ contract TenderFacet is ITenderFacet {
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createTender() external {
+    function createTender(Tender memory _tender) external {
 
-    
+        _tender._tenderState = TenderState.VOTING;
+        _tender.tenderID = numberOfTenders;
+        _tender.numberOfVotes = 0;
+        _tender.dateCreated = block.timestamp;
+
+        tenders[numberOfTenders] = _tender;
 
         numberOfTenders++;
+
     }
 
     function voteForTender(uint256 _tenderID) external onlyCitizen {
@@ -34,54 +40,79 @@ contract TenderFacet is ITenderFacet {
             "PROJECT NOT IN VOTING STATE"
         );
 
-        _voteForProject(_projectID);
+
+        
     }
 
-    function viewAllProjects() external view returns (Project[] memory) {
-        Project[] memory tempProjects = new Project[](numberOfProjects);
+    function viewAllTenders() external view returns (Tender[] memory) {
+        
+        Tender[] memory tempTender = new Tender[](numberOfTenders);
 
-        for (uint256 i = 0; i < numberOfProjects; i++) {
-            tempProjects[i] = projects[i];
+        for (uint256 i = 0; i < numberOfTenders; i++) {
+            tempTender[i] = tenders[i];
         }
 
-        return tempProjects;
+        return tempTender;
     }
 
-    function viewSpecificSectorProjects(uint256 _sectorID)
+    function viewSpecificSectorTenders(uint256 _sectorID)
         external
         view
-        returns (Project[] memory)
+        returns (Tender[] memory)
     {
-        Project[] memory tempProjects = new Project[](numberOfProjects);
+        Tender[] memory tempTender = new Project[](numberOfTenders);
 
-        for (uint256 i = 0; i < numberOfProjects; i++) {
-            if (projects[i].sectorID == _sectorID) {
-                tempProjects[i] = projects[i];
+        for (uint256 i = 0; i < numberOfTenders; i++) {
+            if (tenders[i].sectorID == _sectorID) {
+                tempTenders[i] = tenders[i];
             }
         }
 
-        return tempProjects;
+        return tempTender;
     }
 
-    function getProject(uint256 _projectID)
+    function getTender(uint256 _tenderID)
         external
         view
-        returns (Project memory)
+        returns (Tender memory)
     {
-        return projects[_projectID];
+        return tenders[_tenderID];
     }
 
-    function calculateProjectStatus(uint256 _projectID) public onlyOwner {
-        _calculateProjectStatus(_projectID);
+    /** 
+        Calculating whether a project should progress to next voting stage based on how many votes it recieved
+
+        TODO - fugure out calculation or method to determine if the project should move forward
+    
+     */
+    function calculateProjectStatus(uint256 _tenderID) public onlyOwner {
+
+        uint256 totalProjectVotes = projects[_projectID].numberOfVotes;
+
+        if (totalProjectVotes > 10) {
+            projects[_projectID]._projectState = ProjectState.APPROVED;
+        } else {
+            projects[_projectID]._projectState = ProjectState.DECLINED;
+        }
+
     }
 
-    function closeProject(uint256 _projectID) public {
-        require(projects[projectID]._projectState == ProjectState.DEVELOPMENT);
-        _closeProject(_projectID);
+    function setThreshold(uint256 _threshold, uint256 _tenderID) public onlyAdmin(_tenderID) {
+        tenders[_tenderID].threshold = _threshold;
+
+    }
+
+    function closeTender(uint256 _tenderID) public {
+        require(tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT || block.timestamp >= tenders[_tenderID].closingDate, "");
+
+        tenders[_tenderID]._tenderState == TenderState.CLOSED;    
+
+
     }
 
     function closeProjectsTendering(uint256 _projectID) public {
         require(projects[projectID]._projectState == ProjectState.TENDERING);
+
         _closeProjectsTendering(_projectID);
     }
 
@@ -89,10 +120,7 @@ contract TenderFacet is ITenderFacet {
         _openProjectDevelopment(_tenderID);
 
     }
-    function _voteForProject() internal {
-
-    }
-
+    
     /**
         Calculating whether a project should progress to next voting stage based on how many votes it recieved
 
@@ -114,8 +142,15 @@ contract TenderFacet is ITenderFacet {
     }
 
     function _closeProject(uint256 _tenderID) internal {
-        tenders[_tenderID]._tenderState == TenderState.CLOSED;    }
+        tenders[_tenderID]._tenderState == TenderState.CLOSED;    
+    }
 
     function _closeProjectsTendering(uint256 _tenderID) internal {
-        tenders[_tenderID]._tenderState == TenderState.TENDER_VOTING;    }
+        tenders[_tenderID]._tenderState == TenderState.TENDER_VOTING;    
+    }
+
+    modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == tenders[_tenderID].admin)
+        _;
+    }
 }
