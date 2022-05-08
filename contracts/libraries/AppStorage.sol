@@ -11,19 +11,6 @@ uint256 numberOfCitizens;
 uint256 numberOfSectors;
 uint256 numberOfCompanies;
 
-
-enum TenderState {
-    VOTING,
-    APPROVED,
-    DECLINED,
-    TENDERING,
-    TENDER_VOTING,
-    GOVERNMENT_VOTING,
-    AWARDED,
-    DEVELOPMENT,
-    CLOSED
-}
-
 enum Province {
     EASTERN_CAPE,
     WESTERN_CAPE,
