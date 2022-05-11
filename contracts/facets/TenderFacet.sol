@@ -1,51 +1,39 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import {ITenderFacet} from "../interfaces/ITenderFacet.sol";
-import {AppStorage} from "../libraries/AppStorage.sol";
-import {CitizenFacet} from "./CitizenFacet.sol";
+import "../interfaces/ITenderFacet.sol";
+import "../libraries/AppStorage.sol";
+import "./CitizenFacet.sol";
 
 contract TenderFacet is ITenderFacet {
 
-    
-    enum TenderState {
-        VOTING,
-        APPROVED,
-        DECLINED,
-        PROPOSING,
-        PROPOSAL_VOTING,
-        AWARDED,
-        DEVELOPMENT,
-        CLOSED
-    }
+    AppStorage internal s;
 
-    mapping(uint256 => Tender) public tenders;
-
-    uint256 public constant SCALE = 10_000; //Scale of 10000
-
-    uint256 public numberOfTenders;
-
-    TenderState public _tenderState;
-    Province public _province;
+    address public owner;
 
     constructor() {
         owner = msg.sender;
     }
 
+    //TODO implement priority points for voting
+    //TODO events
+    //TODO check we have enough requires
+
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createTender(Tender memory _tender) public {
+    //How to send in Tender object
+    function createTender(Tender _tender) public {
 
         _tender._tenderState = TenderState.VOTING;
-        _tender.tenderID = numberOfTenders;
+        _tender.tenderID = s.numberOfTenders;
         _tender.numberOfVotes = 0;
         _tender.dateCreated = block.timestamp;
 
-        tenders[numberOfTenders] = _tender;
+        s.tenders[s.numberOfTenders] = _tender;
 
-        numberOfTenders++;
+        s.numberOfTenders++;
 
     }
 
@@ -56,25 +44,25 @@ contract TenderFacet is ITenderFacet {
 
     function viewAllTenders() public view returns (Tender[] memory) {
         
-        Tender[] memory tempTender = new Tender[](numberOfTenders);
+        Tender[] memory tempTender = new Tender[](s.numberOfTenders);
 
-        for (uint256 i = 0; i < numberOfTenders; i++) {
-            tempTender[i] = tenders[i];
+        for (uint256 i = 0; i < s.numberOfTenders; i++) {
+            tempTender[i] = s.tenders[i];
         }
 
         return tempTender;
     }
 
     function viewSpecificSectorTenders(uint256 _sectorID)
-        external
+        public
         view
         returns (Tender[] memory)
     {
-        Tender[] memory tempTender = new Tender[](numberOfTenders);
+        Tender[] memory tempTender = new Tender[](s.numberOfTenders);
 
-        for (uint256 i = 0; i < numberOfTenders; i++) {
-            if (tenders[i].sectorID == _sectorID) {
-                tempTenders[i] = tenders[i];
+        for (uint256 i = 0; i < s.numberOfTenders; i++) {
+            if (s.tenders[i].sectorID == _sectorID) {
+                tempTender[i] = s.tenders[i];
             }
         }
 
@@ -82,7 +70,7 @@ contract TenderFacet is ITenderFacet {
     }
 
     function getTender(uint256 _tenderID) external view returns (Tender memory){
-        return tenders[_tenderID];
+        return s.tenders[_tenderID];
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -91,11 +79,11 @@ contract TenderFacet is ITenderFacet {
 
     function voteForTender(uint256 _tenderID, uint256 _citizenID) public onlyCitizen(_citizenID) {
         require(
-            tenders[_tenderID]._tenderState == TenderState.VOTING,
+            s.tenders[_tenderID]._tenderState == TenderState.VOTING,
             "TENDER NOT IN VOTING STAGE"
         );
 
-        tenders[_tenderID].numberOfVotes++;
+        s.tenders[_tenderID].numberOfVotes++;
         
     }
 
@@ -108,68 +96,79 @@ contract TenderFacet is ITenderFacet {
      */
     function closeVoting(uint256 _tenderID) public onlyAdmin(_tenderID) {
 
-        uint256 totalTenderVotes = tenders[_tenderID].numberOfVotes;
-        uint256 tenderThreshold = tenders[_tenderID].threshold;
+        uint256 totalTenderVotes = s.tenders[_tenderID].numberOfVotes;
+        uint256 tenderThreshold = s.tenders[_tenderID].threshold;
 
-        if (totalTenderVotes > (CitizenFacet.numberOfCitizens() * tenderThreshold / SCALE)) {
-            tenders[_tenderID]._tenderState = TenderState.APPROVED;
+        if (totalTenderVotes > (CitizenFacet.numberOfCitizens() * tenderThreshold / 10000)) {
+            s.tenders[_tenderID]._tenderState = TenderState.APPROVED;
         } else {
-            tenders[_tenderID]._tenderState = TenderState.DECLINED;
+            s.tenders[_tenderID]._tenderState = TenderState.DECLINED;
         }
 
     }
 
     function setThreshold(uint256 _threshold, uint256 _tenderID) public onlyAdmin(_tenderID) {
-        tenders[_tenderID].threshold = _threshold;
+        s.tenders[_tenderID].threshold = _threshold;
 
     }
 
     function closeTender(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT || block.timestamp >= tenders[_tenderID].closingDate, "NOT ALLOWED TO CLOSE TENDER");
+        require(s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT || block.timestamp >= s.tenders[_tenderID].closingDate, "NOT ALLOWED TO CLOSE TENDER");
 
-        tenders[_tenderID]._tenderState == TenderState.CLOSED;    
+        s.tenders[_tenderID]._tenderState == TenderState.CLOSED;    
 
     }
 
     function openProposals(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(tenders[_tenderID]._tenderState == TenderState.APPROVED, "TENDER NOT APPROVED");
+        require(s.tenders[_tenderID]._tenderState == TenderState.APPROVED, "TENDER NOT APPROVED");
         
-        tenders[_tenderID]._tenderState == TenderState.PROPOSING;    
+        s.tenders[_tenderID]._tenderState == TenderState.PROPOSING;    
 
     }
 
     function closeProposals(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(tenders[_tenderID]._tenderState == TenderState.PROPOSING, "NOT IN PROPOSING STATE");
+        require(s.tenders[_tenderID]._tenderState == TenderState.PROPOSING, "NOT IN PROPOSING STATE");
 
-        tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING;    
+        s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING;    
     }
 
     function closeProposalVoting(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING, "NOT CURRENT VOTING");
+        require(s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING, "NOT CURRENT VOTING");
 
         //Set the winning proposals enum to successfull
 
-        tenders[_tenderID]._tenderState == TenderState.AWARDED;    
+        s.tenders[_tenderID]._tenderState == TenderState.AWARDED;    
     }
 
     function openProjectDevelopment(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(tenders[_tenderID]._tenderState == TenderState.AWARDED, "NOT AWARDED");
+        require(s.tenders[_tenderID]._tenderState == TenderState.AWARDED, "NOT AWARDED");
 
-        tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT;
+        s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT;
 
     }
 
     function closeProjectDevelopment(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT, "NOT IN DEVELOPMENT");
+        require(s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT, "NOT IN DEVELOPMENT");
 
-        tenders[_tenderID]._tenderState == TenderState.CLOSED;
+        s.tenders[_tenderID]._tenderState == TenderState.CLOSED;
 
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         ONLY-OWNER FUNCTIONALITY        ------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+    function setAdmin(uint256 _tenderID, address _admin) public onlyOwner(){
+
+        //Require
+
+        s.tenders[_tenderID].admin = _admin;
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -178,12 +177,17 @@ contract TenderFacet is ITenderFacet {
 
 
     modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == tenders[_tenderID].admin, "ONLY ADMIN");
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
         _;
     }
 
     modifier onlyCitizen(uint256 _citizenID) {
         require(_citizenID < CitizenFacet.numberOfCitizens(), "ONLY CITIZENS");
+        _;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "ONLY OWNER");
         _;
     }
 }

@@ -1,15 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-mapping(uint256 => Proposal) proposals;
-mapping(uint256 => Citizen) citizens;
-mapping(uint256 => Sector) sectors;
-mapping(uint256 => TaxPayerCompany) companies;
-
-uint256 numberOfProjects;
-uint256 numberOfCitizens;
-uint256 numberOfSectors;
-uint256 numberOfCompanies;
+import "../interfaces/ITenderFacet.sol";
 
 enum Province {
     EASTERN_CAPE,
@@ -41,8 +33,30 @@ struct Tender {
     string placeOfTender;
 }
 
+struct AppStorage {
+
+    mapping(uint256 => Tender) tenders;
+    mapping(uint256 => Proposal) proposals;
+    mapping(uint256 => Citizen) citizens;
+    mapping(uint256 => Sector) sectors;
+    mapping(uint256 => TaxPayerCompany) companies;
+
+    //Mapping of companyID => CitizenID => salary
+    mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
+
+    uint256 numberOfProposals;
+    uint256 numberOfCitizens;
+    uint256 numberOfSectors;
+    uint256 numberOfCompanies;
+    uint256 numberOfTenders;
+
+    //TenderState _tenderState;
+    Province _province;
+}
+
 struct TaxPayerCompany {
     uint256 companyID;
+    address admin;
     address wallet;
     string name;
 }
@@ -78,19 +92,6 @@ struct Proposal {
     uint256 numberOfGovernmentVotes;
     address headOfProject;
     string companyName;
-}
-
-struct User {
-    string name;
-    uint96 age; // uint96 = 8 bytes, to pack with 20 byte address below
-    address walletAddress;
-}
-
-// All state shared across the protocol goes here
-struct AppStorage {
-    mapping(uint256 => User) users;
-    uint256 userCount;
-    User oldestUser;
 }
 
 library LibAppStorage {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import {IProposalFacet} from "./interfaces/IProposalFacet.sol";
+import "../interfaces/IProposalFacet.sol";
 
 contract ProposalFacet is IProposalFacet {
 
