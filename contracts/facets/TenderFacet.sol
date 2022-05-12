@@ -69,7 +69,7 @@ contract TenderFacet is ITenderFacet {
         return tempTender;
     }
 
-    function getTender(uint256 _tenderID) external view returns (Tender memory){
+    function getTender(uint256 _tenderID) public view returns (Tender memory){
         return s.tenders[_tenderID];
     }
 
@@ -82,6 +82,11 @@ contract TenderFacet is ITenderFacet {
             s.tenders[_tenderID]._tenderState == TenderState.VOTING,
             "TENDER NOT IN VOTING STAGE"
         );
+
+        require(s.citizens[_citizenID].totalPriorityPoints < s.tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POIINTS");
+
+        uint256 tenderPriorityPoints = s.tenders[_tenderID].priorityPoints;
+        s.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
 
         s.tenders[_tenderID].numberOfVotes++;
         
@@ -165,8 +170,7 @@ contract TenderFacet is ITenderFacet {
     //----------------------------------------------------------------------------------------------------------------------
 
     function setAdmin(uint256 _tenderID, address _admin) public onlyOwner(){
-
-        //Require
+        require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
 
         s.tenders[_tenderID].admin = _admin;
     }
