@@ -27,15 +27,10 @@ contract TenderFacet is ITenderFacet {
         owner = msg.sender;
     }
 
-    //TODO implement priority points for voting
-    //TODO events
-    //TODO check we have enough requires
-
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    //How to send in Tender object
     function createTender(Tender _tender) public {
 
         _tender._tenderState = TenderState.VOTING;
@@ -100,8 +95,8 @@ contract TenderFacet is ITenderFacet {
         require(s.citizens[_citizenID].totalPriorityPoints < s.tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POIINTS");
 
         uint256 tenderPriorityPoints = s.tenders[_tenderID].priorityPoints;
+        
         s.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
-
         s.tenders[_tenderID].numberOfVotes++;
 
         emit VoteSubmitted(msg.sender, _tenderID, s.tenders[_tenderID].numberOfVotes);
