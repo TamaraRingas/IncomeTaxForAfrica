@@ -5,17 +5,6 @@ import "../libraries/AppStorage.sol";
 
 interface ITenderFacet {
 
-    enum TenderState {
-        VOTING,
-        APPROVED,
-        DECLINED,
-        PROPOSING,
-        PROPOSAL_VOTING,
-        AWARDED,
-        DEVELOPMENT,
-        CLOSED
-    }
-
     function createTender() external;
 
     function viewAllTenders() external view returns (Tender[] calldata);

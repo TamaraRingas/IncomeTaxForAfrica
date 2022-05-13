@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ITaxPayerCompanyFacet.sol";
 import "../libraries/AppStorage.sol";
 
@@ -10,8 +11,6 @@ contract TaxPayerCompanyFacet {
     //TODO view functions
 
     AppStorage internal s;
-
-    uint256 private SCALE = 10000;
 
     IERC20 public USDC;
 
@@ -35,9 +34,7 @@ contract TaxPayerCompanyFacet {
     function createCompany(TaxPayerCompany _company) public {
 
         _company.companyID = s.numberOfCompanies;
-
         s.companies[s.numberOfCompanies] = _company;
-
         s.numberOfCompanies++;
 
         emit companyCreated(_company.companyID);
@@ -73,30 +70,23 @@ contract TaxPayerCompanyFacet {
 
         uint256 employeeTaxPercentage = s.citizens[_citizenID].taxPercentage;
         uint256 employeeSalary = s.employeeSalaries[_companyID][_citizenID];
-
         uint256 employeeTax = employeeTaxPercentage * employeeSalary / SCALE;
+        uint256 priorityPoints = employeeSalary / 1000;
 
         require(USDC.balanceOf(treasuryAddress) > employeeTax, "NOT ENOUGH FUNDS");
 
-        //Increase tax paid of citizen
         s.citizens[_citizenID].totalTaxPaid += employeeTax;
-        
-        uint256 priorityPoints = employeeSalary / 1000;
-        
-        //Increase priority points
         s.citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
         //TODO could someone call this and increase their points without the transfer?
 
-        //Pay the employeeTax to treasury
-        require(USDC.transfer(_treasury, employeeTax), "TRANSFER FAILED");
+        require(USDC.transfer(treasuryAddress, employeeTax), "TRANSFER FAILED");
 
     }
 
     function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary) public onlyAdmin (_companyID){
         require(_newSalary > 0, "SALARY TOO SMALL");
         require(_citizenID <= s.numberOfCitizens, "NOT A VALID CITIZEN ID");
-
 
         uint256 newTaxPercentage = calculateTax(_newSalary);
 

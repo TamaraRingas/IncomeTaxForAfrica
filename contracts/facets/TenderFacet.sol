@@ -3,7 +3,6 @@ pragma solidity 0.8.13;
 
 import "../interfaces/ITenderFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
-import "./CitizenFacet.sol";
 
 contract TenderFacet is ITenderFacet {
 
@@ -12,7 +11,7 @@ contract TenderFacet is ITenderFacet {
     address public owner;
 
     event TenderCreated(uint256 _id, uint256 _dateCreated);
-    event VoteSubmitted(address _voter, uint526 _tenderVotedFor, uint256 _tendersNumberOfVotes);
+    event VoteSubmitted(address _voter, uint256 _tenderVotedFor, uint256 _tendersNumberOfVotes);
     event VoteClosed(uint256 _tenderVoteIsClosedFor);
     event UpdatedThreshold(uint256 _oldValue, uint256 _newValue);
     event TenderClosed(uint256 _tenderThatIsClosed);
@@ -171,7 +170,7 @@ contract TenderFacet is ITenderFacet {
 
         s.tenders[_tenderID]._tenderState == TenderState.AWARDED; 
 
-        emit ProposalVotingClosed(_tenderID);s   
+        emit ProposalVotingClosed(_tenderID);  
     }
 
     function openProjectDevelopment(uint256 _tenderID) public onlyAdmin(_tenderID){

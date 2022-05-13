@@ -2,5 +2,9 @@
 pragma solidity 0.8.13;
 
 interface ICitizenFacet {
+
+    function selectSectors(uint256 _citizenID, uint256 _primarySectorID, uint256 _secondarySectorID) external;
+
+    function register(Citizen _citizen) external;
     
 }

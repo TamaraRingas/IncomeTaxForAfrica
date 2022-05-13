@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/ITenderFacet.sol";
+import { ITenderFacet } from "../interfaces/ITenderFacet.sol";
 
 enum Province {
     EASTERN_CAPE,
@@ -13,6 +13,17 @@ enum Province {
     MPUMALANGA,
     NORTH_WEST,
     FREESTATE
+}
+
+enum TenderState {
+        VOTING,
+        APPROVED,
+        DECLINED,
+        PROPOSING,
+        PROPOSAL_VOTING,
+        AWARDED,
+        DEVELOPMENT,
+        CLOSED
 }
 
 struct Tender {
@@ -43,6 +54,9 @@ struct AppStorage {
 
     //Mapping of companyID => CitizenID => salary
     mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
+
+    //Mapping of citizen addresses => id's
+    mapping(address => uint256) userAddressesToIDs;
 
     uint256 numberOfProposals;
     uint256 numberOfCitizens;
@@ -112,7 +126,7 @@ contract Modifiers {
     }
 
     modifier onlyCitizen(uint256 _citizenID) {
-        require(_citizenID < CitizenFacet.numberOfCitizens(), "ONLY CITIZENS");
+        require(_citizenID < s.numberOfCitizens, "ONLY CITIZENS");
         _;
     }
 
