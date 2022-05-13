@@ -2,7 +2,7 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/ITenderFacet.sol";
-import "../libraries/AppStorage.sol";
+import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 import "./CitizenFacet.sol";
 
 contract TenderFacet is ITenderFacet {
@@ -10,6 +10,18 @@ contract TenderFacet is ITenderFacet {
     AppStorage internal s;
 
     address public owner;
+
+    event TenderCreated(uint256 _id, uint256 _dateCreated);
+    event VoteSubmitted(address _voter, uint526 _tenderVotedFor, uint256 _tendersNumberOfVotes);
+    event VoteClosed(uint256 _tenderVoteIsClosedFor);
+    event UpdatedThreshold(uint256 _oldValue, uint256 _newValue);
+    event TenderClosed(uint256 _tenderThatIsClosed);
+    event ProposalOpened(uint256 _tenderProposalOpenFor);
+    event ProposalClosed(uint256 _tenderThatProposalIsClosed);
+    event ProposalVotingClosed(uint256 _tenderThatProposalVotingIsClosed);
+    event OpenDevelopment(uint256 _tenderThatDevelopmentIsOpen);
+    event CloseDevelopment(uint256 _tenderThatDevelopmentIsClosed);
+    event UpdateAdmin(uint256 _tenderAdminIsUpdated, address _oldAdmin, address _newAdmin);
 
     constructor() {
         owner = msg.sender;
@@ -34,6 +46,8 @@ contract TenderFacet is ITenderFacet {
         s.tenders[s.numberOfTenders] = _tender;
 
         s.numberOfTenders++;
+
+        emit TenderCreated(_tender.tenderID, _tender.dateCreated);
 
     }
 
@@ -89,6 +103,8 @@ contract TenderFacet is ITenderFacet {
         s.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
 
         s.tenders[_tenderID].numberOfVotes++;
+
+        emit VoteSubmitted(msg.sender, _tenderID, s.tenders[_tenderID].numberOfVotes);
         
     }
 
@@ -110,10 +126,16 @@ contract TenderFacet is ITenderFacet {
             s.tenders[_tenderID]._tenderState = TenderState.DECLINED;
         }
 
+        emit VoteClosed(_tenderID);
+
     }
 
     function setThreshold(uint256 _threshold, uint256 _tenderID) public onlyAdmin(_tenderID) {
+
+        uint256 oldThreshold = s.tenders[_tenderID].threshold;
         s.tenders[_tenderID].threshold = _threshold;
+
+        emit UpdatedThreshold(oldThreshold, s.tenders[_tenderID].threshold);
 
     }
 
@@ -123,6 +145,8 @@ contract TenderFacet is ITenderFacet {
 
         s.tenders[_tenderID]._tenderState == TenderState.CLOSED;    
 
+        emit TenderClosed(_tenderID);
+
     }
 
     function openProposals(uint256 _tenderID) public onlyAdmin(_tenderID){
@@ -131,13 +155,17 @@ contract TenderFacet is ITenderFacet {
         
         s.tenders[_tenderID]._tenderState == TenderState.PROPOSING;    
 
+        emit ProposalOpened(_tenderID);
+
     }
 
     function closeProposals(uint256 _tenderID) public onlyAdmin(_tenderID){
 
         require(s.tenders[_tenderID]._tenderState == TenderState.PROPOSING, "NOT IN PROPOSING STATE");
 
-        s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING;    
+        s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING;   
+
+        emit ProposalClosed(_tenderID); 
     }
 
     function closeProposalVoting(uint256 _tenderID) public onlyAdmin(_tenderID){
@@ -146,7 +174,9 @@ contract TenderFacet is ITenderFacet {
 
         //Set the winning proposals enum to successfull
 
-        s.tenders[_tenderID]._tenderState == TenderState.AWARDED;    
+        s.tenders[_tenderID]._tenderState == TenderState.AWARDED; 
+
+        emit ProposalVotingClosed(_tenderID);s   
     }
 
     function openProjectDevelopment(uint256 _tenderID) public onlyAdmin(_tenderID){
@@ -154,6 +184,8 @@ contract TenderFacet is ITenderFacet {
         require(s.tenders[_tenderID]._tenderState == TenderState.AWARDED, "NOT AWARDED");
 
         s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT;
+
+        emit OpenDevelopment(_tenderID);
 
     }
 
@@ -163,35 +195,22 @@ contract TenderFacet is ITenderFacet {
 
         s.tenders[_tenderID]._tenderState == TenderState.CLOSED;
 
+        emit CloseDevelopment(_tenderID);
+
     }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         ONLY-OWNER FUNCTIONALITY        ------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function setAdmin(uint256 _tenderID, address _admin) public onlyOwner(){
+    function setAdmin(uint256 _tenderID, address _admin) public onlyOwner(owner){
         require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
 
+        address previousAdmin =  s.tenders[_tenderID].admin;
+
         s.tenders[_tenderID].admin = _admin;
+
+        emit UpdateAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
     }
-
-    //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------         MODIFIERS       ----------------------------------------------------
-    //----------------------------------------------------------------------------------------------------------------------
-
-
-    modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
-    modifier onlyCitizen(uint256 _citizenID) {
-        require(_citizenID < CitizenFacet.numberOfCitizens(), "ONLY CITIZENS");
-        _;
-    }
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "ONLY OWNER");
-        _;
-    }
+    
 }

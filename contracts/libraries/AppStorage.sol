@@ -101,3 +101,25 @@ library LibAppStorage {
         }
     }
 }
+
+contract Modifiers {
+
+    AppStorage internal s;
+
+    modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlyCitizen(uint256 _citizenID) {
+        require(_citizenID < CitizenFacet.numberOfCitizens(), "ONLY CITIZENS");
+        _;
+    }
+
+    modifier onlyOwner(address owner) {
+        require(msg.sender == owner, "ONLY OWNER");
+        _;
+    }
+}
+
+
