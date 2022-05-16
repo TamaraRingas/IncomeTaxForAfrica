@@ -65,7 +65,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   }
 
   function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderPhase = PHASE_2;
+    s.proposals[_proposalID]._proposalState = PHASE_2;
   }
 
   function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
@@ -75,7 +75,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   }
 
   function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderPhase = PHASE_3;
+    s.proposals[_proposalID]._proposalState = PHASE_3;
   }
 
   function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
@@ -85,7 +85,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   }
 
   function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderPhase = PHASE_4;
+    s.proposals[_proposalID]._proposalState = PHASE_4;
   }
 
   function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant{
