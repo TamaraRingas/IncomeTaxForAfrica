@@ -89,12 +89,15 @@ struct TaxPayerCompany {
     address wallet;
     string name;
     mapping(address => bool) employees;
+    Proposal[] currentProposals;
 }
 
 struct Citizen {
     uint256 citizenID;
     uint256 citizenIdNumber;
     uint256 salary;
+
+    //Stored out of 10_000 for scale
     uint256 taxPercentage;
     uint256 primarySectoryID;
     uint256 secondarySectorID;
@@ -120,6 +123,7 @@ struct Proposal {
     uint256 proposalID;
     uint256 tenderID;
     uint256 sectorID;
+    uint256 companyID;
     uint256 priceCharged;
     uint256 numberOfPublicVotes;
     uint256 numberOfGovernmentVotes;
