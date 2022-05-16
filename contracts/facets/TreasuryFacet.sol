@@ -14,7 +14,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   AppStorage internal s;
 
-  address public owner;
+  IERC20 public USDC;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
