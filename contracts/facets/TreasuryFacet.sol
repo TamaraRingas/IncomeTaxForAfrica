@@ -4,7 +4,7 @@ pragma solidity 0.8.13;
 import "./ProposalFacet.sol/";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
-import '@openzeppelin/contracts/access/Ownable.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TreasuryFacet is Ownable {
 
@@ -84,5 +84,9 @@ contract TreasuryFacet is Ownable {
 
   function setSupervisor(address supervisor) internal onlyOwner {
     s.supervisors[supervisor] = true;
+  } 
+
+  function removeSupervisor(address supervisor) internal onlyOwner {
+    s.supervisors[supervisor] = false;
   } 
 }
