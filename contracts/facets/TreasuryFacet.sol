@@ -54,10 +54,12 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------         ONLY SUPERVISOR FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID)nonReentrant {
+  function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
     require(s.proposals[_proposalID]._proposalState == PHASE_1, "NOT PHASE_1");
     
-    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
@@ -71,7 +73,9 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
     require(s.proposals[_proposalID]._proposalState == PHASE_2, "STILL IN PHASE ONE");
 
-    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
@@ -85,7 +89,9 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
     require(s.proposals[_proposalID]._proposalState == PHASE_3, "STILL IN PHASE TWO");
 
-    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
@@ -96,10 +102,12 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     s.proposals[_proposalID]._proposalState = PHASE_4;
   }
 
-  function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant {
+  function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant{
     require(s.proposals[_proposalID]._proposalState == PHASE_4, "STILL IN PHASE THREE");
 
-    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 

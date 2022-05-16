@@ -73,8 +73,6 @@ contract TaxPayerCompanyFacet {
         uint256 priorityPoints = employeeSalary / 1000;
         uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
-        require(USDC.balanceOf(s.companies[_companyID].wallet) > employeeGrossSalary, "NOT ENOUGH FUNDS");
-
         s.citizens[_citizenID].totalTaxPaid += employeeTax;
         s.citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
@@ -96,7 +94,7 @@ contract TaxPayerCompanyFacet {
         }
 
         //scenario 3 - tax gets split between more than two sectors
-        
+
 
 
     }
