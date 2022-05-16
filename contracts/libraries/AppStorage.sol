@@ -35,7 +35,7 @@ enum TenderState {
         PHASE_3,
         PHASE_4,
         CLOSED
-    }
+}
 
 struct Tender {
     uint256 tenderID;
@@ -124,6 +124,7 @@ struct Proposal {
     uint256 numberOfPublicVotes;
     uint256 numberOfGovernmentVotes;
     address headOfProject;
+    address supervisor;
     string companyName;
     string storageHash;
     ProposalState _proposalState;
