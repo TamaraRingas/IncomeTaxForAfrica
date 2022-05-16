@@ -2,12 +2,14 @@
 pragma solidity 0.8.13;
 
 import "./ProposalFacet.sol/";
+import "..//interfaces/ITreasuryFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
+contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   AppStorage internal s;
 
@@ -51,11 +53,11 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
   }
 
     //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
+    //-----------------------------------------         ONLY SUPERVISOR FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
   function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID)nonReentrant {
-    require(_proposal._proposalState == PHASE_1, "NOT PHASE_1");
+    require(s.proposals[_proposalID]._proposalState == PHASE_1, "NOT PHASE_1");
     s.USDAddress.transfer
 
     stakingToken.transferFrom(msg.sender, address(this), _amount);
@@ -67,7 +69,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
   }
 
   function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
-    require(s.tenderPhase == PHASE_2, "STILL IN PHASE ONE");
+    require(s.proposals[_proposalID]._proposalState == PHASE_2, "STILL IN PHASE ONE");
 
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
   }
@@ -77,7 +79,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
   }
 
   function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(s.tenderPhase == PHASE_3, "STILL IN PHASE TWO");
+    require(s.proposals[_proposalID]._proposalState == PHASE_3, "STILL IN PHASE TWO");
 
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
   }
@@ -87,7 +89,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
   }
 
   function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant{
-    require(s.tenderPhase == PHASE_4, "STILL IN PHASE THREE");
+    require(s.proposals[_proposalID]._proposalState == PHASE_4, "STILL IN PHASE THREE");
 
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
   }
