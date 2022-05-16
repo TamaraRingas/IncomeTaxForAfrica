@@ -63,6 +63,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
     s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
+    s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
@@ -76,6 +78,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
 
     s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
+    s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
   }
@@ -91,6 +95,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
     s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
+    s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
   }
 
@@ -104,6 +110,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
 
     s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
+    s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
   }
