@@ -58,6 +58,8 @@ struct AppStorage {
     //Mapping of citizen addresses => id's
     mapping(address => uint256) userAddressesToIDs;
 
+    mapping(address => bool) supervisors
+
     uint256 numberOfProposals;
     uint256 numberOfCitizens;
     uint256 numberOfSectors;
@@ -127,6 +129,11 @@ contract Modifiers {
 
     modifier onlyCitizen(uint256 _citizenID) {
         require(_citizenID < s.numberOfCitizens, "ONLY CITIZENS");
+        _;
+    }
+
+    modifier onlySupervisor(address owner) {
+        require(supervisors[msg.sender] == true, "ONLY SUPERVISORS");
         _;
     }
 
