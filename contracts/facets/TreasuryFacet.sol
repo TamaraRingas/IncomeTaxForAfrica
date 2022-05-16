@@ -50,41 +50,38 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function payPhaseOne(Proposal _proposal) external onlyAdmin {
+  function payPhaseOne(Proposal _proposal) external onlySupervisor {
     require(_proposal._proposalState == PHASE_1, "NOT PHASE_1");
 
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseOne(Proposal _proposal) external onlySupervisor {
-    s.tenderPhase = TWO;
+    s.tenderPhase = PHASE_2;
   }
 
-  function payPhaseTwo(Proposal _proposal) external onlyAdmin {
-    require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
-    require(s.tenderPhase == TWO, "STILL IN PHASE ONE");
+  function payPhaseTwo(Proposal _proposal) external onlySupervisor {
+    require(s.tenderPhase == PHASE_2, "STILL IN PHASE ONE");
 
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseTwo(Proposal _proposal) external onlySupervisor {
-    s.tenderPhase = THREE;
+    s.tenderPhase = PHASE_3;
   }
 
-  function payPhaseThree(Proposal _proposal) external onlyAdmin {
-    require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
-    require(s.tenderPhase == THREE, "STILL IN PHASE TWO");
+  function payPhaseThree(Proposal _proposal) external onlySupervisor {
+    require(s.tenderPhase == PHASE_3, "STILL IN PHASE TWO");
 
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseThree(Proposal _proposal) external onlySupervisor {
-    s.tenderPhase = FOUR;
+    s.tenderPhase = PHASE_4;
   }
 
-  function payPhaseFour(Proposal _proposal) external onlyAdmin {
-    require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
-    require(s.tenderPhase == FOUR, "STILL IN PHASE THREE");
+  function payPhaseFour(Proposal _proposal) external onlySupervisor {
+    require(s.tenderPhase == PHASE_4, "STILL IN PHASE THREE");
 
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
   }
