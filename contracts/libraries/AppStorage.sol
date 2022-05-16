@@ -79,6 +79,8 @@ struct AppStorage {
 
     uint256 treasuryBalance;
 
+    address USDAddress;
+
     address superAdmin;
 
     Province _province;
