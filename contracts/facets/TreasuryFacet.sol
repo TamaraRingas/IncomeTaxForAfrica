@@ -60,7 +60,9 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     require(s.proposals[_proposalID]._proposalState == PHASE_1, "NOT PHASE_1");
     
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
-    
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
@@ -72,6 +74,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     require(s.proposals[_proposalID]._proposalState == PHASE_2, "STILL IN PHASE ONE");
 
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
   }
@@ -85,6 +89,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
 
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
   }
 
@@ -96,6 +102,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     require(s.proposals[_proposalID]._proposalState == PHASE_4, "STILL IN PHASE THREE");
 
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
 
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
   }
