@@ -92,7 +92,7 @@ struct TaxPayerCompany {
     address admin;
     address wallet;
     string name;
-    mapping(address => bool) employees;
+    mapping(uint256 => bool) employees;
     Proposal[] currentProposals;
 }
 
@@ -120,6 +120,7 @@ struct Sector {
     uint256 currentFunds;
     uint256 budget;
     string sectorName;
+    bool budgetReached;
     Citizen[] sectorAdmins;
 }
 

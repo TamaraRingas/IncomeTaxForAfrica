@@ -10,6 +10,7 @@ contract TenderFacet is ITenderFacet, Modifiers {
     AppStorage internal s;
 
     address public owner;
+    
     ProposalFacet public proposalFacet;
 
     event TenderCreated(Tender _tender);

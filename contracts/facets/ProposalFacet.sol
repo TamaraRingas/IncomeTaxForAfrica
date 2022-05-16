@@ -6,10 +6,14 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 contract ProposalFacet is IProposalFacet, Modifiers {
 
+    AppStorage internal s;
+
+    address public owner;
+
     event ProposalCreated(Proposal _proposal);
 
     constructor() {
-
+        owner = msg.sender;
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -69,15 +73,15 @@ contract ProposalFacet is IProposalFacet, Modifiers {
         Proposal winningProposal;
 
         for(int x = 0; x <= s.numberOfProposals; x++) {
-            if(s.proposals[s.numberOfProposals].tenderID == _tenderID) {
-                if(s.proposals[s.numberOfProposals].numberOfPublicVotes = winningNumberOfVotes) {
-                    if(s.proposals[s.numberOfProposals].priceCharged < winningBudget) {    
-                        winningNumberOfVotes = s.proposals[s.numberOfProposals].numberOfPublicVotes;
-                        winningProposal = s.proposals[s.numberOfProposals];
+            if(s.proposals[x].tenderID == _tenderID) {
+                if(s.proposals[x].numberOfPublicVotes = winningNumberOfVotes) {
+                    if(s.proposals[x].priceCharged < winningBudget) {    
+                        winningNumberOfVotes = s.proposals[x].numberOfPublicVotes;
+                        winningProposal = s.proposals[x];
                     }
-                } else if(s.proposals[s.numberOfProposals].numberOfPublicVotes > winningNumberOfVotes) {
-                    winningNumberOfVotes = s.proposals[s.numberOfProposals].numberOfPublicVotes;
-                    winningProposal = s.proposals[s.numberOfProposals];
+                } else if(s.proposals[x].numberOfPublicVotes > winningNumberOfVotes) {
+                    winningNumberOfVotes = s.proposals[x].numberOfPublicVotes;
+                    winningProposal = s.proposals[x];
                 }
             }
         }
@@ -85,9 +89,9 @@ contract ProposalFacet is IProposalFacet, Modifiers {
         winningProposal._proposalState = ProposalState.SUCCESSFULL;
 
         for(int x = 0; x < s.numberOfProposals; x++){
-            if(s.proposals[s.numberOfProposals].tenderID == _tenderID) {
-                if(s.proposals[s.numberOfProposals].proposalID != winningProposal.proposalID) {
-                    s.proposals[s.numberOfProposals]._proposalState = ProposalState.UNSUCCESSFULL;
+            if(s.proposals[x].tenderID == _tenderID) {
+                if(s.proposals[x].proposalID != winningProposal.proposalID) {
+                    s.proposals[x]._proposalState = ProposalState.UNSUCCESSFULL;
                 }   
             }
         }

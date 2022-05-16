@@ -36,7 +36,7 @@ contract TaxPayerCompanyFacet {
         s.companies[s.numberOfCompanies] = _company;
         s.numberOfCompanies++;
 
-        emit companyCreated(_company.companyID);
+        emit CompanyCreated(_company.companyID);
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -69,41 +69,60 @@ contract TaxPayerCompanyFacet {
 
         uint256 employeeTaxPercentage = s.citizens[_citizenID].taxPercentage;
         uint256 employeeGrossSalary = s.employeeSalaries[_companyID][_citizenID];
-        uint256 employeeTax = employeeTaxPercentage * employeeSalary / SCALE;
-        uint256 priorityPoints = employeeSalary / 1000;
+        uint256 employeeTax = employeeTaxPercentage * employeeGrossSalary / 10000;
+        uint256 priorityPoints = employeeGrossSalary / 1000;
         uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
         s.citizens[_citizenID].totalTaxPaid += employeeTax;
         s.citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
-        //TODO could someone call this and increase their points without the transfer?
+        //TODO Approve transfer
 
+        //Transferring of tax and salary to respective employee and treasury
         require(USDC.transferFrom(s.companies[_companyID].wallet, s.citizens[_citizenID].walletAddress, employeeNetSalary), "TRANSFER FAILED");
         require(USDC.transferFrom(s.companies[_companyID].wallet, treasuryAddress, employeeTax), "TRANSFER FAILED");
 
-        //Scenario 1 - Tax can go straight to primary sector
-        if(s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds <= (s.sectors[s.citizens[_citizenID].primarySectoryID].budget) - employeeTaxPercentage) {
-            s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds += employeeTax;
+        //Checks if the employees primary sector is full or there is still space for funds
+        //Working on basis that the full tax has to be paid into the sector, not a portion only
+        if(s.sectors[s.citizens[_citizenID].primarySectorID].budgetReached == false){
+            
+            //Updates the sectors balance
+            s.sectors[s.citizens[_citizenID].primarySectorID].currentFunds += employeeTax;
+
+            //Checks if the sector has enough funds and if so, updates the relevant boolean
+            if(s.sectors[s.citizens[_citizenID].primarySectorID].currentFunds >= s.sectors[s.citizens[_citizenID].primarySectoryID].budget) {
+                s.sectors[s.citizens[_citizenID].primarySectorID].budgetReached = true;
+            }   
+        } 
+        else {
+            //Checks if the employees secondary sector is full or there is still space for funds
+            if(s.sectors[s.citizens[_citizenID].secondarySectorID].budgetReached == false) {
+                    
+                //Updates sector balance
+                s.sectors[s.citizens[_citizenID].secondarySectorID].currentFunds += employeeTax;
+            
+                    //Checks if the sector has enough funds and if so, updates the relevant boolean
+                    if(s.sectors[s.citizens[_citizenID].secondarySectorID].currentFunds >= s.sectors[s.citizens[_citizenID].secondarySectorID].budget) {
+                            s.sectors[s.citizens[_citizenID].secondarySectorID].budgetReached = true;
+                    }
+            }else {
+                //Goes through to find a sector that has space for funds and updates its balance
+                for(int x = 0; x < s.numberOfSectors; x++){
+
+                    if(s.sectors[x].currentFunds < (s.sectors[x].budget)){
+                        s.sectors[x].currentFunds += employeeTax;
+                        break;
+                    }
+                }
+            }
         }
-
-        //scenario 2 - tax gets split between both sectors
-        if(s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds > (s.sectors[s.citizens[_citizenID].primarySectoryID].budget) - employeeTaxPercentage){
-            uint256 difference = (s.sectors[s.citizens[_citizenID].primarySectoryID].budget) - (s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds);
-            s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds += difference;
-
-        }
-
-        //scenario 3 - tax gets split between more than two sectors
-
-
-
     }
 
-    function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary) public onlyAdmin (_companyID){
+    function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) public onlyAdmin (_companyID){
         require(_newSalary > 0, "SALARY TOO SMALL");
-        require(_citizenID <= s.numberOfCitizens, "NOT A VALID CITIZEN ID");
+        require(s.companies[_companyID].employees[_citizenID] == false, "NOT AN EMPLOYEE");
 
-        updateEmployeeTax(_citizenID, newTaxPercentage);
+        updateEmployeeTax(_citizenID, _newSalary);
 
         s.employeeSalaries[_companyID][_citizenID] = _newSalary;
     }
@@ -144,6 +163,4 @@ contract TaxPayerCompanyFacet {
         _;
     }
 
-
-    
 }
