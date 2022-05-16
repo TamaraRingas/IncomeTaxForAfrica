@@ -2,13 +2,15 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/ITenderFacet.sol";
+import "./ProposalFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 contract TenderFacet is ITenderFacet, Modifiers {
 
     AppStorage internal s;
 
-    address owner;
+    address public owner;
+    ProposalFacet public proposalFacet;
 
     event TenderCreated(Tender _tender);
     event VoteSubmitted(address _voter, uint256 _tenderVotedFor, uint256 _tendersNumberOfVotes);
@@ -57,22 +59,6 @@ contract TenderFacet is ITenderFacet, Modifiers {
 
         for (uint256 i = 0; i < s.numberOfTenders; i++) {
             tempTender[i] = s.tenders[i];
-        }
-
-        return tempTender;
-    }
-
-    function viewSpecificSectorTenders(uint256 _sectorID)
-        public
-        view
-        returns (Tender[] memory)
-    {
-        Tender[] memory tempTender = new Tender[](s.numberOfTenders);
-
-        for (uint256 i = 0; i < s.numberOfTenders; i++) {
-            if (s.tenders[i].sectorID == _sectorID) {
-                tempTender[i] = s.tenders[i];
-            }
         }
 
         return tempTender;
@@ -167,7 +153,7 @@ contract TenderFacet is ITenderFacet, Modifiers {
 
         require(s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING, "NOT CURRENT VOTING");
 
-        //Set the winning proposals enum to successfull
+        proposalFacet.calculateWinningProposals(_tenderID);
 
         s.tenders[_tenderID]._tenderState == TenderState.AWARDED; 
 
@@ -194,28 +180,5 @@ contract TenderFacet is ITenderFacet, Modifiers {
 
     }
 
-    //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------         ONLY-OWNER FUNCTIONALITY        ------------------------------------
-    //----------------------------------------------------------------------------------------------------------------------
-
-    function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(s.superAdmin){
-        require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
-
-        address previousAdmin =  s.tenders[_tenderID].admin;
-
-        s.tenders[_tenderID].admin = _admin;
-
-        emit UpdateAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
-    }
-
-    function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
-        require(_newSuperAdmin != address(0), "CANNOT BE ZERO ADDRESS");
-
-        address previousSuperAdmin = s.superAdmin;
-
-        s.superAdmin = _newSuperAdmin;
-
-        emit UpdateSuperAdmin(previousSuperAdmin, s.superAdmin);
-    }
     
 }
