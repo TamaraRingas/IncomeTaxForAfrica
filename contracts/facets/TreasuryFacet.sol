@@ -44,7 +44,7 @@ contract TreasuryFacet is Ownable {
   }
 
   function closePhaseOne() external onlySupervisor {
-
+    
   }
 
   function payPhaseTwo() external onlyAdmin {
@@ -68,7 +68,7 @@ contract TreasuryFacet is Ownable {
   }
 
   function closePhaseFour() external onlySupervisor {
-
+    s.tenderState = CLOSED;
   }
 
   function setSupervisor(address supervisor) internal onlyOwner {
