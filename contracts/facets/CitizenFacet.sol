@@ -35,6 +35,7 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
         _citizen.taxPercentage = 0;
         _citizen.totalTaxPaid = 0;
         _citizen.totalPriorityPoints = 0;
+        _citizen.salary = 0;
 
         s.citizens[s.numberOfCitizens] = _citizen;
         s.userAddressesToIDs[msg.sender] = s.numberOfCitizens;
