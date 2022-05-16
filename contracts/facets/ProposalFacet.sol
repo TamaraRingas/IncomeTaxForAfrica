@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity 0.8.13;
 
 import "../interfaces/IProposalFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
@@ -40,7 +40,7 @@ contract ProposalFacet is IProposalFacet, Modifiers {
 
     function voteForProposal(uint256 _proposalID) public onlyCitizen(_citizenID) {
         
-        uint256 _citizenID = s.userAddressesToIDs(msg.sender);
+        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
         
         require(
             s.proposals[_proposalID]._proposalState == ProposalState.PROPOSED,
@@ -59,16 +59,6 @@ contract ProposalFacet is IProposalFacet, Modifiers {
         emit VoteSubmitted(msg.sender, _tenderID, s.tenders[_tenderID].numberOfVotes);
         
     }
-
-    function removeVote(uint256 _proposalID) public {
-
-        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
-
-        require()
-
-
-    }
-
 
     //Total public votes is scale of 10_000
     //Incase of ties, cheaper price quoted will be selected

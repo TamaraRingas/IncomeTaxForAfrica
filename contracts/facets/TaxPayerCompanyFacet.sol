@@ -14,15 +14,14 @@ contract TaxPayerCompanyFacet {
 
     IERC20 public USDC;
 
-    address public USDCAddress;
     address public treasuryAddress;
 
 
     event CompanyCreated(uint256 companyID);
 
     constructor(address _USDC, address _treasury) {
-        usdcAddress = _USDC;
-        USDC = IERC(_USDC);
+        s.USDAddress = _USDC;
+        USDC = IERC20(_USDC);
         treasuryAddress = _treasury;
     }
 
@@ -88,32 +87,36 @@ contract TaxPayerCompanyFacet {
         require(_newSalary > 0, "SALARY TOO SMALL");
         require(_citizenID <= s.numberOfCitizens, "NOT A VALID CITIZEN ID");
 
-        uint256 newTaxPercentage = calculateTax(_newSalary);
-
         updateEmployeeTax(_citizenID, newTaxPercentage);
 
         s.employeeSalaries[_companyID][_citizenID] = _newSalary;
     }
 
 
-    function changeAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
-        require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
-        require(_companyID <= s.numberOfCompanies, "NOT A VALID COMPANY ID");
-
-        s.companies[_companyID].admin = _newAdmin;
-    }
-
     //----------------------------------------------------------------------------------------------------------------------
     //-------------------------------------        INTERNAL STATE-MODIFYING FUNCTIONS       --------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-
-    function calculateTax(uint256 _newSalary) internal returns (uint256) {
+     function updateEmployeeTax(uint256 _citizenID, uint256 _newSalary) internal {
+        
         //Check tax tables and return correct tax percentage
-    }
-
-     function updateEmployeeTax(uint256 _citizenID, uint256 _newTaxPercentage) internal {
-        s.citizens[_citizenID].taxPercentage = _newTaxPercentage;
+        if(_newSalary >= 7000 && _newSalary < 20000){
+            s.citizens[_citizenID].taxPercentage = 1500;
+        }else if(_newSalary >= 20000 && _newSalary < 30000) {
+            s.citizens[_citizenID].taxPercentage = 2200;
+        }else if(_newSalary >= 30000 && _newSalary < 40000) {
+            s.citizens[_citizenID].taxPercentage = 2800;
+        }else if(_newSalary >= 40000 && _newSalary < 50000) {
+            s.citizens[_citizenID].taxPercentage = 3300;
+        }else if(_newSalary >= 50000 && _newSalary < 70000) {
+            s.citizens[_citizenID].taxPercentage = 3700;
+        }else if(_newSalary >= 70000 && _newSalary < 100000) {
+            s.citizens[_citizenID].taxPercentage = 4000;
+        }else if(_newSalary >= 100000 && _newSalary < 150000) {
+            s.citizens[_citizenID].taxPercentage = 4200;
+        }else if(_newSalary >= 150000) {
+            s.citizens[_citizenID].taxPercentage = 4300;
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------------
