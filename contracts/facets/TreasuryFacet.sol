@@ -54,7 +54,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function payPhaseOne(Proposal _proposal) external onlySupervisor nonReentrant {
+  function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID)nonReentrant {
     require(_proposal._proposalState == PHASE_1, "NOT PHASE_1");
     s.USDAddress.transfer
 
@@ -62,37 +62,37 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
-  function closePhaseOne(Proposal _proposal) external onlySupervisor {
+  function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
     s.tenderPhase = PHASE_2;
   }
 
-  function payPhaseTwo(Proposal _proposal) external onlySupervisor nonReentrant{
+  function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
     require(s.tenderPhase == PHASE_2, "STILL IN PHASE ONE");
 
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
   }
 
-  function closePhaseTwo(Proposal _proposal) external onlySupervisor {
+  function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
     s.tenderPhase = PHASE_3;
   }
 
-  function payPhaseThree(Proposal _proposal) external onlySupervisor nonReentrant {
+  function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
     require(s.tenderPhase == PHASE_3, "STILL IN PHASE TWO");
 
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
   }
 
-  function closePhaseThree(Proposal _proposal) external onlySupervisor {
+  function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
     s.tenderPhase = PHASE_4;
   }
 
-  function payPhaseFour(Proposal _proposal) external onlySupervisor nonReentrant{
+  function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant{
     require(s.tenderPhase == PHASE_4, "STILL IN PHASE THREE");
 
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
   }
 
-  function closePhaseFour(Proposal _proposal) external onlySupervisor {
+  function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
     s.tenderState = CLOSED;
   }
 }
