@@ -6,7 +6,7 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract TreasuryFacet is Ownable {
+contract TreasuryFacet is Ownable, Modifiers {
 
   AppStorage internal s;
 
@@ -34,6 +34,9 @@ contract TreasuryFacet is Ownable {
     owner = msg.sender;
   }
 
+  function getProposalDetails() external view returns (string) {
+
+  }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
@@ -81,12 +84,4 @@ contract TreasuryFacet is Ownable {
   function closePhaseFour() external onlySupervisor {
     s.tenderState = CLOSED;
   }
-
-  function setSupervisor(address supervisor) internal onlyOwner {
-    s.supervisors[supervisor] = true;
-  } 
-
-  function removeSupervisor(address supervisor) internal onlyOwner {
-    s.supervisors[supervisor] = false;
-  } 
 }
