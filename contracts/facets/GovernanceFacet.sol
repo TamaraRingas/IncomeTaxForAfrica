@@ -10,9 +10,16 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
   AppStorage internal s;
 
-  //----------------------------------------------------------------------------------------------------------------------
+   //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
+
+  event SetSuperAdmin();
+  event SetTenderAdmin();
+  event SetSectorAdmin();
+  event ChangeAdmin();
+  event SetSupervisor();
+
 
   function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
         require(_newSuperAdmin != address(0), "CANNOT BE ZERO ADDRESS");
@@ -21,7 +28,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
         s.superAdmin = _newSuperAdmin;
 
-        emit UpdateSuperAdmin(previousSuperAdmin, s.superAdmin);
+        emit SetSuperAdmin(previousSuperAdmin, s.superAdmin);
   }
 
   function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(s.superAdmin){
@@ -31,28 +38,30 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
         s.tenders[_tenderID].admin = _admin;
 
-        emit UpdateAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
+        emit SetTenderAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
   }
 
 
   function setSectorAdmin() external onlyOwner {
     
+
+    emit SetSectorAdmin();
   }
 
-  function changeAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
+  function changeCompanyAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
         require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
         require(_companyID <= s.numberOfCompanies, "NOT A VALID COMPANY ID");
 
         s.companies[_companyID].admin = _newAdmin;
   }
+  
+  // function addSupervisor(address supervisor) internal onlyOwner {
+  //   s.supervisors[supervisor] = true;
+  // } 
 
-  function addSupervisor(address supervisor) internal onlyOwner {
-    s.supervisors[supervisor] = true;
-  } 
-
-  function removeSupervisor(address supervisor) internal onlyOwner {
-    s.supervisors[supervisor] = false;
-  } 
+  // function removeSupervisor(address supervisor) internal onlyOwner {
+  //   s.supervisors[supervisor] = false;
+  // } 
 
   
   
