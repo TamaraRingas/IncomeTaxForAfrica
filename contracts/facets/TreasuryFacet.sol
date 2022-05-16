@@ -34,54 +34,58 @@ contract TreasuryFacet is Ownable, Modifiers {
     owner = msg.sender;
   }
 
-  function getProposalDetails() external view returns (string) {
+  //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
 
+  function getProposalStateDetails(Proposal _proposal) external view returns (string) {
+    return _proposal._proposalState;
   }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function payPhaseOne() external onlyAdmin {
-    require(tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+  function payPhaseOne(Proposal _proposal) external onlyAdmin {
+    require(_proposal._proposalState == PHASE_1, "NOT PHASE_1");
 
     emit PhaseOnePaid(_amount, block.timestamp);
   }
 
-  function closePhaseOne() external onlySupervisor {
+  function closePhaseOne(Proposal _proposal) external onlySupervisor {
     s.tenderPhase = TWO;
   }
 
-  function payPhaseTwo() external onlyAdmin {
+  function payPhaseTwo(Proposal _proposal) external onlyAdmin {
     require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
     require(s.tenderPhase == TWO, "STILL IN PHASE ONE");
 
     emit PhaseTwoPaid(_amount, block.timestamp);
   }
 
-  function closePhaseTwo() external onlySupervisor {
+  function closePhaseTwo(Proposal _proposal) external onlySupervisor {
     s.tenderPhase = THREE;
   }
 
-  function payPhaseThree() external onlyAdmin {
+  function payPhaseThree(Proposal _proposal) external onlyAdmin {
     require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
     require(s.tenderPhase == THREE, "STILL IN PHASE TWO");
 
     emit PhaseThreePaid(_amount, block.timestamp);
   }
 
-  function closePhaseThree() external onlySupervisor {
+  function closePhaseThree(Proposal _proposal) external onlySupervisor {
     s.tenderPhase = FOUR;
   }
 
-  function payPhaseFour() external onlyAdmin {
+  function payPhaseFour(Proposal _proposal) external onlyAdmin {
     require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
     require(s.tenderPhase == FOUR, "STILL IN PHASE THREE");
 
     emit PhaseFourPaid(_amount, block.timestamp);
   }
 
-  function closePhaseFour() external onlySupervisor {
+  function closePhaseFour(Proposal _proposal) external onlySupervisor {
     s.tenderState = CLOSED;
   }
 }
