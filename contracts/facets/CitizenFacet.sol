@@ -28,7 +28,7 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
 
     }
 
-    function register(Citizen _citizen) public onlySuperAdmin(s.superAdmin) {
+    function register(Citizen memory _citizen) public onlySuperAdmin(s.superAdmin) {
         //Check they are a SA citizen through chainlink
 
         _citizen.citizenID = s.numberOfCitizens;

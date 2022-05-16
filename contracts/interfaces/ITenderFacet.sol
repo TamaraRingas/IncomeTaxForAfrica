@@ -5,11 +5,9 @@ import "../libraries/AppStorage.sol";
 
 interface ITenderFacet {
 
-    function createTender() external;
+    function createTender(Tender memory _tender) external;
 
     function viewAllTenders() external view returns (Tender[] calldata);
-
-    function viewSpecificSectorTenders(uint256 _sectorID) external view returns (Tender[] calldata);
 
     function getTender(uint256 _tenderID) external view returns (Tender calldata);
 

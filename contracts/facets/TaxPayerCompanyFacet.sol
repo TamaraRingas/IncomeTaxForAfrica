@@ -30,7 +30,7 @@ contract TaxPayerCompanyFacet {
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createCompany(TaxPayerCompany _company) public {
+    function createCompany(TaxPayerCompany memory _company) public {
 
         _company.companyID = s.numberOfCompanies;
         s.companies[s.numberOfCompanies] = _company;

@@ -113,7 +113,7 @@ contract ProposalFacet is IProposalFacet, Modifiers {
         return tempProposal;
     }
 
-    function getProposal(uint256 _proposalID) public view returns (Proposal memory){
+    function getProposal(uint256 _proposalID) public view returns (Proposal memory) {
         return s.proposals[_proposalID];
     }
 
