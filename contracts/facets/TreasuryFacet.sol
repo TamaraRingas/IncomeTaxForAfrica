@@ -50,7 +50,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function payPhaseOne(Proposal _proposal) external onlySupervisor {
+  function payPhaseOne(Proposal _proposal) external onlySupervisor nonReentrant {
     require(_proposal._proposalState == PHASE_1, "NOT PHASE_1");
 
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
@@ -60,7 +60,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     s.tenderPhase = PHASE_2;
   }
 
-  function payPhaseTwo(Proposal _proposal) external onlySupervisor {
+  function payPhaseTwo(Proposal _proposal) external onlySupervisor nonReentrant{
     require(s.tenderPhase == PHASE_2, "STILL IN PHASE ONE");
 
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
@@ -70,7 +70,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     s.tenderPhase = PHASE_3;
   }
 
-  function payPhaseThree(Proposal _proposal) external onlySupervisor {
+  function payPhaseThree(Proposal _proposal) external onlySupervisor nonReentrant {
     require(s.tenderPhase == PHASE_3, "STILL IN PHASE TWO");
 
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
@@ -80,7 +80,7 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     s.tenderPhase = PHASE_4;
   }
 
-  function payPhaseFour(Proposal _proposal) external onlySupervisor {
+  function payPhaseFour(Proposal _proposal) external onlySupervisor nonReentrant{
     require(s.tenderPhase == PHASE_4, "STILL IN PHASE THREE");
 
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
