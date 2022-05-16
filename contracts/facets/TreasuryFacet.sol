@@ -5,8 +5,9 @@ import "./ProposalFacet.sol/";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract TreasuryFacet is Ownable, Modifiers {
+contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
 
   AppStorage internal s;
 
