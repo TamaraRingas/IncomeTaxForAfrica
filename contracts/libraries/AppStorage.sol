@@ -26,11 +26,15 @@ enum TenderState {
         CLOSED
 }
 
-enum TenderPhase {
-    ONE,
-    TWO,
-    THREE,
-    FOUR
+enum ProposalState {
+        PROPOSED,
+        UNSUCCESSFULL,
+        SUCCESSFULL,
+        PHASE_1,
+        PHASE_2,
+        PHASE_3,
+        PHASE_4,
+        CLOSED
 }
 
 struct Tender {
@@ -109,6 +113,8 @@ struct Sector {
     Citizen[] sectorAdmins;
     uint256 numberOfProjects;
     string sectorName;
+    uint256 currentFunds;
+    uint256 budget;
 }
 
 struct Proposal {
