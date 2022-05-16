@@ -23,6 +23,16 @@ contract GovernanceFacet is Ownable {
         emit UpdateSuperAdmin(previousSuperAdmin, s.superAdmin);
   }
 
+  function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(s.superAdmin){
+        require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
+
+        address previousAdmin =  s.tenders[_tenderID].admin;
+
+        s.tenders[_tenderID].admin = _admin;
+
+        emit UpdateAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
+  }
+
 
   function setSectorAdmin() external onlyOwner {
     
