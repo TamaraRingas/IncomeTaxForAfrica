@@ -40,7 +40,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     owner = msg.sender;
   }
 
-  //----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -58,43 +58,57 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID)nonReentrant {
     require(s.proposals[_proposalID]._proposalState == PHASE_1, "NOT PHASE_1");
-    s.USDAddress.transfer
+    
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
 
-    stakingToken.transferFrom(msg.sender, address(this), _amount);
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderPhase = PHASE_2;
+    s.proposals[_proposalID]._proposalState = PHASE_2;
   }
 
   function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
     require(s.proposals[_proposalID]._proposalState == PHASE_2, "STILL IN PHASE ONE");
 
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderPhase = PHASE_3;
+    s.proposals[_proposalID]._proposalState = PHASE_3;
   }
 
   function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
     require(s.proposals[_proposalID]._proposalState == PHASE_3, "STILL IN PHASE TWO");
 
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseThreePaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderPhase = PHASE_4;
+    s.proposals[_proposalID]._proposalState = PHASE_4;
   }
 
   function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant{
     require(s.proposals[_proposalID]._proposalState == PHASE_4, "STILL IN PHASE THREE");
 
+    s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
+
+    s.companies[s.proposals[_proposalID].companyID].balance() += s.proposals[_proposalID].priceCharged/4;
+
     emit PhaseFourPaid(_proposal, _amount, block.timestamp);
   }
 
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderState = CLOSED;
+    s.proposals[_proposalID]._proposalState = CLOSED;
   }
 }

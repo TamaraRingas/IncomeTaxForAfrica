@@ -57,6 +57,48 @@ struct Tender {
     string placeOfTender;
 }
 
+<<<<<<< HEAD
+=======
+struct AppStorage {
+
+    mapping(uint256 => Tender) tenders;
+    mapping(uint256 => Proposal) proposals;
+    mapping(uint256 => Citizen) citizens;
+    mapping(uint256 => Sector) sectors;
+    mapping(uint256 => TaxPayerCompany) companies;
+
+    //Mapping of companyID => CitizenID => salary
+    mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
+
+    //Mapping of citizen addresses => id's
+    mapping(address => uint256) userAddressesToIDs;
+
+    uint256 numberOfProposals;
+    uint256 numberOfCitizens;
+    uint256 numberOfSectors;
+    uint256 numberOfCompanies;
+    uint256 numberOfTenders;
+
+    uint256 treasuryBalance;
+
+    address USDAddress;
+
+    address superAdmin;
+
+    Province _province;
+}
+
+struct TaxPayerCompany {
+    uint256 companyID;
+    uint256 numberOfEmployees;
+    address admin;
+    address wallet;
+    string name;
+    mapping(address => bool) employees;
+    Proposal[] currentProposals;
+}
+
+>>>>>>> 99055bad66947f0af35ef52548a04f56f09cedd9
 struct Citizen {
     uint256 citizenID;
     uint256 citizenIdNumber;

@@ -6,7 +6,7 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract GovernanceFacet is Ownable {
+contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
   AppStorage internal s;
 
@@ -39,7 +39,14 @@ contract GovernanceFacet is Ownable {
     
   }
 
-  function setSupervisor(address supervisor) internal onlyOwner {
+  function changeAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
+        require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
+        require(_companyID <= s.numberOfCompanies, "NOT A VALID COMPANY ID");
+
+        s.companies[_companyID].admin = _newAdmin;
+  }
+
+  function addSupervisor(address supervisor) internal onlyOwner {
     s.supervisors[supervisor] = true;
   } 
 
