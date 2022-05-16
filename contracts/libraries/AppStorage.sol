@@ -57,8 +57,6 @@ struct Tender {
     string placeOfTender;
 }
 
-<<<<<<< HEAD
-=======
 struct AppStorage {
 
     mapping(uint256 => Tender) tenders;
@@ -98,7 +96,6 @@ struct TaxPayerCompany {
     Proposal[] currentProposals;
 }
 
->>>>>>> 99055bad66947f0af35ef52548a04f56f09cedd9
 struct Citizen {
     uint256 citizenID;
     uint256 citizenIdNumber;

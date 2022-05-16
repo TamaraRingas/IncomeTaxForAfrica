@@ -68,18 +68,36 @@ contract TaxPayerCompanyFacet {
         require(_citizenID <= s.numberOfCitizens, "NOT A VALID CITIZEN ID");
 
         uint256 employeeTaxPercentage = s.citizens[_citizenID].taxPercentage;
-        uint256 employeeSalary = s.employeeSalaries[_companyID][_citizenID];
+        uint256 employeeGrossSalary = s.employeeSalaries[_companyID][_citizenID];
         uint256 employeeTax = employeeTaxPercentage * employeeSalary / SCALE;
         uint256 priorityPoints = employeeSalary / 1000;
+        uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
-        require(USDC.balanceOf(treasuryAddress) > employeeTax, "NOT ENOUGH FUNDS");
+        require(USDC.balanceOf(s.companies[_companyID].wallet) > employeeGrossSalary, "NOT ENOUGH FUNDS");
 
         s.citizens[_citizenID].totalTaxPaid += employeeTax;
         s.citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
         //TODO could someone call this and increase their points without the transfer?
 
-        require(USDC.transfer(treasuryAddress, employeeTax), "TRANSFER FAILED");
+        require(USDC.transferFrom(s.companies[_companyID].wallet, s.citizens[_citizenID].walletAddress, employeeNetSalary), "TRANSFER FAILED");
+        require(USDC.transferFrom(s.companies[_companyID].wallet, treasuryAddress, employeeTax), "TRANSFER FAILED");
+
+        //Scenario 1 - Tax can go straight to primary sector
+        if(s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds <= (s.sectors[s.citizens[_citizenID].primarySectoryID].budget) - employeeTaxPercentage) {
+            s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds += employeeTax;
+        }
+
+        //scenario 2 - tax gets split between both sectors
+        if(s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds > (s.sectors[s.citizens[_citizenID].primarySectoryID].budget) - employeeTaxPercentage){
+            uint256 difference = (s.sectors[s.citizens[_citizenID].primarySectoryID].budget) - (s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds);
+            s.sectors[s.citizens[_citizenID].primarySectoryID].currentFunds += difference;
+
+        }
+
+        //scenario 3 - tax gets split between more than two sectors
+        
+
 
     }
 

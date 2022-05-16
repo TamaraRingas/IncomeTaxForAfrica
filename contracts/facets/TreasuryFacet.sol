@@ -5,7 +5,6 @@ import "./ProposalFacet.sol/";
 import "..//interfaces/ITreasuryFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
-
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
