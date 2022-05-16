@@ -26,6 +26,13 @@ enum TenderState {
         CLOSED
 }
 
+enum TenderPhase {
+    ONE,
+    TWO,
+    THREE,
+    FOUR
+}
+
 struct Tender {
     uint256 tenderID;
     uint256 sectorID;
