@@ -158,6 +158,11 @@ contract Modifiers {
         require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
         _;
     }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
 }
 
 
