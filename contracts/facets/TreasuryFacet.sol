@@ -40,7 +40,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     owner = msg.sender;
   }
 
-  //----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID)nonReentrant {
     require(s.proposals[_proposalID]._proposalState == PHASE_1, "NOT PHASE_1");
-    s.USDAddress.transfer
+    
 
     stakingToken.transferFrom(msg.sender, address(this), _amount);
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
