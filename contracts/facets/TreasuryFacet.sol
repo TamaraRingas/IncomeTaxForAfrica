@@ -95,6 +95,6 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   }
 
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.tenderState = CLOSED;
+    s.proposals[_proposalID]._proposalState = CLOSED;
   }
 }
