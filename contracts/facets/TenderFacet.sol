@@ -92,7 +92,7 @@ contract TenderFacet is ITenderFacet, Modifiers {
             "TENDER NOT IN VOTING STAGE"
         );
 
-        require(s.citizens[_citizenID].totalPriorityPoints < s.tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POIINTS");
+        require(s.citizens[_citizenID].totalPriorityPoints < s.tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
 
         uint256 tenderPriorityPoints = s.tenders[_tenderID].priorityPoints;
         
