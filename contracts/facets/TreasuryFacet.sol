@@ -46,13 +46,19 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     return _proposal._proposalState;
   }
 
+  function getTreasuryBalance() external view onlyOwner returns (uint256) {
+    return s.treasuryBalance;
+  }
+
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
   function payPhaseOne(Proposal _proposal) external onlySupervisor nonReentrant {
     require(_proposal._proposalState == PHASE_1, "NOT PHASE_1");
+    s.USDAddress.transfer
 
+    stakingToken.transferFrom(msg.sender, address(this), _amount);
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
