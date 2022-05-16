@@ -14,10 +14,10 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  event SetSuperAdmin();
-  event SetTenderAdmin();
-  event SetSectorAdmin();
-  event ChangeAdmin();
+  event SetSuperAdmin(address previousSuperAdmin, address newAdmin);
+  event SetTenderAdmin(uint256 tenderID,address previousAdmin, address newAdmin);
+  event SetSectorAdmin(uint256 sectorID,address previousAdmin, address newAdmin);
+  event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin);
   event SetSupervisor();
 
 
@@ -42,7 +42,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   }
 
 
-  function setSectorAdmin() external onlyOwner {
+  function setSectorAdmin(uint256 _sectorID, address _newAdmin) external onlyOwner {
     
 
     emit SetSectorAdmin();
@@ -52,10 +52,13 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
         require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
         require(_companyID <= s.numberOfCompanies, "NOT A VALID COMPANY ID");
 
+        address previousAdmin =  s.companies[_companyID].admin;
         s.companies[_companyID].admin = _newAdmin;
+
+        emit ChangeCompanyAdmin(_companyID, previousAdmin, s.companies[_companyID].admin);
   }
   
-  // function addSupervisor(address supervisor) internal onlyOwner {
+  // function addSupervisor(address supervisor) internal onlySupervisor {
   //   s.supervisors[supervisor] = true;
   // } 
 
