@@ -61,8 +61,6 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     
     s.USDAddress.transfer(s.companies[s.proposals[_proposalID].companyID].address, s.proposals[_proposalID].priceCharged/4);
     
-
-    //stakingToken.transferFrom(msg.sender, address(this), _amount);
     emit PhaseOnePaid(_proposal, _amount, block.timestamp);
   }
 
