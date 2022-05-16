@@ -17,13 +17,13 @@ contract TreasuryFacet is Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  event PhaseOnePaid(uint256 amount, uint256 time);
-  event PhaseTwoApproved();
-  event PhaseTwoPaid(uint256 amount, uint256 time);
+  event PhaseOnePaid(Proposal proposal, uint256 amount, uint256 time);
+  event PhaseTwoApproved(Proposal proposal);
+  event PhaseTwoPaid(Proposal proposal, uint256 amount, uint256 time);
   event PhaseThreeApproved();
-  event PhaseThreePaid(uint256 amount, uint256 time);
+  event PhaseThreePaid(Proposal proposal, uint256 amount, uint256 time);
   event PhaseFourApproved();
-  event PhaseFourPaid(uint256 amount, uint256 time);
+  event PhaseFourPaid(Proposal proposal, uint256 amount, uint256 time);
   event ProposalClosed();
 
    //----------------------------------------------------------------------------------------------------------------------
