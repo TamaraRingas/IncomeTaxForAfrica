@@ -49,6 +49,9 @@ contract TreasuryFacet is Ownable {
 
   function payPhaseTwo() external onlyAdmin {
     require(tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+    require(tenderPhase == TWO, "STILL IN PHASE ONE");
+
+
   }
 
   function closePhaseTwo() external onlySupervisor {
@@ -57,6 +60,7 @@ contract TreasuryFacet is Ownable {
 
   function payPhaseThree() external onlyAdmin {
     require(tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+    require(tenderPhase == THREE, "STILL IN PHASE TWO");
   }
 
   function closePhaseThree() external onlySupervisor {
@@ -65,9 +69,11 @@ contract TreasuryFacet is Ownable {
 
   function payPhaseFour() external onlyAdmin {
     require(tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+    require(tenderPhase == FOUR, "STILL IN PHASE THREE");
   }
 
   function closePhaseFour() external onlySupervisor {
+
     s.tenderState = CLOSED;
   }
 
