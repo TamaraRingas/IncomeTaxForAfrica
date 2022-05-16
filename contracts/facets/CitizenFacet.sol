@@ -4,18 +4,14 @@ pragma solidity 0.8.13;
 import "../interfaces/ICitizenFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
-contract CitizenFacet is ICitizenFacet{
+contract CitizenFacet is ICitizenFacet, Modifiers {
 
     AppStorage internal s;
-
-
-    address public owner;
 
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
 
     constructor() {
-        owner = msg.sender;
     }
 
     function selectSectors(uint256 _citizenID, uint256 _primarySectorID, uint256 _secondarySectorID) public {
@@ -32,7 +28,7 @@ contract CitizenFacet is ICitizenFacet{
 
     }
 
-    function register(Citizen _citizen) public {
+    function register(Citizen _citizen) public onlySuperAdmin(s.superAdmin) {
         //Check they are a SA citizen through chainlink
 
         _citizen.citizenID = s.numberOfCitizens;

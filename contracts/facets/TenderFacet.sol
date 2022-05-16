@@ -4,13 +4,13 @@ pragma solidity 0.8.13;
 import "../interfaces/ITenderFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
-contract TenderFacet is ITenderFacet {
+contract TenderFacet is ITenderFacet, Modifiers {
 
     AppStorage internal s;
 
-    address public owner;
+    address owner;
 
-    event TenderCreated(uint256 _id, uint256 _dateCreated);
+    event TenderCreated(Tender _tender);
     event VoteSubmitted(address _voter, uint256 _tenderVotedFor, uint256 _tendersNumberOfVotes);
     event VoteClosed(uint256 _tenderVoteIsClosedFor);
     event UpdatedThreshold(uint256 _oldValue, uint256 _newValue);
@@ -21,6 +21,7 @@ contract TenderFacet is ITenderFacet {
     event OpenDevelopment(uint256 _tenderThatDevelopmentIsOpen);
     event CloseDevelopment(uint256 _tenderThatDevelopmentIsClosed);
     event UpdateAdmin(uint256 _tenderAdminIsUpdated, address _oldAdmin, address _newAdmin);
+    event UpdateSuperAdmin(address _oldSuperAdmin, address _newSuperAdmin);
 
     constructor() {
         owner = msg.sender;
@@ -30,7 +31,7 @@ contract TenderFacet is ITenderFacet {
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createTender(Tender _tender) public {
+    function createTender(Tender memory _tender) public {
 
         _tender._tenderState = TenderState.VOTING;
         _tender.tenderID = s.numberOfTenders;
@@ -41,7 +42,7 @@ contract TenderFacet is ITenderFacet {
 
         s.numberOfTenders++;
 
-        emit TenderCreated(_tender.tenderID, _tender.dateCreated);
+        emit TenderCreated(s.tenders[s.numberOfTenders - 1]);
 
     }
 
@@ -114,7 +115,7 @@ contract TenderFacet is ITenderFacet {
         uint256 totalTenderVotes = s.tenders[_tenderID].numberOfVotes;
         uint256 tenderThreshold = s.tenders[_tenderID].threshold;
 
-        if (totalTenderVotes > (CitizenFacet.numberOfCitizens() * tenderThreshold / 10000)) {
+        if (totalTenderVotes > (s.numberOfCitizens * tenderThreshold / 10000)) {
             s.tenders[_tenderID]._tenderState = TenderState.APPROVED;
         } else {
             s.tenders[_tenderID]._tenderState = TenderState.DECLINED;
@@ -197,7 +198,7 @@ contract TenderFacet is ITenderFacet {
     //-----------------------------------------         ONLY-OWNER FUNCTIONALITY        ------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function setAdmin(uint256 _tenderID, address _admin) public onlyOwner(owner){
+    function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(s.superAdmin){
         require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
 
         address previousAdmin =  s.tenders[_tenderID].admin;
@@ -205,6 +206,16 @@ contract TenderFacet is ITenderFacet {
         s.tenders[_tenderID].admin = _admin;
 
         emit UpdateAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
+    }
+
+    function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
+        require(_newSuperAdmin != address(0), "CANNOT BE ZERO ADDRESS");
+
+        address previousSuperAdmin = s.superAdmin;
+
+        s.superAdmin = _newSuperAdmin;
+
+        emit UpdateSuperAdmin(previousSuperAdmin, s.superAdmin);
     }
     
 }

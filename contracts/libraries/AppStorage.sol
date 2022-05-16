@@ -26,6 +26,17 @@ enum TenderState {
         CLOSED
 }
 
+ enum ProposalState {
+        PROPOSED,
+        UNSUCCESSFULL,
+        SUCCESSFULL,
+        PHASE_1,
+        PHASE_2,
+        PHASE_3,
+        PHASE_4,
+        CLOSED
+    }
+
 struct Tender {
     uint256 tenderID;
     uint256 sectorID;
@@ -34,6 +45,8 @@ struct Tender {
     Province _province;
     TenderState _tenderState;
     uint256 numberOfVotes;
+
+    //How many votes the tender needs to succeed
     uint256 threshold;
 
     //Out of 10: 10 being high priority
@@ -64,15 +77,18 @@ struct AppStorage {
     uint256 numberOfCompanies;
     uint256 numberOfTenders;
 
-    //TenderState _tenderState;
+    address superAdmin;
+
     Province _province;
 }
 
 struct TaxPayerCompany {
     uint256 companyID;
+    uint256 numberOfEmployees;
     address admin;
     address wallet;
     string name;
+    mapping(address => bool) employees;
 }
 
 struct Citizen {
@@ -92,20 +108,24 @@ struct Citizen {
 
 struct Sector {
     uint256 sectorID;
-    Citizen[] sectorAdmins;
     uint256 numberOfProjects;
+    uint256 currentFunds;
+    uint256 budget;
     string sectorName;
+    Citizen[] sectorAdmins;
 }
 
 struct Proposal {
     uint256 proposalID;
-    uint256 projectID;
+    uint256 tenderID;
     uint256 sectorID;
     uint256 priceCharged;
     uint256 numberOfPublicVotes;
     uint256 numberOfGovernmentVotes;
     address headOfProject;
     string companyName;
+    string storageHash;
+    ProposalState _proposalState;
 }
 
 library LibAppStorage {
@@ -130,8 +150,8 @@ contract Modifiers {
         _;
     }
 
-    modifier onlyOwner(address owner) {
-        require(msg.sender == owner, "ONLY OWNER");
+    modifier onlySuperAdmin(address superAdmin) {
+        require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
         _;
     }
 }
