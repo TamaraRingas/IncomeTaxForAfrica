@@ -44,6 +44,11 @@ struct Tender {
     string placeOfTender;
 }
 
+
+struct Treasury {
+    uint256 balance;
+}
+
 struct AppStorage {
 
     mapping(uint256 => Tender) tenders;
