@@ -94,6 +94,7 @@ struct TaxPayerCompany {
 struct Citizen {
     uint256 citizenID;
     uint256 citizenIdNumber;
+    uint256 salary;
     uint256 taxPercentage;
     uint256 primarySectoryID;
     uint256 secondarySectorID;
