@@ -77,6 +77,8 @@ struct AppStorage {
     uint256 numberOfCompanies;
     uint256 numberOfTenders;
 
+    uint256 treasuryBalance;
+
     address superAdmin;
 
     Province _province;
