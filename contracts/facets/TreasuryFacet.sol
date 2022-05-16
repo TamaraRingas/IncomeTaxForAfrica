@@ -7,12 +7,15 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   AppStorage internal s;
 
-  address public owner;
+  IERC20 public USDC;
+
+  address public USDCAddress;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
