@@ -34,4 +34,55 @@ contract TreasuryFacet is Ownable {
     owner = msg.sender;
   }
 
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+  function payPhaseOne() external onlyAdmin {
+    require(tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+
+    emit PhaseOnePaid(_amount, uint256 block.timestamp);
+  }
+
+  function closePhaseOne() external onlySupervisor {
+    s.tenderPhase = TWO;
+  }
+
+  function payPhaseTwo() external onlyAdmin {
+    require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+    require(s.tenderPhase == TWO, "STILL IN PHASE ONE");
+
+    emit PhaseTwoPaid(_amount, uint256 block.timestamp);
+  }
+
+  function closePhaseTwo() external onlySupervisor {
+    s.tenderPhase = THREE;
+  }
+
+  function payPhaseThree() external onlyAdmin {
+    require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+    require(s.tenderPhase == THREE, "STILL IN PHASE TWO");
+
+    emit PhaseThreePaid(_amount, uint256 block.timestamp);
+  }
+
+  function closePhaseThree() external onlySupervisor {
+    s.tenderPhase = FOUR;
+  }
+
+  function payPhaseFour() external onlyAdmin {
+    require(s.tenderState == DEVELOPMENT, "NOT DEVELOPMENT");
+    require(s.tenderPhase == FOUR, "STILL IN PHASE THREE");
+
+    emit PhaseFourPaid(_amount, uint256 block.timestamp);
+  }
+
+  function closePhaseFour() external onlySupervisor {
+    s.tenderState = CLOSED;
+  }
+
+  function setSupervisor(address supervisor) internal onlyOwner {
+    s.supervisors[supervisor] = true;
+  } 
 }
