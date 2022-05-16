@@ -35,7 +35,7 @@ enum TenderState {
         PHASE_3,
         PHASE_4,
         CLOSED
-    }
+}
 
 struct Tender {
     uint256 tenderID;
@@ -76,6 +76,8 @@ struct AppStorage {
     uint256 numberOfSectors;
     uint256 numberOfCompanies;
     uint256 numberOfTenders;
+
+    uint256 treasuryBalance;
 
     address superAdmin;
 
@@ -128,6 +130,7 @@ struct Proposal {
     uint256 numberOfPublicVotes;
     uint256 numberOfGovernmentVotes;
     address headOfProject;
+    address supervisor;
     string companyName;
     string storageHash;
     ProposalState _proposalState;
@@ -157,6 +160,11 @@ contract Modifiers {
 
     modifier onlySuperAdmin(address superAdmin) {
         require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
         _;
     }
 }
