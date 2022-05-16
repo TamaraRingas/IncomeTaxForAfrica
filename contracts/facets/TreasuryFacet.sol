@@ -37,7 +37,6 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   constructor (address _USDC) {
     s.USDAddress = _USDC;
-    owner = msg.sender;
   }
 
     //----------------------------------------------------------------------------------------------------------------------
