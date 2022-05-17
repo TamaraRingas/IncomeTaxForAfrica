@@ -60,7 +60,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
         emit ChangeCompanyAdmin(_companyID, previousAdmin, s.companies[_companyID].admin);
   }
   
-  function setSupervisor(uint256 _proposalID, address _newSupervisor) public onlySupervisor {
+  function setSupervisor(uint256 _proposalID, address _newSupervisor) public onlySupervisor(_proposalID) {
     require(_newSupervisor != address(0), "CANNOT BE ZERO ADDRESS");
     require(_proposalID <= s.numberOfProposals, "NOT A VALID COMPANY ID");
 
