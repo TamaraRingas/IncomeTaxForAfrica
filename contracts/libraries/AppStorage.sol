@@ -132,7 +132,6 @@ struct Proposal {
     uint256 priceCharged;
     uint256 numberOfPublicVotes;
     uint256 numberOfGovernmentVotes;
-    address headOfProject;
     address supervisor;
     string companyName;
     string storageHash;
