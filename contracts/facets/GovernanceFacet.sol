@@ -45,6 +45,8 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   function setSectorAdmin(uint256 _sectorID, address _newAdmin) external onlyOwner {
     require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
 
+    address previousAdmin =  s.sectors[_sectorID].admin;
+
     emit SetSectorAdmin();
   }
 
@@ -58,7 +60,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
         emit ChangeCompanyAdmin(_companyID, previousAdmin, s.companies[_companyID].admin);
   }
   
-  // function addSupervisor(address supervisor) internal onlySupervisor {
+  function addSupervisor(address supervisor) internal onlySupervisor {
   //   s.supervisors[supervisor] = true;
   // } 
 
