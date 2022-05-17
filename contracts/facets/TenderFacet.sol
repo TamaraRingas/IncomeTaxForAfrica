@@ -7,7 +7,7 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 contract TenderFacet is ITenderFacet, Modifiers {
 
-    AppStorage internal s;
+    //AppStorage internal s;
 
     address public owner;
     

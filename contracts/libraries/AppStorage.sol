@@ -92,7 +92,7 @@ struct TaxPayerCompany {
     address admin;
     address wallet;
     string name;
-    mapping(uint256 => bool) employees;
+    Citizen[] employees;
     Proposal[] currentProposals;
 }
 
@@ -103,7 +103,7 @@ struct Citizen {
 
     //Stored out of 10_000 for scale
     uint256 taxPercentage;
-    uint256 primarySectoryID;
+    uint256 primarySectorID;
     uint256 secondarySectorID;
     uint256 totalTaxPaid;
 
@@ -131,7 +131,6 @@ struct Proposal {
     uint256 companyID;
     uint256 priceCharged;
     uint256 numberOfPublicVotes;
-    uint256 numberOfGovernmentVotes;
     address headOfProject;
     address supervisor;
     string companyName;
@@ -156,7 +155,8 @@ contract Modifiers {
         _;
     }
 
-    modifier onlyCitizen(uint256 _citizenID) {
+    modifier onlyCitizen(address citizen) {
+        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
         require(_citizenID < s.numberOfCitizens, "ONLY CITIZENS");
         _;
     }

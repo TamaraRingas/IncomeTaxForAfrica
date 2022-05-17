@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "./ProposalFacet.sol/";
+import "./ProposalFacet.sol";
 import "../interfaces/ITreasuryFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
-  AppStorage internal s;
+  //AppStorage internal s;
 
   IERC20 public USDC;
 
@@ -47,8 +47,8 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function getProposalStateDetails(Proposal _proposal) external view returns (string) {
-    return _proposal._proposalState;
+  function getProposalStateDetails(uint256 _proposalID) external view returns (string memory) {
+    return s.proposals[_proposalID]._proposalState;
   }
 
   function getTreasuryBalance() external view onlyOwner returns (uint256) {
@@ -60,58 +60,58 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
   function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(s.proposals[_proposalID]._proposalState == PHASE_1, "NOT PHASE_1");
+    require(s.proposals[_proposalID]._proposalState == ProposalState.PHASE_1, "NOT PHASE_1");
     
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
     USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseOnePaid(_proposal, _amount, block.timestamp);
+    emit PhaseOnePaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.proposals[_proposalID]._proposalState = PHASE_2;
+    s.proposals[_proposalID]._proposalState = ProposalState.PHASE_2;
   }
 
   function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
-    require(s.proposals[_proposalID]._proposalState == PHASE_2, "STILL IN PHASE ONE");
+    require(s.proposals[_proposalID]._proposalState == ProposalState.PHASE_2, "STILL IN PHASE ONE");
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
     
     USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseTwoPaid(_proposal, _amount, block.timestamp);
+    emit PhaseTwoPaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.proposals[_proposalID]._proposalState = PHASE_3;
+    s.proposals[_proposalID]._proposalState = ProposalState.PHASE_3;
   }
 
   function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(s.proposals[_proposalID]._proposalState == PHASE_3, "STILL IN PHASE TWO");
+    require(s.proposals[_proposalID]._proposalState == ProposalState.PHASE_3, "STILL IN PHASE TWO");
         
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
     USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseThreePaid(_proposal, _amount, block.timestamp);
+    emit PhaseThreePaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.proposals[_proposalID]._proposalState = PHASE_4;
+    s.proposals[_proposalID]._proposalState = ProposalState.PHASE_4;
   }
 
-  function payPhaseFour(Proposal _proposal) external onlySupervisor(_proposalID) nonReentrant{
-    require(s.proposals[_proposalID]._proposalState == PHASE_4, "STILL IN PHASE THREE");
+  function payPhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
+    require(s.proposals[_proposalID]._proposalState == ProposalState.PHASE_4, "STILL IN PHASE THREE");
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
     USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseFourPaid(_proposal, _amount, block.timestamp);
+    emit PhaseFourPaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    s.proposals[_proposalID]._proposalState = CLOSED;
+    s.proposals[_proposalID]._proposalState = ProposalState.CLOSED;
   }
 }

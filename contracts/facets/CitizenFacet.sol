@@ -6,7 +6,7 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 contract CitizenFacet is ICitizenFacet, Modifiers {
 
-    AppStorage internal s;
+    //AppStorage internal s;
 
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
@@ -24,7 +24,7 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
         s.citizens[_citizenID].primarySectoryID = _primarySectorID;
         s.citizens[_citizenID].secondarySectorID = _secondarySectorID;
 
-        emit SectorSelected(_citizenID, s.citizens[_citizenID].primarySectoryID, s.citizens[_citizenID].secondarySectorID);
+        emit SectorsSelected(_citizenID, s.citizens[_citizenID].primarySectoryID, s.citizens[_citizenID].secondarySectorID);
 
     }
 

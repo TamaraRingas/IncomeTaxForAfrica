@@ -5,12 +5,6 @@ import "../libraries/AppStorage.sol";
 
 interface ITaxPayerCompanyFacet {
 
-    function createCompany(TaxPayerCompany memory _company) external;
-
-    function viewAllCompanies() external view returns (TaxPayerCompany[] memory);
-
-    function getCompany(uint256 _companyID) external view returns (TaxPayerCompany memory);
-
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) external;
 
     function updateEmployeeTax(uint256 _citizenID, uint256 _newSalary) external;

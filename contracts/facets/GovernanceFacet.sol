@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
-  AppStorage internal s;
+  //AppStorage internal s;
 
    //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------

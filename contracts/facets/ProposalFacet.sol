@@ -6,7 +6,7 @@ import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 contract ProposalFacet is IProposalFacet, Modifiers {
 
-    AppStorage internal s;
+    //AppStorage internal s;
 
     address public owner;
 
@@ -24,7 +24,6 @@ contract ProposalFacet is IProposalFacet, Modifiers {
 
         _proposal.numberOfPublicVotes = 0;
         _proposal.proposalID = s.numberOfProposals;
-        _proposal.numberOfGovernmentVotes = 0;
         _proposal.storageHash = "";
         _proposal._proposalState = ProposalState.PROPOSED;
 
@@ -42,7 +41,7 @@ contract ProposalFacet is IProposalFacet, Modifiers {
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function voteForProposal(uint256 _proposalID) public onlyCitizen(_citizenID) {
+    function voteForProposal(uint256 _proposalID) public onlyCitizen(msg.sender) {
         
         uint256 _citizenID = s.userAddressesToIDs[msg.sender];
         
@@ -57,11 +56,6 @@ contract ProposalFacet is IProposalFacet, Modifiers {
 
         s.proposals[_proposalID].numberOfPublicVotes += citizenVotePower;
         
-        s.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
-        s.tenders[_tenderID].numberOfVotes++;
-
-        emit VoteSubmitted(msg.sender, _tenderID, s.tenders[_tenderID].numberOfVotes);
-        
     }
 
     //Total public votes is scale of 10_000
@@ -70,11 +64,11 @@ contract ProposalFacet is IProposalFacet, Modifiers {
         
         uint256 winningNumberOfVotes = 0;
         uint256 winningBudget = 0;
-        Proposal winningProposal;
+        Proposal memory winningProposal;
 
-        for(int x = 0; x <= s.numberOfProposals; x++) {
+        for(uint256 x = 0; x <= s.numberOfProposals; x++) {
             if(s.proposals[x].tenderID == _tenderID) {
-                if(s.proposals[x].numberOfPublicVotes = winningNumberOfVotes) {
+                if(s.proposals[x].numberOfPublicVotes == winningNumberOfVotes) {
                     if(s.proposals[x].priceCharged < winningBudget) {    
                         winningNumberOfVotes = s.proposals[x].numberOfPublicVotes;
                         winningProposal = s.proposals[x];
@@ -88,7 +82,7 @@ contract ProposalFacet is IProposalFacet, Modifiers {
 
         winningProposal._proposalState = ProposalState.SUCCESSFULL;
 
-        for(int x = 0; x < s.numberOfProposals; x++){
+        for(uint256 x = 0; x < s.numberOfProposals; x++){
             if(s.proposals[x].tenderID == _tenderID) {
                 if(s.proposals[x].proposalID != winningProposal.proposalID) {
                     s.proposals[x]._proposalState = ProposalState.UNSUCCESSFULL;
@@ -104,7 +98,7 @@ contract ProposalFacet is IProposalFacet, Modifiers {
 
     function viewAllProposals() public view returns (Proposal[] memory) {
         
-        Proposal[] memory tempProposal = new Tender[](s.numberOfProposals);
+        Proposal[] memory tempProposal = new Proposal[](s.numberOfProposals);
 
         for (uint256 i = 0; i < s.numberOfProposals; i++) {
             tempProposal[i] = s.proposals[i];
