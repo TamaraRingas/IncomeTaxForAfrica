@@ -169,6 +169,11 @@ contract Modifiers {
         require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
         _;
     }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
 }
 
 
