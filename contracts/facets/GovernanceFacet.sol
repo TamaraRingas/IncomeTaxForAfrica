@@ -21,7 +21,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor, uint256 time);
 
     //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------  FUNCTIONS       ---------------------------------------
+    //-----------------------------------------  ACCESS FUNCTIONS       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
   function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
@@ -73,4 +73,12 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
     emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor, block.timestamp);
   } 
+
+  //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------  GENERAL FUNCTIONS       ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+  function fundTreasury() public {
+
+  }
 }
