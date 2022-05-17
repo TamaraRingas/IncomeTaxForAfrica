@@ -121,7 +121,7 @@ struct Sector {
     uint256 budget;
     string sectorName;
     bool budgetReached;
-    Citizen[] sectorAdmins;
+    mapping(address => bool) sectorAdmins;
 }
 
 struct Proposal {
