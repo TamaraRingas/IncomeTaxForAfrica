@@ -45,7 +45,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   function setSectorAdmin(uint256 _sectorID, address _newAdmin) external onlyOwner {
     require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
 
-    //emit SetSectorAdmin();
+    emit SetSectorAdmin();
   }
 
   function changeCompanyAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
