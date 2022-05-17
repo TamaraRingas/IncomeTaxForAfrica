@@ -70,11 +70,4 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
     emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor);
   } 
-
-  // function removeSupervisor(address supervisor) internal onlyOwner {
-  //   s.supervisors[supervisor] = false;
-  // } 
-
-  
-  
 }
