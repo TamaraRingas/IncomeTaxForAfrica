@@ -68,8 +68,8 @@ contract TaxPayerCompanyFacet is Modifiers{
         //TODO Approve transfer
 
         //Transferring of tax and salary to respective employee and treasury
-        require(USDC.transferFrom(s.companies[_companyID].wallet, s.citizens[_citizenID].walletAddress, employeeNetSalary), "TRANSFER FAILED");
-        require(USDC.transferFrom(s.companies[_companyID].wallet, treasuryAddress, employeeTax), "TRANSFER FAILED");
+        require(USDC.transfer(s.citizens[_citizenID].walletAddress, employeeNetSalary), "TRANSFER FAILED");
+        require(USDC.transfer(treasuryAddress, employeeTax), "TRANSFER FAILED");
 
         //Checks if the employees primary sector is full or there is still space for funds
         //Working on basis that the full tax has to be paid into the sector, not a portion only
