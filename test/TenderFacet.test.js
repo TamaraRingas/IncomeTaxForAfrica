@@ -8,3 +8,9 @@ let owner, ownerAddress;
 let bob, chad, usdcWhale;
 let bobAddress, chadAddress, usdcWhaleAddress;
 
+const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json");
+const USDC = new ethers.Contract(
+    constants.POLYGON.USDC,
+    ERC20_ABI.abi,
+    ethers.provider
+);

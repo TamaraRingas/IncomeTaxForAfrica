@@ -20,7 +20,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin, uint256 time);
   event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor, uint256 time);
 
-   //----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  FUNCTIONS       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
