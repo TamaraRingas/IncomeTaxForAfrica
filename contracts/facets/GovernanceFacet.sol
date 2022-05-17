@@ -14,11 +14,11 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  event SetSuperAdmin(address previousSuperAdmin, address newAdmin);
-  event SetTenderAdmin(uint256 tenderID,address previousAdmin, address newAdmin);
-  event SetSectorAdmin(uint256 sectorID,address previousAdmin, address newAdmin);
-  event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin);
-  event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor);
+  event SetSuperAdmin(address previousSuperAdmin, address newAdmin, uint256 time);
+  event SetTenderAdmin(uint256 tenderID,address previousAdmin, address newAdmin, uint256 time);
+  event SetSectorAdmin(uint256 sectorID, address newAdmin, uint256 time);
+  event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin, uint256 time);
+  event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor, uint256 time);
 
 
   function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
@@ -28,7 +28,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
         s.superAdmin = _newSuperAdmin;
 
-        emit SetSuperAdmin(previousSuperAdmin, s.superAdmin);
+        emit SetSuperAdmin(previousSuperAdmin, s.superAdmin, block.timestamp);
   }
 
   function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(s.superAdmin){
@@ -38,7 +38,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
         s.tenders[_tenderID].admin = _admin;
 
-        emit SetTenderAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin);
+        emit SetTenderAdmin(_tenderID, previousAdmin, s.tenders[_tenderID].admin, block.timestamp);
   }
 
 
@@ -47,7 +47,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
     s.sectors[_sectorID].sectorAdmins[_newAdmin] = true; 
 
-    emit SetSectorAdmin();
+    emit SetSectorAdmin(_sectorID, _newAdmin, block.timestamp);
   }
 
   function changeCompanyAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
@@ -57,7 +57,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
         address previousAdmin =  s.companies[_companyID].admin;
         s.companies[_companyID].admin = _newAdmin;
 
-        emit ChangeCompanyAdmin(_companyID, previousAdmin, s.companies[_companyID].admin);
+        emit ChangeCompanyAdmin(_companyID, previousAdmin, s.companies[_companyID].admin, block.timestamp);
   }
   
   function setSupervisor(uint256 _proposalID, address _newSupervisor) public onlySupervisor(_proposalID) {
@@ -68,6 +68,6 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
     s.proposals[_proposalID].supervisor = _newSupervisor;
 
-    emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor);
+    emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor, block.timestamp);
   } 
 }
