@@ -65,6 +65,10 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
     require(_proposalID <= s.numberOfProposals, "NOT A VALID COMPANY ID");
 
     address previousSupervisor =  s.proposals[_proposalID].supervisor;
+
+    s.proposals[_proposalID].supervisor = _newSupervisor;
+
+    emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor);
   } 
 
   // function removeSupervisor(address supervisor) internal onlyOwner {
