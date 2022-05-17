@@ -3,14 +3,14 @@ pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ITaxPayerCompanyFacet.sol";
-import "../libraries/AppStorage.sol";
+import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
-contract TaxPayerCompanyFacet {
+contract TaxPayerCompanyFacet is Modifiers{
 
     //TODO events
     //TODO view functions
 
-    AppStorage internal s;
+    //AppStorage internal s;
 
     IERC20 public USDC;
 
@@ -30,39 +30,28 @@ contract TaxPayerCompanyFacet {
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createCompany(TaxPayerCompany memory _company) public {
+    function createCompany(address _admin, address _wallet, string memory _name) public {
+
+
+        TaxPayerCompany storage _company = s.companies[s.numberOfCompanies];
 
         _company.companyID = s.numberOfCompanies;
-        s.companies[s.numberOfCompanies] = _company;
+        _company.numberOfEmployees = 0;
+        _company.admin = _admin;
+        _company.wallet = _wallet;
+        _company.name = _name;
+
         s.numberOfCompanies++;
 
         emit CompanyCreated(_company.companyID);
     }
 
-    //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------         VIEW FUNCTIONS        --------------------------------------------
-    //----------------------------------------------------------------------------------------------------------------------
-
-    function viewAllCompanies() public view returns (TaxPayerCompany[] memory) {   
-        
-        TaxPayerCompany[] memory tempCompany = new TaxPayerCompany[](s.numberOfCompanies);
-
-        for (uint256 i = 0; i < s.numberOfCompanies; i++) {
-            tempCompany[i] = s.companies[i];
-        }
-
-        return tempCompany;
-    }
-
-    function getCompany(uint256 _companyID) public view returns (TaxPayerCompany memory){
-        return s.companies[_companyID];
-    }
-
+    
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         ONLY-ADMIN FUNCTIONALITY        ------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function payEmployeeTax(uint256 _companyID, uint256 _citizenID) public onlyAdmin(_companyID) {
+    function payEmployeeTax(uint256 _companyID, uint256 _citizenID) public onlyCompanyAdmin(_companyID) {
 
         require(_companyID <= s.numberOfCompanies, "NOT A VALID COMPANY ID");
         require(_citizenID <= s.numberOfCitizens, "NOT A VALID CITIZEN ID");
@@ -90,7 +79,7 @@ contract TaxPayerCompanyFacet {
             s.sectors[s.citizens[_citizenID].primarySectorID].currentFunds += employeeTax;
 
             //Checks if the sector has enough funds and if so, updates the relevant boolean
-            if(s.sectors[s.citizens[_citizenID].primarySectorID].currentFunds >= s.sectors[s.citizens[_citizenID].primarySectoryID].budget) {
+            if(s.sectors[s.citizens[_citizenID].primarySectorID].currentFunds >= s.sectors[s.citizens[_citizenID].primarySectorID].budget) {
                 s.sectors[s.citizens[_citizenID].primarySectorID].budgetReached = true;
             }   
         } 
@@ -107,7 +96,7 @@ contract TaxPayerCompanyFacet {
                     }
             }else {
                 //Goes through to find a sector that has space for funds and updates its balance
-                for(int x = 0; x < s.numberOfSectors; x++){
+                for(uint256 x = 0; x < s.numberOfSectors; x++){
 
                     if(s.sectors[x].currentFunds < (s.sectors[x].budget)){
                         s.sectors[x].currentFunds += employeeTax;
@@ -118,9 +107,10 @@ contract TaxPayerCompanyFacet {
         }
     }
 
-    function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) public onlyAdmin (_companyID){
+    function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) public onlyCompanyAdmin (_companyID){
         require(_newSalary > 0, "SALARY TOO SMALL");
-        require(s.companies[_companyID].employees[_citizenID] == false, "NOT AN EMPLOYEE");
+
+        //Need to check if is an employee
 
         updateEmployeeTax(_citizenID, _newSalary);
 
@@ -154,13 +144,11 @@ contract TaxPayerCompanyFacet {
         }
     }
 
-    //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------         MODIFIERS       ----------------------------------------------------
-    //----------------------------------------------------------------------------------------------------------------------
+    function addEmployee(uint256 _citizenID, uint256 _companyID) public {
+        //Requires
 
-    modifier onlyAdmin(uint256 _companyID) {
-        require(msg.sender = s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
-        _;
+        s.companies[_companyID].employees[_citizenID] = true;
+        s.companies[_companyID].numberOfEmployees++;
     }
 
 }

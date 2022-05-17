@@ -47,7 +47,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function getProposalStateDetails(uint256 _proposalID) external view returns (string memory) {
+  function getProposalStateDetails(uint256 _proposalID) external view returns (ProposalState) {
     return s.proposals[_proposalID]._proposalState;
   }
 
@@ -73,7 +73,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     s.proposals[_proposalID]._proposalState = ProposalState.PHASE_2;
   }
 
-  function payPhaseTwo(uint256 _proposalID) external onlySupervisor() nonReentrant{
+  function payPhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
     require(s.proposals[_proposalID]._proposalState == ProposalState.PHASE_2, "STILL IN PHASE ONE");
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;

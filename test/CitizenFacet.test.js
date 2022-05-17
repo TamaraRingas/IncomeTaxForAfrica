@@ -1,20 +1,20 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const hre = require("hardhat");
-const { constants } = require("../utils/TestConstants");
+const { constants } = require("../contracts/Utils/TestConstants");
 
 let owner, ownerAddress;
 let bob, chad, usdcWhale;
 let bobAddress, chadAddress, usdcWhaleAddress;
 
-const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json");
+const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json");
 const USDC = new ethers.Contract(
     constants.POLYGON.USDC,
     ERC20_ABI.abi,
     ethers.provider
 );
 
-describe("Citizen tests", function () {
+describe.only("Citizen tests", function () {
     beforeEach(async () => {
         [
             owner,

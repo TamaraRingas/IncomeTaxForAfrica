@@ -20,18 +20,20 @@ contract ProposalFacet is IProposalFacet, Modifiers {
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createProposal(Proposal memory _proposal) public {
+    function createProposal(Proposal memory _proposal, address _supervisor) public {
 
         _proposal.numberOfPublicVotes = 0;
         _proposal.proposalID = s.numberOfProposals;
         _proposal.storageHash = "";
         _proposal._proposalState = ProposalState.PROPOSED;
+        
+        _proposal.supervisor = _supervisor;
 
         s.proposals[s.numberOfProposals] = _proposal;
 
         s.numberOfProposals++;
 
-        s.companies[_proposal.companyID].currentProposals.push(_proposal);
+        s.companies[_proposal.companyID].currentProposals[s.numberOfProposals - 1] = _proposal;
 
         emit ProposalCreated(s.proposals[s.numberOfProposals - 1]);
 

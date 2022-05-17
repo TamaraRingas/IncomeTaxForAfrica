@@ -21,10 +21,10 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
         require(_secondarySectorID < s.numberOfSectors, "INVALID SECONDARY SECTOR ID");
         require(_citizenID == s.userAddressesToIDs[msg.sender], "CAN ONLY UPDATE OWN SETTINGS");
 
-        s.citizens[_citizenID].primarySectoryID = _primarySectorID;
+        s.citizens[_citizenID].primarySectorID = _primarySectorID;
         s.citizens[_citizenID].secondarySectorID = _secondarySectorID;
 
-        emit SectorsSelected(_citizenID, s.citizens[_citizenID].primarySectoryID, s.citizens[_citizenID].secondarySectorID);
+        emit SectorsSelected(_citizenID, s.citizens[_citizenID].primarySectorID, s.citizens[_citizenID].secondarySectorID);
 
     }
 

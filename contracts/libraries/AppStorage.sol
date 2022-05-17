@@ -92,8 +92,8 @@ struct TaxPayerCompany {
     address admin;
     address wallet;
     string name;
-    Citizen[] employees;
-    Proposal[] currentProposals;
+    mapping(uint256 => bool) employees;
+    mapping(uint256 => Proposal) currentProposals;
 }
 
 struct Citizen {
@@ -121,7 +121,7 @@ struct Sector {
     uint256 budget;
     string sectorName;
     bool budgetReached;
-    Citizen[] sectorAdmins;
+    mapping(address => bool) sectorAdmins;
 }
 
 struct Proposal {
@@ -131,7 +131,6 @@ struct Proposal {
     uint256 companyID;
     uint256 priceCharged;
     uint256 numberOfPublicVotes;
-    address headOfProject;
     address supervisor;
     string companyName;
     string storageHash;
@@ -170,6 +169,17 @@ contract Modifiers {
         require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
         _;
     }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
+    }
+
 }
 
 

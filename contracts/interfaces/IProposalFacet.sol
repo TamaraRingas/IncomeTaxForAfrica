@@ -5,7 +5,7 @@ import "../libraries/AppStorage.sol";
 
 interface IProposalFacet {
 
-    function createProposal(Proposal memory _proposal) external;
+    function createProposal(Proposal memory _proposal, address _supervisor) external;
 
     function voteForProposal(uint256 _proposalID) external;
 

@@ -73,7 +73,7 @@ contract TenderFacet is ITenderFacet, Modifiers {
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function voteForTender(uint256 _tenderID, uint256 _citizenID) public onlyCitizen(_citizenID) {
+    function voteForTender(uint256 _tenderID, uint256 _citizenID) public onlyCitizen(msg.sender) {
         require(
             s.tenders[_tenderID]._tenderState == TenderState.VOTING,
             "TENDER NOT IN VOTING STAGE"
