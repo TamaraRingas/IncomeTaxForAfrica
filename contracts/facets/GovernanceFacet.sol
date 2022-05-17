@@ -60,7 +60,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
         emit ChangeCompanyAdmin(_companyID, previousAdmin, s.companies[_companyID].admin);
   }
   
-  function addSupervisor(address supervisor) internal onlySupervisor {
+  function setSupervisor(uint256 projectID, address supervisor) public onlySupervisor {
   //   s.supervisors[supervisor] = true;
   // } 
 
