@@ -18,7 +18,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event SetTenderAdmin(uint256 tenderID,address previousAdmin, address newAdmin);
   event SetSectorAdmin(uint256 sectorID,address previousAdmin, address newAdmin);
   event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin);
-  event SetSupervisor();
+  event SetSupervisor(uint256 proposalID,address previousSupervisor, address newAdmin);
 
 
   function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
