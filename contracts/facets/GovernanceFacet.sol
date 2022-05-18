@@ -5,11 +5,14 @@ import "..//interfaces/IGovernanceFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "hardhat/console.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
+contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuard {
 
-  //AppStorage internal s;
+  IERC20 public USDC;
+
+  address public USDCAddress;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
@@ -19,9 +22,18 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event SetTenderAdmin(uint256 tenderID,address previousAdmin, address newAdmin, uint256 time);
   event SetSectorAdmin(uint256 sectorID, address newAdmin, uint256 time);
   event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin, uint256 time);
-  event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor, uint256 time);
+  event SetSupervisor(uint256 proposalID, address previousSupervisor, address newSupervisor, uint256 time);
 
-  constructor() {
+  event TreasuryBalanceUpdated(uint256 increasedBy);
+  event SectorBudgetUpdated(uint256 newBudget);
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------  CONSTRUCTOR        ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+  constructor (address _USDC) {
+    s.USDAddress = _USDC;
+    USDC = IERC20(_USDC);
     s.superAdmin = msg.sender;
   }
 
@@ -79,11 +91,21 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
     emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor, block.timestamp);
   } 
 
-  //----------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  GENERAL FUNCTIONS       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function fundTreasury() public {
+  function fundTreasury(uint256 _amount) public onlySuperAdmin() nonReentrant {
 
+    USDC.transfer(s.TreasuryAddress, _amount);
+
+    emit TreasuryBalanceUpdated(_amount);
   }
+
+  function updateBudget(uint256 _sectorID, uint256 _newBudget) public onlySuperAdmin() {
+    s.sectors[_sectorID].budget = _newBudget;
+
+    emit SectorBudgetUpdated(_newBudget);
+  }
+
 }
