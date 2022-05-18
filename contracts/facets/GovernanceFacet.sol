@@ -78,7 +78,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
     //-----------------------------------------  GENERAL FUNCTIONS       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function fundTreasury() public {
+  function fundTreasury() public onlySuperAdmin(s.superAdmin) {
 
   }
 }
