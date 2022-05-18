@@ -3,12 +3,14 @@ pragma solidity 0.8.13;
 
 import "../interfaces/ISectorFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import "hardhat/console.sol";
 
 contract SectorFacet is ISectorFacet, Modifiers {
 
     //AppStorage internal s;
 
     constructor() {
+        s.superAdmin = msg.sender;
     }
 
     function createSector(string memory _name) public onlySuperAdmin(){
@@ -24,6 +26,10 @@ contract SectorFacet is ISectorFacet, Modifiers {
 
         s.numberOfSectors++;
 
+    }
+
+    function getSectorName(uint256 _sectorID) public view returns (string memory){
+        return s.sectors[_sectorID].sectorName;
     }
     
 }

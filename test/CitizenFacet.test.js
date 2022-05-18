@@ -12,7 +12,7 @@ const {
   calcAdminFee,
   calcAmountAfterFees,
   createGrantObject,
-  createProjectObject,
+  createCitizenObject,
 } = require("../contracts/Utils/TestUtils");
 const { BigNumber } = require("ethers");
 let superAdmin;
@@ -35,7 +35,7 @@ const DAI = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("ArtizenCore Basic Tests", function () {
+describe("Citizen Facet Tests", function () {
   beforeEach(async () => {
     [
       superAdmin,
@@ -60,14 +60,20 @@ describe.only("ArtizenCore Basic Tests", function () {
     proposalAdminAddress = await proposalAdmin.getAddress();
 
     // Deploy core
-    CitizenContract = await ethers.getContractFactory("CitizenFacet");
-    CitizenInstance = await CitizenContract.connect(superAdmin).deploy();
-
+    
     GovernanceContract = await ethers.getContractFactory("GovernanceFacet");
-    GovernanceInstance = await GovernanceContract.connect(superAdmin).deploy();
+    GovernanceInstance = await GovernanceContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
 
     SectorContract = await ethers.getContractFactory("SectorFacet");
     SectorInstance = await SectorContract.connect(superAdmin).deploy();
+
+    CitizenContract = await ethers.getContractFactory("CitizenFacet");
+    CitizenInstance = await CitizenContract.connect(superAdmin).deploy();
+
+    await SectorInstance.connect(superAdmin).createSector("Health");
+    await SectorInstance.connect(superAdmin).createSector("Education");
+    await SectorInstance.connect(superAdmin).createSector("Road");
+    await SectorInstance.connect(superAdmin).createSector("Mining");
 
 
     // Creating DAI token instance
@@ -93,54 +99,65 @@ describe.only("ArtizenCore Basic Tests", function () {
 
     it("Reverts if sectors are the same", async () => {
 
-        await SectorInstance.connect(superAdmin).createSector("Health");
+      
+      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
 
-        //await CitizenInstance.connect(superAdmin).register(constants.TEST.citizen1);
+      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
 
-        await expect(await CitizenInstance.connect(superAdmin).selectSectors(0, 1, 1)).to.be.revertedWith("SECTORS CANNOT BE THE SAME");
+      await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 1, 1)).to.be.revertedWith("SECTORS CANNOT BE THE SAME");
 
     
     });
 
     it("Reverts if primary sector is not valid", async () => {
 
-        await SectorInstance.connect(superAdmin).createSector("Health");
-        await SectorInstance.connect(superAdmin).createSector("Education");
-        await SectorInstance.connect(superAdmin).createSector("Road");
-        await SectorInstance.connect(superAdmin).createSector("Mining");
+        let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
 
-        await expect(await CitizenInstance.connect(superAdmin).selectSectors(0, 5, 2)).to.be.revertedWith("INVALID PRIMARY SECTOR ID");
+        await CitizenInstance.connect(superAdmin).register(testCitizenOne);
+
+        await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 5, 2)).to.be.revertedWith("INVALID PRIMARY SECTOR ID");
     
     });
 
     it("Reverts if secondary sector is not valid", async () => {
-        
-        await SectorInstance.connect(superAdmin).createSector("Health");
-        await SectorInstance.connect(superAdmin).createSector("Education");
-        await SectorInstance.connect(superAdmin).createSector("Road");
-        await SectorInstance.connect(superAdmin).createSector("Mining");
 
-        await expect(await CitizenInstance.connect(superAdmin).selectSectors(0, 2, 5)).to.be.revertedWith("INVALID SECONDARY SECTOR ID");
+        let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
+
+        await CitizenInstance.connect(superAdmin).register(testCitizenOne);
+        
+        await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 2, 5)).to.be.revertedWith("INVALID SECONDARY SECTOR ID");
     
     });
 
     it("Reverts if caller isnt updating their own settings", async () => {
+
+      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
+
+      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
+      
+      //await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 0, 1)).to.be.revertedWith("CAN ONLY UPDATE OWN SETTINGS");
     
     });
 
-    it.only("Correctly updates sectors", async () => {
+    it("Correctly updates sectors", async () => {
 
-        await SectorInstance.connect(superAdmin).createSector("Health");
-        await SectorInstance.connect(superAdmin).createSector("Education");
-        await SectorInstance.connect(superAdmin).createSector("Road");
-        await SectorInstance.connect(superAdmin).createSector("Mining");
+        // console.log(await SectorInstance.connect(superAdmin).getSectorName(3));
 
-        await CitizenInstance.connect(superAdmin).selectSectors(0, 3, 2);
+        // await CitizenInstance.connect(superAdmin).selectSectors(0, 3, 2);
 
-        expect(await CitizenInstance.connect(superAdmin).getCitizenPrimaryID(0)).to.be.equal(3);
-        expect(await CitizenInstance.connect(superAdmin).getCitizenSecondaryID(0)).to.be.equal(2);
+        // expect(await CitizenInstance.connect(superAdmin).getCitizenPrimaryID(0)).to.be.equal(3);
+        // expect(await CitizenInstance.connect(superAdmin).getCitizenSecondaryID(0)).to.be.equal(2);
 
-    
+    });
+
+  });
+
+  describe("Citizen selecting sectors", function () {
+
+    it("Correctly creates citizen", async () => {
+
+  
+
     });
 
   });

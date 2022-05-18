@@ -112,6 +112,23 @@ const createGrantTest = async (admins, startTime, endTime) => {
   return grant;
 };
 
+const createCitizenObject = async (firstName, secondName, primaryID, secondaryID, wallet) => {
+  const citizen = {
+    citizenID: 0,
+    salary: 0,
+    taxPercentage: 0,
+    primarySectorID: primaryID,
+    secondarySectorID: secondaryID,
+    totalTaxPaid: 0,
+    totalPriorityPoints: 0,
+    walletAddress: wallet,
+    firstName: firstName,
+    secondName: secondName,
+  };
+
+  return citizen;
+};
+
 const createGrantObject = async (admins, startTime, endTime) => {
   const grant = {
     topVotedProjectID: 0,
@@ -223,6 +240,7 @@ module.exports = {
   createGrantTest: createGrantTest,
   calcAdminFee: calcAdminFee,
   createGrantQuick: createGrantQuick,
+  createCitizenObject: createCitizenObject,
   payRewards: payRewards,
   calcAmountAfterFees: calcAmountAfterFees,
   feesEarnedOnDeposit: feesEarnedOnDeposit,

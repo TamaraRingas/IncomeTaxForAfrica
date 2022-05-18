@@ -34,7 +34,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
   constructor (address _USDC) {
     s.USDAddress = _USDC;
     USDC = IERC20(_USDC);
-    s.superAdmin = msg.sender;
+    //s.superAdmin = msg.sender;
   }
 
     //----------------------------------------------------------------------------------------------------------------------

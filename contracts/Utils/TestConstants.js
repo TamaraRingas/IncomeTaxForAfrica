@@ -37,7 +37,6 @@ const CONSTANTS = {
     oneMonth: 2629800,
     twoMonths: 2629800 * 2,
     citizen1: {
-      citizenIdNumber: 9706215113088,
       primarySectorID: 1,
       secondarySectorID: 2,
       firstname: "John",
