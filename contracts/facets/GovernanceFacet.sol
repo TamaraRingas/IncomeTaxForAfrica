@@ -5,10 +5,14 @@ import "..//interfaces/IGovernanceFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
-  //AppStorage internal s;
+  IERC20 public USDC;
+
+  address public USDCAddress;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
@@ -21,6 +25,15 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event SetSupervisor(uint256 proposalID, address previousSupervisor, address newSupervisor, uint256 time);
 
   event SectorBudgetUpdated(uint256 newBudget);
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------  CONSTRUCTOR        ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+  constructor (address _USDC) {
+    s.USDAddress = _USDC;
+    USDC = IERC20(_USDC);
+  }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  ACCESS FUNCTIONS       ---------------------------------------
