@@ -11,12 +11,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
-  //AppStorage internal s;
-
-  IERC20 public USDC;
-
-  address public USDCAddress;
-
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
@@ -39,7 +33,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
   constructor (address _USDC) {
     s.USDAddress = _USDC;
-    USDC = IERC20(_USDC);
+    s.USDC = IERC20(_USDC);
     s.TreasuryAddress = address(this);
   }
 
@@ -64,7 +58,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
     
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
     emit PhaseOnePaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
@@ -78,7 +72,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
     
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
     emit PhaseTwoPaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
@@ -92,7 +86,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
         
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
     emit PhaseThreePaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
@@ -106,7 +100,7 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
 
     s.treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
+    s.USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, s.proposals[_proposalID].priceCharged/4);
 
     emit PhaseFourPaid(_proposalID, s.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
