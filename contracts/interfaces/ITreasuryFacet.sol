@@ -15,7 +15,7 @@ interface ITreasuryFacet {
 
   function payPhaseTwo(uint256 _proposalID) external;
 
-  function closePhaseTwo(uint256 _proposalID) external
+  function closePhaseTwo(uint256 _proposalID) external;
 
   function payPhaseThree(uint256 _proposalID) external;
 
