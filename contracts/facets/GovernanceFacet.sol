@@ -103,6 +103,8 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
 
   function updateBudget(uint256 _sectorID, uint256 _newBudget) public onlySuperAdmin(s.superAdmin) {
     s.sectors[_sectorID].budget = _newBudget;
+
+    emit SectorBudgetUpdated(_newBudget);
   }
 
 }
