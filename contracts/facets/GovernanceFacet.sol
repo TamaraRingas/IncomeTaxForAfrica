@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
+contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuard {
 
   IERC20 public USDC;
 
