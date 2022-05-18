@@ -9,6 +9,18 @@ interface ITreasuryFacet {
 
   function getTreasuryBalance() external;
 
-  
+  function payPhaseOne(uint256 _proposalID) external;
+
+
+
+  function payPhaseTwo(uint256 _proposalID) external;
+
+
+
+  function payPhaseThree(uint256 _proposalID) external;
+
+
+
+  function payPhaseFour(uint256 _proposalID) external;
 
 }
