@@ -35,7 +35,7 @@ const DAI = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("ArtizenCore Basic Tests", function () {
+describe.only("Basic Tests", function () {
   beforeEach(async () => {
     [
       superAdmin,
