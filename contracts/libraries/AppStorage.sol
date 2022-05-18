@@ -2,6 +2,8 @@
 pragma solidity 0.8.13;
 
 import { ITenderFacet } from "../interfaces/ITenderFacet.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 enum Province {
     EASTERN_CAPE,
@@ -80,8 +82,11 @@ struct AppStorage {
     uint256 treasuryBalance;
 
     address USDAddress;
+    address treasuryAddress;
 
     address superAdmin;
+
+    IERC20 USDC;
 
     Province _province;
 }
@@ -98,7 +103,6 @@ struct TaxPayerCompany {
 
 struct Citizen {
     uint256 citizenID;
-    uint256 citizenIdNumber;
     uint256 salary;
 
     //Stored out of 10_000 for scale
@@ -116,7 +120,7 @@ struct Citizen {
 
 struct Sector {
     uint256 sectorID;
-    uint256 numberOfProjects;
+    uint256 numberOfTenders;
     uint256 currentFunds;
     uint256 budget;
     string sectorName;
@@ -160,8 +164,8 @@ contract Modifiers {
         _;
     }
 
-    modifier onlySuperAdmin(address superAdmin) {
-        require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
         _;
     }
 

@@ -28,7 +28,7 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
 
     }
 
-    function register(Citizen memory _citizen) public onlySuperAdmin(s.superAdmin) {
+    function register(Citizen memory _citizen) public onlySuperAdmin() {
         //Check they are a SA citizen through chainlink
 
         _citizen.citizenID = s.numberOfCitizens;
@@ -36,6 +36,7 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
         _citizen.totalTaxPaid = 0;
         _citizen.totalPriorityPoints = 0;
         _citizen.salary = 0;
+        _citizen.walletAddress = msg.sender;
 
         s.citizens[s.numberOfCitizens] = _citizen;
         s.userAddressesToIDs[msg.sender] = s.numberOfCitizens;
@@ -43,6 +44,14 @@ contract CitizenFacet is ICitizenFacet, Modifiers {
 
         emit CitizenRegistered(_citizen.citizenID, s.numberOfCitizens);
 
+    }
+
+    function getCitizenPrimaryID(uint256 _citizenID) public view returns (uint256){
+        return s.citizens[_citizenID].primarySectorID;
+    }
+
+    function getCitizenSecondaryID(uint256 _citizenID) public view returns (uint256){
+        return s.citizens[_citizenID].secondarySectorID;
     }
     
 }

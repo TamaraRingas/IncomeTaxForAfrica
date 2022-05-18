@@ -36,10 +36,12 @@ const CONSTANTS = {
     oneDai: ethers.utils.parseEther("1"),
     oneMonth: 2629800,
     twoMonths: 2629800 * 2,
-    grant1: {
-      ID: 1,
-      admins: ["", "", ""],
-      duration: 604800, //1 week in seconds
+    citizen1: {
+      citizenIdNumber: 9706215113088,
+      primarySectorID: 1,
+      secondarySectorID: 2,
+      firstname: "John",
+      secondName: "Doe", //1 week in seconds
     },
     zeroAddr: "0x0000000000000000000000000000000000000000",
     projectID: 1,

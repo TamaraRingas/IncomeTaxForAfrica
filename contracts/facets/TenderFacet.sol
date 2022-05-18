@@ -43,6 +43,8 @@ contract TenderFacet is ITenderFacet, Modifiers {
 
         s.tenders[s.numberOfTenders] = _tender;
 
+        s.sectors[_tender.sectorID].numberOfTenders++;
+
         s.numberOfTenders++;
 
         emit TenderCreated(s.tenders[s.numberOfTenders - 1]);

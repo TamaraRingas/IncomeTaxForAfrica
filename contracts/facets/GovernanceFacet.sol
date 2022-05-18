@@ -5,6 +5,7 @@ import "..//interfaces/IGovernanceFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
 contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
@@ -20,11 +21,15 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin, uint256 time);
   event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor, uint256 time);
 
+  constructor() {
+    s.superAdmin = msg.sender;
+  }
+
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  ACCESS FUNCTIONS       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(s.superAdmin){
+  function setSuperAdmin(address _newSuperAdmin) public onlySuperAdmin(){
         require(_newSuperAdmin != address(0), "CANNOT BE ZERO ADDRESS");
 
         address previousSuperAdmin = s.superAdmin;
@@ -34,7 +39,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
         emit SetSuperAdmin(previousSuperAdmin, s.superAdmin, block.timestamp);
   }
 
-  function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(s.superAdmin){
+  function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(){
         require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
 
         address previousAdmin =  s.tenders[_tenderID].admin;

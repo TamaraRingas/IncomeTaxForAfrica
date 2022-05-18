@@ -12,17 +12,12 @@ contract TaxPayerCompanyFacet is Modifiers{
 
     //AppStorage internal s;
 
-    IERC20 public USDC;
-
-    address public treasuryAddress;
-
-
     event CompanyCreated(uint256 companyID);
 
     constructor(address _USDC, address _treasury) {
         s.USDAddress = _USDC;
-        USDC = IERC20(_USDC);
-        treasuryAddress = _treasury;
+        s.USDC = IERC20(_USDC);
+        s.treasuryAddress = _treasury;
     }
 
 
