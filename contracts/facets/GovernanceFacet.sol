@@ -24,6 +24,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
   event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin, uint256 time);
   event SetSupervisor(uint256 proposalID, address previousSupervisor, address newSupervisor, uint256 time);
 
+  event TreasuryBalanceUpdated(uint256 increasedBy);
   event SectorBudgetUpdated(uint256 newBudget);
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -93,8 +94,11 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
     //-----------------------------------------  GENERAL FUNCTIONS       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function fundTreasury(uint256 _amount) public onlySuperAdmin(s.superAdmin) {
+  function fundTreasury(uint256 _amount) public onlySuperAdmin(s.superAdmin) nonReentrant {
 
+    USDC.transfer(s.TreasuryAddress, _amount);
+
+    emit TreasuryBalanceUpdated(_amount);
   }
 
   function updateBudget(uint256 _sectorID, uint256 _newBudget) public onlySuperAdmin(s.superAdmin) {
