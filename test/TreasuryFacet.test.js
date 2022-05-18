@@ -26,7 +26,7 @@ let citizenOneAddress, citizenTwoAddress;
 let employeeOneAddress, employeeTwoAddress, employeeThreeAddress;
 let companyAdminAddress, tenderAdminAddress, proposalAdminAddress;
 
-let CitizenContract, CitizenInstance;
+let TreasuryContract, TreasuryInstance;
 
 let startTime, endTime;
 
