@@ -18,7 +18,9 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
   event SetTenderAdmin(uint256 tenderID,address previousAdmin, address newAdmin, uint256 time);
   event SetSectorAdmin(uint256 sectorID, address newAdmin, uint256 time);
   event ChangeCompanyAdmin(uint256 companyID,address previousAdmin, address newAdmin, uint256 time);
-  event SetSupervisor(uint256 proposalID,address previousSupervisor, address newSupervisor, uint256 time);
+  event SetSupervisor(uint256 proposalID, address previousSupervisor, address newSupervisor, uint256 time);
+
+  event SectorBudgetUpdated(uint256 newBudget);
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  ACCESS FUNCTIONS       ---------------------------------------
@@ -82,7 +84,8 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers {
 
   }
 
-  function updateBudgets(uint256 _sectorID) public onlySuperAdmin(s.superAdmin) {
-
+  function updateBudget(uint256 _sectorID, uint256 _newBudget) public onlySuperAdmin(s.superAdmin) {
+    s.sectors[_sectorID].budget = _newBudget;
   }
+
 }
