@@ -2,11 +2,11 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/IProposalFacet.sol";
-import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import { AppStorage } from "../libraries/AppStorage.sol";
 
-contract ProposalFacet is IProposalFacet, Modifiers {
+contract ProposalFacet is IProposalFacet {
 
-    //AppStorage internal s;
+    AppStorage internal s;
 
     address public owner;
 
@@ -113,4 +113,34 @@ contract ProposalFacet is IProposalFacet, Modifiers {
         return s.proposals[_proposalID];
     }
 
+    modifier onlyCitizen(address citizen) {
+        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
+        require(_citizenID <= s.numberOfCitizens, "ONLY CITIZENS");
+        _;
+    }
+
+     modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
+    }
 }

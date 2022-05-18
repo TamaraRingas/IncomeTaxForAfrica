@@ -3,11 +3,12 @@ pragma solidity 0.8.13;
 
 import "../interfaces/ITenderFacet.sol";
 import "./ProposalFacet.sol";
-import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import { AppStorage } from "../libraries/AppStorage.sol";
+import "hardhat/console.sol";
 
-contract TenderFacet is ITenderFacet, Modifiers {
+contract TenderFacet is ITenderFacet {
 
-    //AppStorage internal s;
+    AppStorage internal s;
 
     address public owner;
     
@@ -27,7 +28,7 @@ contract TenderFacet is ITenderFacet, Modifiers {
     event UpdateSuperAdmin(address _oldSuperAdmin, address _newSuperAdmin);
 
     constructor() {
-        owner = msg.sender;
+        s.superAdmin = msg.sender;
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -40,6 +41,7 @@ contract TenderFacet is ITenderFacet, Modifiers {
         _tender.tenderID = s.numberOfTenders;
         _tender.numberOfVotes = 0;
         _tender.dateCreated = block.timestamp;
+        _tender._province = Province.EASTERN_CAPE;
 
         s.tenders[s.numberOfTenders] = _tender;
 
@@ -83,10 +85,20 @@ contract TenderFacet is ITenderFacet, Modifiers {
 
         require(s.citizens[_citizenID].totalPriorityPoints < s.tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
 
+        console.log("Check");
         uint256 tenderPriorityPoints = s.tenders[_tenderID].priorityPoints;
-        
+        console.log("Check");
+
+        console.log(s.citizens[_citizenID].totalPriorityPoints);
+        console.log(tenderPriorityPoints);
+        console.log(s.numberOfCitizens);
+
         s.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
+        console.log("Check");
+
         s.tenders[_tenderID].numberOfVotes++;
+        console.log("Check");
+
 
         emit VoteSubmitted(msg.sender, _tenderID, s.tenders[_tenderID].numberOfVotes);
         
@@ -183,5 +195,35 @@ contract TenderFacet is ITenderFacet, Modifiers {
 
     }
 
-    
+     modifier onlyCitizen(address citizen) {
+        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
+        require(_citizenID <= s.numberOfCitizens, "ONLY CITIZENS");
+        _;
+    }
+
+     modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
+    }
+
 }

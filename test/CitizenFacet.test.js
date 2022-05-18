@@ -35,7 +35,7 @@ const DAI = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("Citizen Facet Tests", function () {
+describe("Citizen Facet Tests", function () {
   beforeEach(async () => {
     [
       superAdmin,

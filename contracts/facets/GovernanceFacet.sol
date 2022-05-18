@@ -2,13 +2,15 @@
 pragma solidity 0.8.13;
 
 import "..//interfaces/IGovernanceFacet.sol";
-import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import { AppStorage} from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuard {
+contract GovernanceFacet is IGovernanceFacet, Ownable, ReentrancyGuard {
+
+  AppStorage internal s;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
@@ -29,13 +31,8 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
 
   constructor (address _USDC) {
     s.USDAddress = _USDC;
-<<<<<<< HEAD
-    USDC = IERC20(_USDC);
-    //s.superAdmin = msg.sender;
-=======
     s.USDC = IERC20(_USDC);
     s.superAdmin = msg.sender;
->>>>>>> 65cda27e108898dfe2049d7f9b875f8eee459452
   }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -108,5 +105,30 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
 
     emit SectorBudgetUpdated(_newBudget);
   }
+
+   modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
+    }
 
 }

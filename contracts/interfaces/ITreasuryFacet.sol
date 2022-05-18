@@ -5,9 +5,9 @@ import "../libraries/AppStorage.sol";
 
 interface ITreasuryFacet {
 
-  function getProposalStateDetails(uint256 _proposalID) external;
+  function getProposalStateDetails(uint256 _proposalID) external view returns (ProposalState);
 
-  function getTreasuryBalance() external;
+  function getTreasuryBalance() external view returns (uint256);
 
   function payPhaseOne(uint256 _proposalID) external;
 

@@ -13,6 +13,8 @@ const {
   calcAmountAfterFees,
   createGrantObject,
   createCitizenObject,
+  createTenderObject,
+  createProposalObject,
 } = require("../contracts/Utils/TestUtils");
 const { BigNumber } = require("ethers");
 let superAdmin;
@@ -26,6 +28,9 @@ let employeeOneAddress, employeeTwoAddress, employeeThreeAddress;
 let companyAdminAddress, tenderAdminAddress, proposalAdminAddress;
 
 let CitizenContract, CitizenInstance;
+let TenderContract, TenderInstance;
+let GovernanceContract, GovernanceInstance;
+let SectorContract, SectorInstance;
 
 let startTime, endTime;
 
@@ -59,16 +64,18 @@ describe("Tender Facet Tests", function () {
     tenderAdminAddress = await tenderAdmin.getAddress();
     proposalAdminAddress = await proposalAdmin.getAddress();
 
-    // Deploy core
     
     GovernanceContract = await ethers.getContractFactory("GovernanceFacet");
     GovernanceInstance = await GovernanceContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
 
-    SectorContract = await ethers.getContractFactory("SectorFacet");
-    SectorInstance = await SectorContract.connect(superAdmin).deploy();
+    TenderContract = await ethers.getContractFactory("TenderFacet");
+    TenderInstance = await TenderContract.connect(superAdmin).deploy();
 
     CitizenContract = await ethers.getContractFactory("CitizenFacet");
     CitizenInstance = await CitizenContract.connect(superAdmin).deploy();
+
+    SectorContract = await ethers.getContractFactory("SectorFacet");
+    SectorInstance = await SectorContract.connect(superAdmin).deploy();
 
     await SectorInstance.connect(superAdmin).createSector("Health");
     await SectorInstance.connect(superAdmin).createSector("Education");
@@ -99,43 +106,20 @@ describe("Tender Facet Tests", function () {
 
     it("Reverts if sectors are the same", async () => {
 
-      
-      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-
-      await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 1, 1)).to.be.revertedWith("SECTORS CANNOT BE THE SAME");
-
     
     });
 
     it("Reverts if primary sector is not valid", async () => {
 
-        let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-        await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-
-        await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 5, 2)).to.be.revertedWith("INVALID PRIMARY SECTOR ID");
-    
+      
     });
 
     it("Reverts if secondary sector is not valid", async () => {
-
-        let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-        await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-        
-        await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 2, 5)).to.be.revertedWith("INVALID SECONDARY SECTOR ID");
     
     });
 
     it("Reverts if caller isnt updating their own settings", async () => {
 
-      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-      
-      //await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 0, 1)).to.be.revertedWith("CAN ONLY UPDATE OWN SETTINGS");
     
     });
 
@@ -148,9 +132,25 @@ describe("Tender Facet Tests", function () {
 
   describe("Voting on a tender", function () {
 
-    it("Correctly creates citizen", async () => {
+    it.only("Reverts if tender is not in voting state", async () => {
 
-  
+      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
+
+      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
+
+      let testTender = await createTenderObject(1, endTime, 5000, 8, tenderAdminAddress, "Random Town");
+
+      await TenderInstance.connect(superAdmin).createTender(testTender);
+
+      console.log("check test");
+
+      await expect(TenderInstance.connect(superAdmin).voteForTender(0, 0)).to.be.revertedWith("TENDER NOT IN VOTING STAGE");
+
+
+    });
+
+    it("Reverts if sender does not have enough priority points", async () => {
+    
 
     });
 
@@ -160,8 +160,6 @@ describe("Tender Facet Tests", function () {
 
     it("Correctly creates citizen", async () => {
 
-  
-
     });
 
   });
@@ -169,8 +167,6 @@ describe("Tender Facet Tests", function () {
   describe("State changing functions", function () {
 
     it("Correctly creates citizen", async () => {
-
-  
 
     });
 

@@ -2,12 +2,12 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/ISectorFacet.sol";
-import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import { AppStorage } from "../libraries/AppStorage.sol";
 import "hardhat/console.sol";
 
-contract SectorFacet is ISectorFacet, Modifiers {
+contract SectorFacet is ISectorFacet{
 
-    //AppStorage internal s;
+    AppStorage internal s;
 
     constructor() {
         s.superAdmin = msg.sender;
@@ -26,10 +26,37 @@ contract SectorFacet is ISectorFacet, Modifiers {
 
         s.numberOfSectors++;
 
+        console.log(s.sectors[s.numberOfSectors - 1].sectorID);
+
     }
 
     function getSectorName(uint256 _sectorID) public view returns (string memory){
         return s.sectors[_sectorID].sectorName;
+    }
+
+     modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
     }
     
 }

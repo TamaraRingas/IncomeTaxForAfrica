@@ -2,12 +2,6 @@ const { ethers } = require("hardhat");
 const { BigNumber } = require("@ethersproject/bignumber");
 const { constants } = require("./TestConstants");
 
-let donor1, donor1Address;
-let project1Owner1, project1Owner1Address;
-let grant1Admin1, grant1Admin1Address;
-let owner, ownerAddress;
-
-let CoreContract, CoreInstance;
 const ERC20_ABI = require("../../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json");
 
 const DAI = new ethers.Contract(
@@ -35,30 +29,6 @@ const fastForward = async (seconds) => {
   await ethers.provider.send("evm_mine", []);
 };
 
-const toJSNum = (bigNum) => {
-  return parseInt(bigNum.toString());
-};
-
-const burnTokenBalance = async (signer, tokenContract) => {
-  const addr = await signer.getAddress();
-  const bal = await tokenContract.balanceOf(addr);
-  tokenContract
-    .connect(signer)
-    .transfer("0x000000000000000000000000000000000000dEaD", bal);
-};
-
-const calcAdminFee = (totalDonations) => {
-  return totalDonations
-    .mul(constants.DEPLOY.fees.admin)
-    .div(constants.DEPLOY.SCALE);
-};
-
-const addWhaleBalance = async (donor) => {
-  await donor.sendTransaction({
-    to: whaleAddress,
-    value: ethers.utils.parseEther("1"),
-  });
-};
 
 const sendDaiFromWhale = async (amount, whaleSigner, toSigner, coreAddress) => {
   await DAI.connect(whaleSigner).transfer(toSigner.address, amount);
@@ -87,31 +57,6 @@ const calcAmountAfterFees = (amountBeforeFees) => {
   );
 };
 
-const transferDAI = async (donorAddress, amount) => {
-  await DAI.connect(daiWhale).transfer(donorAddress, amount);
-};
-
-const approveDAI = async (donor, coreAddress, amount) => {
-  await DAI.connect(donor).approve(coreAddress, amount);
-};
-
-const createGrantTest = async (admins, startTime, endTime) => {
-  const grant = {
-    topVotedProjectID: 0,
-    matchLimit: 0,
-    adminFeeClaimed: 0,
-    grantAdmins: admins,
-    startTime: startTime,
-    endTime: endTime,
-    totalVotePoints: 0,
-    totalDonations: 0,
-    totalProtocolFees: 0,
-    cancelled: false,
-  };
-
-  return grant;
-};
-
 const createCitizenObject = async (firstName, secondName, primaryID, secondaryID, wallet) => {
   const citizen = {
     citizenID: 0,
@@ -120,7 +65,7 @@ const createCitizenObject = async (firstName, secondName, primaryID, secondaryID
     primarySectorID: primaryID,
     secondarySectorID: secondaryID,
     totalTaxPaid: 0,
-    totalPriorityPoints: 0,
+    totalPriorityPoints: 20,
     walletAddress: wallet,
     firstName: firstName,
     secondName: secondName,
@@ -129,120 +74,46 @@ const createCitizenObject = async (firstName, secondName, primaryID, secondaryID
   return citizen;
 };
 
-const createGrantObject = async (admins, startTime, endTime) => {
-  const grant = {
-    topVotedProjectID: 0,
-    matchLimit: 0,
-    adminFeeClaimed: 0,
-    grantAdmins: admins,
-    startTime: startTime,
-    endTime: endTime,
-    totalVotePoints: 0,
-    totalDonations: 0,
-    totalProtocolFees: 0,
-    cancelled: false,
+const createProposalObject = async (_tenderID, _sectorID, _companyID, _priceCharged, _supervisor, _hash) => {
+  const proposal = {
+    proposalID: 0,
+    tenderID: _tenderID,
+    sectorID: _sectorID,
+    companyID: _companyID,
+    priceCharged: _priceCharged,
+    numberOfPublicVotes: 0,
+    supervisor: _supervisor,
+    storageHash: _hash,
+    _proposalState: 0,
   };
 
-  return grant;
+  return proposal;
 };
 
-//Not really sure what the holder is or how to get the nftID
-const createProjectObject = async (owners) => {
-
-  [, , , , , , , , , , , , , , donor1, grant1Admin1, project1Owner1] =
-    await ethers.getSigners();
-    
-  donor1Address = await donor1.getAddress();
-
-  const project = {
-    owners: owners,
-    nftHolder: donor1Address,
-    nftID: 1,
+const createTenderObject = async (_sectorID, _closingDate, _threshold, _priorityPoints, _admin, _placeOfTender) => {
+  const tender = {
+    tenderID: 0,
+    sectorID: _sectorID,
+    dateCreated: 0,
+    closingDate: _closingDate,
+    _province: 0,
+    _tenderState: 0,
+    numberOfVotes: 0,
+    threshold: _threshold,
+    priorityPoints: _priorityPoints,
+    admin: _admin,
+    placeOfTender: _placeOfTender,
   };
 
-  return project;
-};
-
-const createGrantQuick = async (CoreInstance, owner) => {
-  startTime = await currentTime();
-  endTime = startTime + constants.TEST.oneMonth;
-
-  [, , , , , , , , , , , , , , donor1, grant1Admin1, project1Owner1] =
-    await ethers.getSigners();
-
-  ownerAddress = await owner.getAddress();
-  donor1Address = await donor1.getAddress();
-  grant1Admin1Address = await grant1Admin1.getAddress();
-  project1Owner1Address = await project1Owner1.getAddress();
-
-  // create grant
-  await CoreInstance.connect(owner).createGrant(
-    [grant1Admin1Address],
-    startTime,
-    endTime
-  );
-  // create project
-  await CoreInstance.connect(owner).createProject(constants.TEST.projectOne, [
-    project1Owner1Address,
-  ]);
-
-  // Set fees
-  await CoreInstance.connect(owner).setFees(
-    constants.TEST.protocolFee,
-    constants.TEST.adminFee
-  );
-
-  await CoreInstance.connect(owner).setProjectInGrant(1, 1, true);
-  //set up donor
-  await addWhaleBalance(donor1);
-  await transferDAI(donor1Address, constants.TEST.oneDai.mul(200));
-  await approveDAI(
-    donor1,
-    CoreInstance.address,
-    constants.TEST.oneDai.mul(200)
-  );
-  // donate
-  await CoreInstance.connect(donor1).donate(
-    1,
-    constants.TEST.oneDai.mul(150),
-    donor1Address
-  );
-
-  await CoreInstance.connect(donor1).vote(1, 1, 10);
-
-  return {
-    donor: donor1,
-    grantAdmin: grant1Admin1,
-    projectOwner: project1Owner1,
-  };
-};
-
-const payRewards = async (CoreInstance, owner, grantID) => {
-  await CoreInstance.connect(owner).payGrantAdminFees(grantID);
-  await CoreInstance.connect(owner).payDonationsToAllProjectsInGrant(grantID);
-};
-
-const feesEarnedOnDeposit = async (amount) => {
-  return amount.mul(constants.DEPLOY.fees.protocol).div(constants.DEPLOY.SCALE);
+  return tender;
 };
 
 module.exports = {
-  DAI: DAI,
   currentTime: currentTime,
   fastForward: fastForward,
-  burnTokenBalance: burnTokenBalance,
-  addWhaleBalance: addWhaleBalance,
-  transferDAI: transferDAI,
   sendDaiFromWhale: sendDaiFromWhale,
-  createProjectObject: createProjectObject,
-  createGrantObject:createGrantObject,
-  approveDAI: approveDAI,
-  createGrantTest: createGrantTest,
-  calcAdminFee: calcAdminFee,
-  createGrantQuick: createGrantQuick,
   createCitizenObject: createCitizenObject,
-  payRewards: payRewards,
-  calcAmountAfterFees: calcAmountAfterFees,
-  feesEarnedOnDeposit: feesEarnedOnDeposit,
+  createProposalObject: createProposalObject,
+  createTenderObject: createTenderObject,
   sendUsdcFromWhale: sendUsdcFromWhale,
 };
