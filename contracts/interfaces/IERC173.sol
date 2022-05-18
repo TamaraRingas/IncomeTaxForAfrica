@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-interface ERC173 /* is ERC165 */ {
+interface IERC173 /* is ERC165 */ {
     /// @dev This emits when ownership of a contract changes.    
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
