@@ -10,10 +10,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuard {
 
-  IERC20 public USDC;
-
-  address public USDCAddress;
-
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
@@ -33,8 +29,13 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
 
   constructor (address _USDC) {
     s.USDAddress = _USDC;
+<<<<<<< HEAD
     USDC = IERC20(_USDC);
     //s.superAdmin = msg.sender;
+=======
+    s.USDC = IERC20(_USDC);
+    s.superAdmin = msg.sender;
+>>>>>>> 65cda27e108898dfe2049d7f9b875f8eee459452
   }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -97,7 +98,7 @@ contract GovernanceFacet is IGovernanceFacet, Ownable, Modifiers, ReentrancyGuar
 
   function fundTreasury(uint256 _amount) public onlySuperAdmin() nonReentrant {
 
-    USDC.transfer(s.TreasuryAddress, _amount);
+    s.USDC.transfer(s.TreasuryAddress, _amount);
 
     emit TreasuryBalanceUpdated(_amount);
   }

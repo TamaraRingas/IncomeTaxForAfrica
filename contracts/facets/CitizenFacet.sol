@@ -7,8 +7,6 @@ import "hardhat/console.sol";
 
 contract CitizenFacet is ICitizenFacet, Modifiers {
 
-    //AppStorage internal s;
-
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
 
