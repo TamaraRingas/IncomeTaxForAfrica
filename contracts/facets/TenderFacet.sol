@@ -6,9 +6,7 @@ import "./ProposalFacet.sol";
 import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
 
 contract TenderFacet is ITenderFacet, Modifiers {
-
-    //AppStorage internal s;
-
+    
     address public owner;
     
     ProposalFacet public proposalFacet;
