@@ -63,7 +63,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) public onlyCompanyAdmin(_companyID) nonReentrant {
 
         require(_companyID <= numberOfCompanies, "NOT A VALID COMPANY ID");
-        require(_citizenID <= _citizen.numberOfCitizens, "NOT A VALID CITIZEN ID");
+        require(_citizenID <= _citizen.numberOfCitizens(), "NOT A VALID CITIZEN ID");
 
         uint256 employeeTaxPercentage = _citizen.citizens[_citizenID].taxPercentage;
         uint256 employeeGrossSalary = employeeSalaries[_companyID][_citizenID];
@@ -160,7 +160,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         companies[_companyID].numberOfEmployees++;
     }
 
-    function getCompany(uint256 _companyID) public view returns (Proposal memory){
+    function getCompany(uint256 _companyID) public view returns (TaxPayerCompany memory){
         return companies[_companyID];
     }
 

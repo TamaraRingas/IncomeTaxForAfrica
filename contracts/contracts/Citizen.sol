@@ -61,5 +61,10 @@ contract Citizen is ICitizen {
     function getCitizenSecondaryID(uint256 _citizenID) public view returns (uint256){
         return citizens[_citizenID].secondarySectorID;
     }
+
+    function getCitizen(uint256 _citizenID) public view returns (Citizen memory){
+        return citizens[_citizenID];
+    }
+
     
 }
