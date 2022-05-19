@@ -3,7 +3,7 @@ pragma solidity 0.8.13;
 
 interface ISector {
 
-    struct SectorStruct {
+    struct Sector {
     uint256 sectorID;
     uint256 numberOfTenders;
     uint256 currentFunds;
