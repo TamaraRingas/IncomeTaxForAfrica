@@ -39,55 +39,30 @@ contract Citizen is ICitizen {
     function register(Citizen memory _citizen) public {
         //Check they are a SA citizen through chainlink
 
-        console.log(s.numberOfTenders);
+        console.log(numberOfTenders);
 
-        _citizen.citizenID = s.numberOfCitizens;
+        _citizen.citizenID = numberOfCitizens;
         _citizen.taxPercentage = 0;
         _citizen.totalTaxPaid = 0;
         _citizen.totalPriorityPoints = 20;
         _citizen.salary = 0;
         _citizen.walletAddress = msg.sender;
 
-        s.citizens[s.numberOfCitizens] = _citizen;
-        s.userAddressesToIDs[msg.sender] = s.numberOfCitizens;
-        s.numberOfCitizens++;
+        citizens[s.numberOfCitizens] = _citizen;
+        userAddressesToIDs[msg.sender] = numberOfCitizens;
+        numberOfCitizens++;
 
 
-        emit CitizenRegistered(_citizen.citizenID, s.numberOfCitizens);
+        emit CitizenRegistered(_citizen.citizenID, numberOfCitizens);
 
     }
 
     function getCitizenPrimaryID(uint256 _citizenID) public view returns (uint256){
-        return s.citizens[_citizenID].primarySectorID;
+        return citizens[_citizenID].primarySectorID;
     }
 
     function getCitizenSecondaryID(uint256 _citizenID) public view returns (uint256){
-        return s.citizens[_citizenID].secondarySectorID;
-    }
-
-     modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
-    modifier onlySuperAdmin() {
-        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
-        _;
-    }
-
-    modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-        _;
-    }
-
-    modifier onlySectorAdmins(uint256 _sectorID) {
-        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
-        _;
-    }
-
-     modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
-        _;
+        return citizens[_citizenID].secondarySectorID;
     }
     
 }
