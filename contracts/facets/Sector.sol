@@ -8,7 +8,7 @@ import "hardhat/console.sol";
 
 contract Sector is ISector {
 
-    uint256 numberOfSectors;
+    uint256 public numberOfSectors;
 
     mapping(uint256 => Sector) sectors;
 
