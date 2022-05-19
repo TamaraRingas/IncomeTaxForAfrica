@@ -14,7 +14,7 @@ struct AppStorage {
     
     
 
-    uint256 treasuryBalance;
+    
 
     address USDAddress;
     

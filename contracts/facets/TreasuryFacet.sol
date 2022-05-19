@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TreasuryFacet is ITreasuryFacet, Ownable, ReentrancyGuard {
 
-  AppStorage internal s;
+  uint256 treasuryBalance;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
