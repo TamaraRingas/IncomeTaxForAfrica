@@ -182,7 +182,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     //     return companies[_companyID].currentProposals;
     // }
 
-    function getAllCompanies() public view returns (TaxPayerCompany[] memory) {
+    function getAllCompanyProposals() public view returns (TaxPayerCompany[] memory) {
         TaxPayerCompany[] memory tempCompanies = new TaxPayerCompany[](numberOfCompanies);
 
         for (uint256 i = 0; i < numberOfCompanies; i++) {
