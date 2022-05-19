@@ -135,18 +135,18 @@ describe("Citizen Facet Tests", function () {
 
       await CitizenInstance.connect(superAdmin).register(testCitizenOne);
       
-      //await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 0, 1)).to.be.revertedWith("CAN ONLY UPDATE OWN SETTINGS");
+      await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 0, 1)).to.be.revertedWith("CAN ONLY UPDATE OWN SETTINGS");
     
     });
 
     it("Correctly updates sectors", async () => {
 
-        // console.log(await SectorInstance.connect(superAdmin).getSectorName(3));
+        console.log(await SectorInstance.connect(superAdmin).getSectorName(3));
 
-        // await CitizenInstance.connect(superAdmin).selectSectors(0, 3, 2);
+        await CitizenInstance.connect(superAdmin).selectSectors(0, 3, 2);
 
-        // expect(await CitizenInstance.connect(superAdmin).getCitizenPrimaryID(0)).to.be.equal(3);
-        // expect(await CitizenInstance.connect(superAdmin).getCitizenSecondaryID(0)).to.be.equal(2);
+        expect(await CitizenInstance.connect(superAdmin).getCitizenPrimaryID(0)).to.be.equal(3);
+        expect(await CitizenInstance.connect(superAdmin).getCitizenSecondaryID(0)).to.be.equal(2);
 
     });
 

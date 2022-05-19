@@ -36,7 +36,7 @@ contract Sector is ISector {
         return sectors[_sectorID].sectorName;
     }
 
-    function getSector(uint256 _sectorID) public view returns (Sector memory){
+    function getSector(uint256 _sectorID) public view returns (Sector memory) {
         return sectors[_sectorID];
     }
 

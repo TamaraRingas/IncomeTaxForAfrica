@@ -71,7 +71,7 @@ contract Tender is ITender {
         return tempTender;
     }
 
-    function getTender(uint256 _tenderID) public view returns (Tender memory){
+    function getTender(uint256 _tenderID) public view returns (Tender calldata){
         return tenders[_tenderID];
     }
 
@@ -186,7 +186,11 @@ contract Tender is ITender {
         emit CloseDevelopment(_tenderID);
 
     }
-    
+
+    // function getTender(uint256 _tenderID) public view returns (Tender memory){
+    //     return tenders[_tenderID];
+    // }
+
      modifier onlyCitizen(address citizen) {
         uint256 _citizenID = _citizen.getUserID(msg.sender);
         require(_citizenID <= _citizen.numberOfCitizens(), "ONLY CITIZENS");
