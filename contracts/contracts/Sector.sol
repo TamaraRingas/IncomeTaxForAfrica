@@ -20,7 +20,7 @@ contract Sector is ISector {
 
     function createSector(string memory _name) public onlySuperAdmin(){
 
-        Sector _sector = sectors[numberOfSectors];
+        Sector memory _sector = sectors[numberOfSectors];
 
        _sector.sectorID = numberOfSectors;
        _sector.numberOfTenders = 0;

@@ -21,8 +21,6 @@ contract Citizen is ICitizen {
 
     function selectSectors(uint256 _citizenID, uint256 _primarySectorID, uint256 _secondarySectorID) public {
 
-        console.log(Citizen.numberOfSectors);
-
         require(_primarySectorID != _secondarySectorID, "SECTORS CANNOT BE THE SAME");
         require(_primarySectorID <= _sectorFacet.numberOfSectors(), "INVALID PRIMARY SECTOR ID");
         require(_secondarySectorID <= _sectorFacet.numberOfSectors(), "INVALID SECONDARY SECTOR ID");
@@ -66,13 +64,8 @@ contract Citizen is ICitizen {
         return citizens[_citizenID];
     }
 
-<<<<<<< HEAD
-    function getUserID(address _citizenID) public view returns (uint256){
-        return userAddressesToIDs[_citizenID];
-=======
     function getUserID(address _citizenAddress) public view returns (uint256){
         return userAddressesToIDs[_citizenAddress];
->>>>>>> badb81e055eebdbe4527b44b16230eb382eab07a
     }
     
 }
