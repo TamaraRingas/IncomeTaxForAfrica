@@ -63,42 +63,43 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
         emit SetSuperAdmin(previousSuperAdmin, superAdmin, block.timestamp);
   }
 
+  //_proposal.getProposal(_proposalID)._proposalState
   function setTenderAdmin(uint256 _tenderID, address _admin) public onlySuperAdmin(){
         require(_admin != address(0), "CANNOT BE ZERO ADDRESS");
 
-        address previousAdmin =  _tender.tenders[_tenderID].admin;
+        address previousAdmin =  _tender.getTender(_tenderID).admin;
 
-        _tender.tenders[_tenderID].admin = _admin;
+        _tender.getTender(_tenderID).admin = _admin;
 
-        emit SetTenderAdmin(_tenderID, previousAdmin, _tender.tenders[_tenderID].admin, block.timestamp);
+        emit SetTenderAdmin(_tenderID, previousAdmin, _admin, block.timestamp);
   }
 
 
   function setSectorAdmin(uint256 _sectorID, address _newAdmin) public onlyOwner {
     require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
 
-    _sector.sectors[_sectorID].sectorAdmins[_newAdmin] = true; 
+    _sector.getSector(_sectorID).sectorAdmins[_newAdmin] = true; 
 
     emit SetSectorAdmin(_sectorID, _newAdmin, block.timestamp);
   }
 
   function changeCompanyAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
         require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
-        require(_companyID <= _company.numberOfCompanies, "NOT A VALID COMPANY ID");
+        require(_companyID <= _company.numberOfCompanies(), "NOT A VALID COMPANY ID");
 
-        address previousAdmin =  _company.companies[_companyID].admin;
-        _company.companies[_companyID].admin = _newAdmin;
+        address previousAdmin =  _company.getCompany().admin;
+        _company.getCompany(_companyID).admin = _newAdmin;
 
-        emit ChangeCompanyAdmin(_companyID, previousAdmin, _company.companies[_companyID].admin, block.timestamp);
+        emit ChangeCompanyAdmin(_companyID, previousAdmin, _newAdmin, block.timestamp);
   }
   
   function setSupervisor(uint256 _proposalID, address _newSupervisor) public onlySupervisor(_proposalID) {
     require(_newSupervisor != address(0), "CANNOT BE ZERO ADDRESS");
-    require(_proposalID <= _proposal.numberOfProposals, "NOT A VALID COMPANY ID");
+    require(_proposalID <= _proposal.numberOfProposals(), "NOT A VALID COMPANY ID");
 
-    address previousSupervisor =  _proposal.proposals[_proposalID].supervisor;
+    address previousSupervisor =  _proposal.getProposal(_proposalID).supervisor;
 
-    _proposal.proposals[_proposalID].supervisor = _newSupervisor;
+    _proposal.getProposal(_proposalID).supervisor = _newSupervisor;
 
     emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor, block.timestamp);
   } 
@@ -109,13 +110,13 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
   function fundTreasury(uint256 _amount) public onlySuperAdmin() nonReentrant {
 
-    USDC.transfer(_treasury.treasuryBalance, _amount);
+    USDC.transfer(_treasury.treasuryBalance(), _amount);
 
     emit TreasuryBalanceUpdated(_amount);
   }
 
   function updateBudget(uint256 _sectorID, uint256 _newBudget) public onlySuperAdmin() {
-    _sector.sectors[_sectorID].budget = _newBudget;
+    _sector.getSector(_sectorID).budget = _newBudget;
 
     emit SectorBudgetUpdated(_newBudget);
   }
@@ -125,7 +126,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
    modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == _tender.tenders[_tenderID].admin, "ONLY ADMIN");
+        require(msg.sender == _tender.getTender(_tenderID).admin, "ONLY ADMIN");
         _;
     }
 
@@ -135,7 +136,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     }
 
     modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == _proposal.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        require(msg.sender == _proposal.getProposal(_proposalID).supervisor, "ONLY SUPERVISOR");
         _;
     }
 }
