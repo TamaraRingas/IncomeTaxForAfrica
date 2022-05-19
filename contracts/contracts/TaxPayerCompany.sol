@@ -71,8 +71,8 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         uint256 priorityPoints = employeeGrossSalary / 1000;
         uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
-        Citizen.citizens[_citizenID].totalTaxPaid += employeeTax;
-        Citizen.citizens[_citizenID].totalPriorityPoints += priorityPoints;
+        _citizen.citizens[_citizenID].totalTaxPaid += employeeTax;
+        _citizen.citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
         //TODO Approve transfer
 

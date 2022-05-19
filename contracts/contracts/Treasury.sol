@@ -51,72 +51,72 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function getProposalStateDetails(uint256 _proposalID) external view returns (IProposal.ProposalState) {
-     return _proposal.proposals[_proposalID]._proposalState;
-  }
+  // function getProposalStateDetails(uint256 _proposalID) external view returns (IProposal.ProposalState) {
+  //    return _proposal.proposals[_proposalID]._proposalState;
+  // }
 
-    //----------------------------------------------------------------------------------------------------------------------
-    //-----------------------------------------         ONLY SUPERVISOR FUNCTIONALITY        ---------------------------------------
-    //----------------------------------------------------------------------------------------------------------------------
+  //   //----------------------------------------------------------------------------------------------------------------------
+  //   //-----------------------------------------         ONLY SUPERVISOR FUNCTIONALITY        ---------------------------------------
+  //   //----------------------------------------------------------------------------------------------------------------------
 
-  function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(_proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_1, "NOT PHASE_1");
+  // function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
+  //   require(_proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_1, "NOT PHASE_1");
     
-    treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
+  //   treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(_company.companies[IProposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
+  //   USDC.transfer(_company.companies[IProposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseOnePaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
-  }
+  //   emit PhaseOnePaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
+  // }
 
-  function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.PHASE_2;
-  }
+  // function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
+  //   Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.PHASE_2;
+  // }
 
-  function payPhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
-    require(Proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_2, "STILL IN PHASE ONE");
+  // function payPhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
+  //   require(Proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_2, "STILL IN PHASE ONE");
 
-    treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
+  //   treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
     
-    USDC.transfer(_company.companies[IProposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
+  //   USDC.transfer(_company.companies[IProposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseTwoPaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
-  }
+  //   emit PhaseTwoPaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
+  // }
 
-  function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.PHASE_3;
-  }
+  // function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
+  //   Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.PHASE_3;
+  // }
 
-  function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(Proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_3, "STILL IN PHASE TWO");
+  // function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
+  //   require(Proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_3, "STILL IN PHASE TWO");
         
-    treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
+  //   treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(_company.companies[Proposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
+  //   USDC.transfer(_company.companies[Proposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseThreePaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
-  }
+  //   emit PhaseThreePaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
+  // }
 
-  function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.PHASE_4;
-  }
+  // function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
+  //   Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.PHASE_4;
+  // }
 
-  function payPhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
-    require(Proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_4, "STILL IN PHASE THREE");
+  // function payPhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
+  //   require(Proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_4, "STILL IN PHASE THREE");
 
-    treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
+  //   treasuryBalance -= Proposal.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(_company.companies[Proposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
+  //   USDC.transfer(_company.companies[Proposal.proposals[_proposalID].companyID].wallet, Proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseFourPaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
-  }
+  //   emit PhaseFourPaid(_proposalID, Proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
+  // }
 
-  function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.CLOSED;
-  }
+  // function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
+  //   Proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.CLOSED;
+  // }
 
-  modifier onlySupervisor(uint256 _proposalID) {
-      require(msg.sender == IProposal.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-      _;
-  }
+  // modifier onlySupervisor(uint256 _proposalID) {
+  //     require(msg.sender == IProposal.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+  //     _;
+  // }
 }
