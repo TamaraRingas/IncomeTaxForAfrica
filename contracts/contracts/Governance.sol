@@ -71,14 +71,14 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
         _tender.getTender(_tenderID).admin = _admin;
 
-        emit SetTenderAdmin(_tenderID, previousAdmin, _tender.getTender(_tenderID).admin, block.timestamp);
+        emit SetTenderAdmin(_tenderID, previousAdmin, _admin, block.timestamp);
   }
 
 
   function setSectorAdmin(uint256 _sectorID, address _newAdmin) public onlyOwner {
     require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
 
-    _sector.getSector().sectorAdmins[_newAdmin] = true; 
+    _sector.getSector(_sectorID).sectorAdmins[_newAdmin] = true; 
 
     emit SetSectorAdmin(_sectorID, _newAdmin, block.timestamp);
   }
@@ -88,18 +88,18 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
         require(_companyID <= _company.numberOfCompanies(), "NOT A VALID COMPANY ID");
 
         address previousAdmin =  _company.getCompany().admin;
-        _company.getCompany().admin = _newAdmin;
+        _company.getCompany(_companyID).admin = _newAdmin;
 
-        emit ChangeCompanyAdmin(_companyID, previousAdmin, _company.getCompany().admin, block.timestamp);
+        emit ChangeCompanyAdmin(_companyID, previousAdmin, _newAdmin, block.timestamp);
   }
   
   function setSupervisor(uint256 _proposalID, address _newSupervisor) public onlySupervisor(_proposalID) {
     require(_newSupervisor != address(0), "CANNOT BE ZERO ADDRESS");
     require(_proposalID <= _proposal.numberOfProposals(), "NOT A VALID COMPANY ID");
 
-    address previousSupervisor =  _proposal.getProposal().supervisor;
+    address previousSupervisor =  _proposal.getProposal(_proposalID).supervisor;
 
-    _proposal.getProposal().supervisor = _newSupervisor;
+    _proposal.getProposal(_proposalID).supervisor = _newSupervisor;
 
     emit SetSupervisor(_proposalID, previousSupervisor, _newSupervisor, block.timestamp);
   } 
@@ -116,7 +116,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
   }
 
   function updateBudget(uint256 _sectorID, uint256 _newBudget) public onlySuperAdmin() {
-    _sector.getSector().budget = _newBudget;
+    _sector.getSector(_sectorID).budget = _newBudget;
 
     emit SectorBudgetUpdated(_newBudget);
   }
@@ -126,7 +126,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
    modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == _tender.getTender().admin, "ONLY ADMIN");
+        require(msg.sender == _tender.getTender(_tenderID).admin, "ONLY ADMIN");
         _;
     }
 
@@ -136,7 +136,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     }
 
     modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == _proposal.getProposal().supervisor, "ONLY SUPERVISOR");
+        require(msg.sender == _proposal.getProposal(_proposalID).supervisor, "ONLY SUPERVISOR");
         _;
     }
 }

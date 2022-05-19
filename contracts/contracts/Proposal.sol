@@ -54,7 +54,7 @@ contract Proposal is IProposal {
         public
         onlyCitizen(msg.sender)
     {
-        uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
+        uint256 _citizenID = _citizen.getUserID(msg.sender).userAddressesToIDs;
 
         require(
             proposals[_proposalID]._proposalState == ProposalState.PROPOSED,
@@ -62,11 +62,11 @@ contract Proposal is IProposal {
         );
 
         require(
-            _citizen.citizens[_citizenID].taxPercentage >= 0,
+            _citizen.getCitizen(_citizenID).taxPercentage >= 0,
             "NOT A TAX PAYER"
         );
 
-        uint256 citizenVotePower = _citizen.citizens[_citizenID].taxPercentage;
+        uint256 citizenVotePower = _citizen.getCitizen(_citizenID).taxPercentage;
 
         proposals[_proposalID].numberOfPublicVotes += citizenVotePower;
     }
