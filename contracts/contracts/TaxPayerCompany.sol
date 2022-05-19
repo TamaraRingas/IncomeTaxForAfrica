@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../interfaces/ITaxPayerCompany.sol";
 import "../interfaces/ITreasury.sol";
 import "../interfaces/IProposal.sol";
+import "../interfaces/ISector.sol";
 import "./Proposal.sol";
 import "./Citizen.sol";
 import "./Sector.sol";
@@ -24,6 +25,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
     Citizen public _citizen;
     Sector public _sector;
+    ISector public _Isector;
     Treasury public _treasury;
 
     event CompanyCreated(uint256 companyID);
@@ -106,11 +108,18 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
                             _sector.getSector(_citizen.getCitizen(_citizenID).secondarySectorID).budgetReached = true;
                     }
             }else {
+
+                ISector.Sector[] memory sectorArray = _sector.viewAllSetors();
                 //Goes through to find a sector that has space for funds and updates its balance
                 for(uint256 x = 0; x < _sector.numberOfSectors(); x++){
 
-                    if(_sector.sectors[x].currentFunds < (_sector.sectors[x].budget)){
-                        _sector.sectors[x].currentFunds += employeeTax;
+                    // if(_sector.sectors[x].currentFunds < (_sector.sectors[x].budget)){
+                    //     _sector.sectors[x].currentFunds += employeeTax;
+                    //     break;
+                    // }
+
+                    if (sectorArray[x].currentFunds < sectorArray[x].budget) {
+                        sectorArray[x].currentFunds += employeeTax;
                         break;
                     }
                 }

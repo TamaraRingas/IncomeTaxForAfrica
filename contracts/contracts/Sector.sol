@@ -10,13 +10,13 @@ contract Sector is ISector {
 
     uint256 public numberOfSectors;
 
-    mapping(uint256 => Sector) sectors;
+    mapping(uint256 => Sector) public sectors;
 
     Governance public _governance;
 
-    constructor() {
+    // constructor() {
 
-    }
+    // }
 
     function createSector(string memory _name) public onlySuperAdmin(){
 
@@ -30,6 +30,16 @@ contract Sector is ISector {
        _sector.sectorName = _name;
 
         numberOfSectors++;
+    }
+
+    function viewAllSetors() public view returns (ISector.Sector[] memory) {
+        ISector.Sector[] memory tempSectors = new ISector.Sector[](numberOfSectors);
+
+        for (uint256 i = 0; i < numberOfSectors; i++) {
+            tempSectors[i] = sectors[i];
+        }
+
+        return tempSectors;
     }
 
     function getSectorName(uint256 _sectorID) public view returns (string memory){
