@@ -33,10 +33,6 @@ contract Tender is ITender {
     event UpdateAdmin(uint256 _tenderAdminIsUpdated, address _oldAdmin, address _newAdmin);
     event UpdateSuperAdmin(address _oldSuperAdmin, address _newSuperAdmin);
 
-    constructor() {
-        superAdmin = msg.sender;
-    }
-
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
