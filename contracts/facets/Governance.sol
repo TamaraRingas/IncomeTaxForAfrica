@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "..//interfaces/IGovernanceFacet.sol";
-import { AppStorage} from "../libraries/AppStorage.sol";
+import "..//interfaces/IGovernance.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract GovernanceFacet is IGovernanceFacet, Ownable, ReentrancyGuard {
+contract GovernanceFacet is IGovernance, Ownable, ReentrancyGuard {
 
   address superAdmin;
 
