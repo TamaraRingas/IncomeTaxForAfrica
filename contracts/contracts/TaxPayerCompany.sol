@@ -3,6 +3,7 @@ pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ITaxPayerCompany.sol";
+import "../interfaces/ITreasury.sol";
 import "./Proposal.sol";
 import "./Citizen.sol";
 import "./Sector.sol";
@@ -20,7 +21,6 @@ contract TaxPayerCompany is ITaxPayerCompany {
 
     Citizen public _citizen;
     Sector public _sector;
-    Treasury public _treasury;
 
     event CompanyCreated(uint256 companyID);
 
@@ -32,7 +32,6 @@ contract TaxPayerCompany is ITaxPayerCompany {
     constructor(address _USDC) {
         USDAddress = _USDC;
         USDC = IERC20(_USDC);
-        //s.TreasuryAddress = _treasury;
     }
 
     //----------------------------------------------------------------------------------------------------------------------
