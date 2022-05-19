@@ -19,6 +19,8 @@ contract ProposalFacet is IProposalFacet {
         CLOSED
     }
 
+    uint256 numberOfProposals;
+
     struct Proposal {
     uint256 proposalID;
     uint256 tenderID;
