@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "./ProposalFacet.sol";
-import "../interfaces/ITreasuryFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "./Proposal.sol";
+import "../interfaces/ITreasury.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract TreasuryFacet is ITreasuryFacet, Ownable, ReentrancyGuard {
+contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
 
   uint256 treasuryBalance;
 
