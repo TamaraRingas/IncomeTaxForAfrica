@@ -160,7 +160,7 @@ contract TaxPayerCompany is ITaxPayerCompany {
     }
 
      modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        require(msg.sender == companies[_companyID].admin, "ONLY COMPANY ADMIN");
         _;
     }
 
