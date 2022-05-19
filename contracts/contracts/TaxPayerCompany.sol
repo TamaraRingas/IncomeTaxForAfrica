@@ -166,10 +166,6 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     //-------------------------------------        GETTER FUNCTIONS        --------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    // function getCompany(uint256 _companyID) public view returns (TaxPayerCompany memory){
-    //     return companies[_companyID];
-    // }
-
     function getCompanyAdmin(uint256 _companyID) public view returns (address){
         return companies[_companyID].admin;
     }
@@ -178,18 +174,15 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         return companies[_companyID].wallet;
     }
 
-    // function getCompanyProposals(uint256 _companyID) public view returns (IProposal.Proposal memory){
-    //     return companies[_companyID].currentProposals;
-    // }
+    function getAllProposals(uint256 _companyID) public view returns (Proposal[] memory) {
+        
+        Proposal[] memory tempProposals = new Proposal[](companies);
 
-    function getAllCompanies() public view returns (TaxPayerCompany[] memory) {
-        TaxPayerCompany[] memory tempCompanies = new TaxPayerCompany[](numberOfCompanies);
-
-        for (uint256 i = 0; i < numberOfCompanies; i++) {
-            tempCompanies[i] = companies[i];
+        for (uint256 i = 0; i < companies[_companyID].numberOfProposals; i++) {
+             tempProposals[i] = companies[_companyID].currentProposals[i];
         }
 
-        return tempCompanies;
+        return tempProposals;
     }
 
     //----------------------------------------------------------------------------------------------------------------------

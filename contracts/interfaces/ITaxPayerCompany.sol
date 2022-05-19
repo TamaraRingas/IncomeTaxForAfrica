@@ -13,6 +13,7 @@ interface ITaxPayerCompany {
     string name;
     mapping(uint256 => bool) employees;
     mapping(uint256 => IProposal.Proposal) currentProposals;
+    uint256 numberOfProposals;
     }
 
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) external;
@@ -21,9 +22,9 @@ interface ITaxPayerCompany {
 
     function addEmployee(uint256 _citizenID, uint256 _companyID) external;
 
-    // function getCompany(uint256 _companyID) external view returns (TaxPayerCompany memory);
-
     function getCompanyAdmin(uint256 _companyID) external view returns (address);
 
     function getCompanyWallet(uint256 _companyID) external view returns (address);
+
+    function getAllProposals(uint256 _companyID) external view returns (Proposal[] memory)
 }
