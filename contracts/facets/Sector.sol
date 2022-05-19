@@ -7,18 +7,8 @@ import "hardhat/console.sol";
 contract Sector is ISector {
 
     uint256 numberOfSectors;
-    
-    struct SectorStruct {
-    uint256 sectorID;
-    uint256 numberOfTenders;
-    uint256 currentFunds;
-    uint256 budget;
-    string sectorName;
-    bool budgetReached;
-    mapping(address => bool) sectorAdmins;
-    }
 
-    mapping(uint256 => SectorStruct) sectors;
+    mapping(uint256 => Sector) sectors;
 
     // constructor() {
     //     superAdmin = msg.sender;
@@ -26,7 +16,7 @@ contract Sector is ISector {
 
     function createSector(string memory _name) public onlySuperAdmin(){
 
-        SectorStruct storage _sector = sectors[numberOfSectors];
+        Sector storage _sector = sectors[numberOfSectors];
 
        _sector.sectorID = numberOfSectors;
        _sector.numberOfTenders = 0;
