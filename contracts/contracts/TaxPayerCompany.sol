@@ -174,7 +174,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         return companies[_companyID].wallet;
     }
 
-    function getAllProposals(uint256 _companyID) public view returns (Proposal[] memory) {
+    function getAllProposals(uint256 _companyID) public view returns (IProposal.Proposal[] memory) {
         
         Proposal[] memory tempProposals = new Proposal[](companies);
 
