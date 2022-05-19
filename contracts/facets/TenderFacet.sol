@@ -10,6 +10,29 @@ contract TenderFacet is ITenderFacet {
 
     address public owner;
 
+    enum Province {
+    EASTERN_CAPE,
+    WESTERN_CAPE,
+    GAUTENG,
+    KWA_ZULU_NATAL,
+    NORTHERN_CAPE,
+    LIMPOPO,
+    MPUMALANGA,
+    NORTH_WEST,
+    FREESTATE
+    }
+
+    enum TenderState {
+        VOTING,
+        APPROVED,
+        DECLINED,
+        PROPOSING,
+        PROPOSAL_VOTING,
+        AWARDED,
+        DEVELOPMENT,
+        CLOSED
+    }
+
     struct Tender {
     uint256 tenderID;
     uint256 sectorID;

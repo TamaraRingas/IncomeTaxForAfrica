@@ -4,30 +4,6 @@ pragma solidity 0.8.13;
 import { ITenderFacet } from "../interfaces/ITenderFacet.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-
-enum Province {
-    EASTERN_CAPE,
-    WESTERN_CAPE,
-    GAUTENG,
-    KWA_ZULU_NATAL,
-    NORTHERN_CAPE,
-    LIMPOPO,
-    MPUMALANGA,
-    NORTH_WEST,
-    FREESTATE
-}
-
-enum TenderState {
-        VOTING,
-        APPROVED,
-        DECLINED,
-        PROPOSING,
-        PROPOSAL_VOTING,
-        AWARDED,
-        DEVELOPMENT,
-        CLOSED
-}
-
  enum ProposalState {
         PROPOSED,
         UNSUCCESSFULL,
