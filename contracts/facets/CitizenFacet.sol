@@ -26,6 +26,9 @@ contract CitizenFacet is ICitizenFacet{
 
     mapping(uint256 => Citizen) citizens;
 
+    //Mapping of citizen addresses => id's
+    mapping(address => uint256) userAddressesToIDs;
+
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
 

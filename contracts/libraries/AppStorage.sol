@@ -7,15 +7,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 struct AppStorage {
 
     
-    
-    
-    
-    
-
-    
-
-    //Mapping of citizen addresses => id's
-    mapping(address => uint256) userAddressesToIDs;
 
     uint256 numberOfProposals;
     uint256 numberOfCitizens;
