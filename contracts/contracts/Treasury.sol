@@ -82,7 +82,7 @@ contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
 
     treasuryBalance -= _proposal.proposals[_proposalID].priceCharged/4;
     
-    USDC.transfer(_company.companies[proposals[_proposalID].companyID].wallet, _proposal.proposals[_proposalID].priceCharged/4);
+    USDC.transfer(_company.companies[IProposal.proposals[_proposalID].companyID].wallet, _proposal.proposals[_proposalID].priceCharged/4);
 
     emit PhaseTwoPaid(_proposalID, _proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
