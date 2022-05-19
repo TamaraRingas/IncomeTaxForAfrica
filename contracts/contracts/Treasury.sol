@@ -2,7 +2,9 @@
 pragma solidity 0.8.13;
 
 import "./Proposal.sol";
+import "./TaxPayerCompany.sol";
 import "../interfaces/ITreasury.sol";
+import "../interfaces/IProposal.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -16,6 +18,9 @@ contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
   IERC20 USDC;
 
   address public treasuryAddress;
+
+  Proposal public _proposal;
+  TaxPayerCompany public _company;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
@@ -47,7 +52,7 @@ contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
   function getProposalStateDetails(uint256 _proposalID) external view returns (ProposalState) {
-    return proposals[_proposalID]._proposalState;
+    return _proposal.proposals[_proposalID]._proposalState;
   }
 
   function getTreasuryBalance() external view onlyOwner returns (uint256) {
@@ -59,73 +64,63 @@ contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
   function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(proposals[_proposalID]._proposalState == ProposalState.PHASE_1, "NOT PHASE_1");
+    require(_proposal.proposals[_proposalID]._proposalState == ProposalState.PHASE_1, "NOT PHASE_1");
     
-    treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
+    treasuryBalance -= _proposal.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, proposals[_proposalID].priceCharged/4);
+    USDC.transfer(_company.companies[s.proposals[_proposalID].companyID].wallet, _proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseOnePaid(_proposalID, proposals[_proposalID].priceCharged/4, block.timestamp);
+    emit PhaseOnePaid(_proposalID, _proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    proposals[_proposalID]._proposalState = ProposalState.PHASE_2;
+    _proposal.proposals[_proposalID]._proposalState = ProposalState.PHASE_2;
   }
 
   function payPhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
-    require(proposals[_proposalID]._proposalState == ProposalState.PHASE_2, "STILL IN PHASE ONE");
+    require(_proposal.proposals[_proposalID]._proposalState == ProposalState.PHASE_2, "STILL IN PHASE ONE");
 
-    treasuryBalance -= proposals[_proposalID].priceCharged/4;
+    treasuryBalance -= _proposal.proposals[_proposalID].priceCharged/4;
     
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, proposals[_proposalID].priceCharged/4);
+    USDC.transfer(_company.companies[s.proposals[_proposalID].companyID].wallet, _proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseTwoPaid(_proposalID, proposals[_proposalID].priceCharged/4, block.timestamp);
+    emit PhaseTwoPaid(_proposalID, _proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseTwo(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    proposals[_proposalID]._proposalState = ProposalState.PHASE_3;
+    _proposal.proposals[_proposalID]._proposalState = ProposalState.PHASE_3;
   }
 
   function payPhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
-    require(proposals[_proposalID]._proposalState == ProposalState.PHASE_3, "STILL IN PHASE TWO");
+    require(_proposal.proposals[_proposalID]._proposalState == ProposalState.PHASE_3, "STILL IN PHASE TWO");
         
-    treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
+    treasuryBalance -= _proposal.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, proposals[_proposalID].priceCharged/4);
+    USDC.transfer(_company.companies[_proposal.proposals[_proposalID].companyID].wallet, _proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseThreePaid(_proposalID, proposals[_proposalID].priceCharged/4, block.timestamp);
+    emit PhaseThreePaid(_proposalID, _proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseThree(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    proposals[_proposalID]._proposalState = ProposalState.PHASE_4;
+    _proposal.proposals[_proposalID]._proposalState = ProposalState.PHASE_4;
   }
 
   function payPhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
-    require(proposals[_proposalID]._proposalState == ProposalState.PHASE_4, "STILL IN PHASE THREE");
+    require(_proposal.proposals[_proposalID]._proposalState == ProposalState.PHASE_4, "STILL IN PHASE THREE");
 
-    treasuryBalance -= s.proposals[_proposalID].priceCharged/4;
+    treasuryBalance -= _proposal.proposals[_proposalID].priceCharged/4;
 
-    USDC.transfer(s.companies[s.proposals[_proposalID].companyID].wallet, proposals[_proposalID].priceCharged/4);
+    USDC.transfer(_company.companies[_proposal..proposals[_proposalID].companyID].wallet, _proposal.proposals[_proposalID].priceCharged/4);
 
-    emit PhaseFourPaid(_proposalID, proposals[_proposalID].priceCharged/4, block.timestamp);
+    emit PhaseFourPaid(_proposalID, _proposal.proposals[_proposalID].priceCharged/4, block.timestamp);
   }
 
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    proposals[_proposalID]._proposalState = ProposalState.CLOSED;
+    _proposal.proposals[_proposalID]._proposalState = ProposalState.CLOSED;
   }
 
-   modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
-    modifier onlySuperAdmin() {
-        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
-        _;
-    }
-
-    modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-        _;
-    }
+  modifier onlySupervisor(uint256 _proposalID) {
+      require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+      _;
+  }
 }

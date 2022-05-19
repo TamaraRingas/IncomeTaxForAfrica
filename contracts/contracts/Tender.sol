@@ -208,7 +208,7 @@ contract Tender is ITender {
     }
 
      modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        require(msg.sender == tenders[_tenderID].admin, "ONLY ADMIN");
         _;
     }
 
