@@ -51,7 +51,7 @@ contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
     //-----------------------------------------         VIEW FUNCTIONALITY       ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function getProposalStateDetails(uint256 _proposalID) external view returns (ProposalState) {
+  function getProposalStateDetails(uint256 _proposalID) external view returns (IProposal.ProposalState) {
     return _proposal.proposals[_proposalID]._proposalState;
   }
 
