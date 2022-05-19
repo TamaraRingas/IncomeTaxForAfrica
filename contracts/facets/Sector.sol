@@ -2,6 +2,7 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/ISector.sol";
+import "./Tender.sol";
 import "hardhat/console.sol";
 
 contract Sector is ISector {
