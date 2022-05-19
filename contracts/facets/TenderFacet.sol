@@ -6,15 +6,10 @@ import "./ProposalFacet.sol";
 import { AppStorage } from "../libraries/AppStorage.sol";
 import "hardhat/console.sol";
 
-<<<<<<< HEAD
-contract TenderFacet is ITenderFacet, Modifiers {
-    
-=======
 contract TenderFacet is ITenderFacet {
 
     AppStorage internal s;
 
->>>>>>> cb4abe69b44e9813b5e8bd83107e3ff91efa49df
     address public owner;
     
     ProposalFacet public proposalFacet;

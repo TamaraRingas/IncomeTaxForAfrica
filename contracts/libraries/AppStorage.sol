@@ -118,16 +118,6 @@ struct Citizen {
     string secondName;
 }
 
-struct Sector {
-    uint256 sectorID;
-    uint256 numberOfTenders;
-    uint256 currentFunds;
-    uint256 budget;
-    string sectorName;
-    bool budgetReached;
-    mapping(address => bool) sectorAdmins;
-}
-
 struct Proposal {
     uint256 proposalID;
     uint256 tenderID;
