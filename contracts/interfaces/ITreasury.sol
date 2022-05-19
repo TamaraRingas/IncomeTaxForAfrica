@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
+import "./IProposal.sol";
+
 interface ITreasury {
 
   function getProposalStateDetails(uint256 _proposalID) external view returns (ProposalState);
