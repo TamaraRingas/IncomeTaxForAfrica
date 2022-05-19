@@ -116,11 +116,11 @@ contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
   }
 
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    _proposal.proposals[_proposalID]._proposalState = ProposalState.CLOSED;
+    _proposal.proposals[_proposalID]._proposalState = IProposal.ProposalState.CLOSED;
   }
 
   modifier onlySupervisor(uint256 _proposalID) {
-      require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+      require(msg.sender == IProposal.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
       _;
   }
 }
