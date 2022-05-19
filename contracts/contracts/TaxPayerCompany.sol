@@ -77,7 +77,7 @@ contract TaxPayerCompany is ITaxPayerCompany {
 
         //Transferring of tax and salary to respective employee and treasury
         require(USDC.transfer(_citizen.citizens[_citizenID].walletAddress, employeeNetSalary), "TRANSFER FAILED");
-        require(USDC.transfer(_treasury.TreasuryAddress, employeeTax), "TRANSFER FAILED");
+        require(USDC.transfer(ITreasury.TreasuryAddress, employeeTax), "TRANSFER FAILED");
 
         //Checks if the employees primary sector is full or there is still space for funds
         //Working on basis that the full tax has to be paid into the sector, not a portion only
