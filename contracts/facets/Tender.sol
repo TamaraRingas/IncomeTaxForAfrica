@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/ITenderFacet.sol";
-import "./ProposalFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "../interfaces/ITender.sol";
+import "./Proposal.sol";
 import "hardhat/console.sol";
 
-contract TenderFacet is ITenderFacet {
+contract Tender is ITender {
 
     address public owner;
 
