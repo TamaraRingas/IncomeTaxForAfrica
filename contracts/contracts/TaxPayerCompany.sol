@@ -70,8 +70,8 @@ contract TaxPayerCompany is ITaxPayerCompany {
         uint256 priorityPoints = employeeGrossSalary / 1000;
         uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
-        citizens[_citizenID].totalTaxPaid += employeeTax;
-        citizens[_citizenID].totalPriorityPoints += priorityPoints;
+        Citizen.citizens[_citizenID].totalTaxPaid += employeeTax;
+        Citizen.citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
         //TODO Approve transfer
 
