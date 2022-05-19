@@ -68,9 +68,8 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     IProposal.Proposal memory p = _proposal.getProposal(_proposalID);
 
     uint256 _companyID = p.companyID;
-    
-    ITaxPayerCompany.TaxPayerCompany memory c = _company.getCompany(_companyID);
-    USDC.transfer(c.wallet, _proposal.getProposal(_proposalID).priceCharged/4);
+
+    USDC.transfer(_company.getWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
 
     emit PhaseOnePaid(_proposalID, _proposal.getProposal(_proposalID).priceCharged/4, block.timestamp);
   }
