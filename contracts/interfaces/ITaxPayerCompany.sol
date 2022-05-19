@@ -12,7 +12,7 @@ interface ITaxPayerCompany {
     address wallet;
     string name;
     mapping(uint256 => bool) employees;
-    mapping(uint256 => Proposal) currentProposals;
+    mapping(uint256 => IProposal.Proposal) currentProposals;
     }
 
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) external;
