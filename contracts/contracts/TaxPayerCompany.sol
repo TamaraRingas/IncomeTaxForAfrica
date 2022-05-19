@@ -2,6 +2,7 @@
 pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../interfaces/ITaxPayerCompany.sol";
 import "../interfaces/ITreasury.sol";
 import "./Proposal.sol";
@@ -9,7 +10,7 @@ import "./Citizen.sol";
 import "./Sector.sol";
 import "./Treasury.sol";
 
-contract TaxPayerCompany is ITaxPayerCompany {
+contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
     //TODO events
     //TODO view functions
@@ -59,7 +60,7 @@ contract TaxPayerCompany is ITaxPayerCompany {
     //-----------------------------------------         ONLY-ADMIN FUNCTIONALITY        ------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function payEmployeeTax(uint256 _companyID, uint256 _citizenID) public onlyCompanyAdmin(_companyID) {
+    function payEmployeeTax(uint256 _companyID, uint256 _citizenID) public onlyCompanyAdmin(_companyID) nonReentrant {
 
         require(_companyID <= numberOfCompanies, "NOT A VALID COMPANY ID");
         require(_citizenID <= _citizen.numberOfCitizens, "NOT A VALID CITIZEN ID");
