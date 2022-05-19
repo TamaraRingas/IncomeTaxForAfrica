@@ -6,7 +6,6 @@ import "./TaxPayerCompany.sol";
 import "./Citizen.sol";
 
 contract Proposal is IProposal {
-
     TaxPayerCompany public _company;
     Citizen public _citizen;
 
@@ -26,62 +25,69 @@ contract Proposal is IProposal {
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function createProposal(Proposal memory _proposal, address _supervisor) public {
-
+    function createProposal(Proposal memory _proposal, address _supervisor)
+        public
+    {
         _proposal.numberOfPublicVotes = 0;
         _proposal.proposalID = numberOfProposals;
         _proposal.storageHash = "";
         _proposal._proposalState = ProposalState.PROPOSED;
-        
+
         _proposal.supervisor = _supervisor;
 
         proposals[numberOfProposals] = _proposal;
 
         numberOfProposals++;
 
-        _company.companies[_proposal.companyID].currentProposals[numberOfProposals - 1] = _proposal;
+        _company.companies[_proposal.companyID].currentProposals[
+            numberOfProposals - 1
+        ] = _proposal;
 
         emit ProposalCreated(proposals[numberOfProposals - 1]);
-
     }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-    function voteForProposal(uint256 _proposalID) public onlyCitizen(msg.sender) {
-        
+    function voteForProposal(uint256 _proposalID)
+        public
+        onlyCitizen(msg.sender)
+    {
         uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
-        
+
         require(
             proposals[_proposalID]._proposalState == ProposalState.PROPOSED,
             "PROPOSAL CLOSED"
         );
 
-        require(_citizen.citizens[_citizenID].taxPercentage >= 0, "NOT A TAX PAYER");
+        require(
+            _citizen.citizens[_citizenID].taxPercentage >= 0,
+            "NOT A TAX PAYER"
+        );
 
         uint256 citizenVotePower = _citizen.citizens[_citizenID].taxPercentage;
 
         proposals[_proposalID].numberOfPublicVotes += citizenVotePower;
-        
     }
 
     //Total public votes is scale of 10_000
     //Incase of ties, cheaper price quoted will be selected
     function calculateWinningProposals(uint256 _tenderID) public {
-        
         uint256 winningNumberOfVotes = 0;
         uint256 winningBudget = 0;
         Proposal memory winningProposal;
 
-        for(uint256 x = 0; x <= numberOfProposals; x++) {
-            if(proposals[x].tenderID == _tenderID) {
-                if(proposals[x].numberOfPublicVotes == winningNumberOfVotes) {
-                    if(proposals[x].priceCharged < winningBudget) {    
+        for (uint256 x = 0; x <= numberOfProposals; x++) {
+            if (proposals[x].tenderID == _tenderID) {
+                if (proposals[x].numberOfPublicVotes == winningNumberOfVotes) {
+                    if (proposals[x].priceCharged < winningBudget) {
                         winningNumberOfVotes = proposals[x].numberOfPublicVotes;
                         winningProposal = proposals[x];
                     }
-                } else if(proposals[x].numberOfPublicVotes > winningNumberOfVotes) {
+                } else if (
+                    proposals[x].numberOfPublicVotes > winningNumberOfVotes
+                ) {
                     winningNumberOfVotes = proposals[x].numberOfPublicVotes;
                     winningProposal = proposals[x];
                 }
@@ -90,11 +96,11 @@ contract Proposal is IProposal {
 
         winningProposal._proposalState = ProposalState.SUCCESSFULL;
 
-        for(uint256 x = 0; x < numberOfProposals; x++){
-            if(proposals[x].tenderID == _tenderID) {
-                if(proposals[x].proposalID != winningProposal.proposalID) {
+        for (uint256 x = 0; x < numberOfProposals; x++) {
+            if (proposals[x].tenderID == _tenderID) {
+                if (proposals[x].proposalID != winningProposal.proposalID) {
                     proposals[x]._proposalState = ProposalState.UNSUCCESSFULL;
-                }   
+                }
             }
         }
     }
@@ -103,9 +109,7 @@ contract Proposal is IProposal {
     //-----------------------------------------         VIEW FUNCTIONS        --------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-
     function viewAllProposals() public view returns (Proposal[] memory) {
-        
         Proposal[] memory tempProposal = new Proposal[](numberOfProposals);
 
         for (uint256 i = 0; i < numberOfProposals; i++) {
@@ -115,7 +119,11 @@ contract Proposal is IProposal {
         return tempProposal;
     }
 
-    function getProposal(uint256 _proposalID) public view returns (Proposal memory) {
+    function getProposal(uint256 _proposalID)
+        public
+        view
+        returns (Proposal memory)
+    {
         return proposals[_proposalID];
     }
 

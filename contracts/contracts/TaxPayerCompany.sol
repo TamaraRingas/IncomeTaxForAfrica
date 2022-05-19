@@ -160,6 +160,10 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         companies[_companyID].numberOfEmployees++;
     }
 
+    function getCompany(uint256 _companyID) public view returns (Proposal memory){
+        return companies[_companyID];
+    }
+
      modifier onlyCompanyAdmin(uint256 _companyID) {
         require(msg.sender == companies[_companyID].admin, "ONLY COMPANY ADMIN");
         _;
