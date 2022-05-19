@@ -3,6 +3,7 @@ pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ITaxPayerCompany.sol";
+import "./Proposal.sol";
 
 contract TaxPayerCompany is ITaxPayerCompany {
 
@@ -14,16 +15,6 @@ contract TaxPayerCompany is ITaxPayerCompany {
 
     uint256 numberOfCompanies;
 
-    struct TaxPayerCompany {
-    uint256 companyID;
-    uint256 numberOfEmployees;
-    address admin;
-    address wallet;
-    string name;
-    mapping(uint256 => bool) employees;
-    mapping(uint256 => Proposal) currentProposals;
-    }
-
     event CompanyCreated(uint256 companyID);
 
     mapping(uint256 => TaxPayerCompany) companies;
@@ -31,12 +22,11 @@ contract TaxPayerCompany is ITaxPayerCompany {
     //Mapping of companyID => CitizenID => salary
     mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
 
-    constructor(address _USDC, address _treasury) {
-        s.USDAddress = _USDC;
-        s.USDC = IERC20(_USDC);
-        s.TreasuryAddress = _treasury;
+    constructor(address _USDC) {
+        USDAddress = _USDC;
+        USDC = IERC20(_USDC);
+        //s.TreasuryAddress = _treasury;
     }
-
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
