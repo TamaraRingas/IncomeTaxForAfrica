@@ -2,12 +2,17 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/IProposal.sol";
+import "./TaxPayerCompany.sol";
+import "./Citizen.sol";
 
 contract Proposal is IProposal {
 
+    TaxPayerCompany public _company;
+    Citizen public _citizen;
+
     address public owner;
 
-    uint256 numberOfProposals;
+    uint256 public numberOfProposals;
 
     event ProposalCreated(Proposal _proposal);
 
@@ -24,19 +29,19 @@ contract Proposal is IProposal {
     function createProposal(Proposal memory _proposal, address _supervisor) public {
 
         _proposal.numberOfPublicVotes = 0;
-        _proposal.proposalID = s.numberOfProposals;
+        _proposal.proposalID = numberOfProposals;
         _proposal.storageHash = "";
         _proposal._proposalState = ProposalState.PROPOSED;
         
         _proposal.supervisor = _supervisor;
 
-        s.proposals[s.numberOfProposals] = _proposal;
+        proposals[numberOfProposals] = _proposal;
 
-        s.numberOfProposals++;
+        numberOfProposals++;
 
-        s.companies[_proposal.companyID].currentProposals[s.numberOfProposals - 1] = _proposal;
+        _company.companies[_proposal.companyID].currentProposals[numberOfProposals - 1] = _proposal;
 
-        emit ProposalCreated(s.proposals[s.numberOfProposals - 1]);
+        emit ProposalCreated(proposals[numberOfProposals - 1]);
 
     }
 
@@ -46,18 +51,18 @@ contract Proposal is IProposal {
 
     function voteForProposal(uint256 _proposalID) public onlyCitizen(msg.sender) {
         
-        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
+        uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
         
         require(
-            s.proposals[_proposalID]._proposalState == ProposalState.PROPOSED,
+            proposals[_proposalID]._proposalState == ProposalState.PROPOSED,
             "PROPOSAL CLOSED"
         );
 
-        require(s.citizens[_citizenID].taxPercentage >= 0, "NOT A TAX PAYER");
+        require(_citizen.citizens[_citizenID].taxPercentage >= 0, "NOT A TAX PAYER");
 
-        uint256 citizenVotePower = s.citizens[_citizenID].taxPercentage;
+        uint256 citizenVotePower = _citizen.citizens[_citizenID].taxPercentage;
 
-        s.proposals[_proposalID].numberOfPublicVotes += citizenVotePower;
+        proposals[_proposalID].numberOfPublicVotes += citizenVotePower;
         
     }
 
@@ -69,26 +74,26 @@ contract Proposal is IProposal {
         uint256 winningBudget = 0;
         Proposal memory winningProposal;
 
-        for(uint256 x = 0; x <= s.numberOfProposals; x++) {
-            if(s.proposals[x].tenderID == _tenderID) {
-                if(s.proposals[x].numberOfPublicVotes == winningNumberOfVotes) {
-                    if(s.proposals[x].priceCharged < winningBudget) {    
-                        winningNumberOfVotes = s.proposals[x].numberOfPublicVotes;
-                        winningProposal = s.proposals[x];
+        for(uint256 x = 0; x <= numberOfProposals; x++) {
+            if(proposals[x].tenderID == _tenderID) {
+                if(proposals[x].numberOfPublicVotes == winningNumberOfVotes) {
+                    if(proposals[x].priceCharged < winningBudget) {    
+                        winningNumberOfVotes = proposals[x].numberOfPublicVotes;
+                        winningProposal = proposals[x];
                     }
                 } else if(s.proposals[x].numberOfPublicVotes > winningNumberOfVotes) {
-                    winningNumberOfVotes = s.proposals[x].numberOfPublicVotes;
-                    winningProposal = s.proposals[x];
+                    winningNumberOfVotes = proposals[x].numberOfPublicVotes;
+                    winningProposal = proposals[x];
                 }
             }
         }
 
         winningProposal._proposalState = ProposalState.SUCCESSFULL;
 
-        for(uint256 x = 0; x < s.numberOfProposals; x++){
-            if(s.proposals[x].tenderID == _tenderID) {
-                if(s.proposals[x].proposalID != winningProposal.proposalID) {
-                    s.proposals[x]._proposalState = ProposalState.UNSUCCESSFULL;
+        for(uint256 x = 0; x < numberOfProposals; x++){
+            if(proposals[x].tenderID == _tenderID) {
+                if(proposals[x].proposalID != winningProposal.proposalID) {
+                    proposals[x]._proposalState = ProposalState.UNSUCCESSFULL;
                 }   
             }
         }
@@ -101,47 +106,22 @@ contract Proposal is IProposal {
 
     function viewAllProposals() public view returns (Proposal[] memory) {
         
-        Proposal[] memory tempProposal = new Proposal[](s.numberOfProposals);
+        Proposal[] memory tempProposal = new Proposal[](numberOfProposals);
 
-        for (uint256 i = 0; i < s.numberOfProposals; i++) {
-            tempProposal[i] = s.proposals[i];
+        for (uint256 i = 0; i < numberOfProposals; i++) {
+            tempProposal[i] = proposals[i];
         }
 
         return tempProposal;
     }
 
     function getProposal(uint256 _proposalID) public view returns (Proposal memory) {
-        return s.proposals[_proposalID];
+        return proposals[_proposalID];
     }
 
     modifier onlyCitizen(address citizen) {
-        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
-        require(_citizenID <= s.numberOfCitizens, "ONLY CITIZENS");
-        _;
-    }
-
-     modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
-    modifier onlySuperAdmin() {
-        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
-        _;
-    }
-
-    modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-        _;
-    }
-
-    modifier onlySectorAdmins(uint256 _sectorID) {
-        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
-        _;
-    }
-
-     modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
+        require(_citizenID <= _citizen.numberOfCitizens, "ONLY CITIZENS");
         _;
     }
 }

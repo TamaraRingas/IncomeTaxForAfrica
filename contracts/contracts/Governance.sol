@@ -135,14 +135,4 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
         _;
     }
 
-    modifier onlySectorAdmins(uint256 _sectorID) {
-        require(_sector.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
-        _;
-    }
-
-     modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == _company.companies[_companyID].admin, "ONLY COMPANY ADMIN");
-        _;
-    }
-
 }
