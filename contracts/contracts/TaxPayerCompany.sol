@@ -2,24 +2,31 @@
 pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/ITaxPayerCompanyFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "../interfaces/ITaxPayerCompany.sol";
+import "./Proposal.sol";
 
-contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
+contract TaxPayerCompany is ITaxPayerCompany {
 
     //TODO events
     //TODO view functions
 
-    AppStorage internal s;
+    address USDAddress;
+    IERC20 USDC;
+
+    uint256 public numberOfCompanies;
 
     event CompanyCreated(uint256 companyID);
 
-    constructor(address _USDC, address _treasury) {
-        s.USDAddress = _USDC;
-        s.USDC = IERC20(_USDC);
-        s.TreasuryAddress = _treasury;
-    }
+    mapping(uint256 => TaxPayerCompany) companies;
 
+    //Mapping of companyID => CitizenID => salary
+    mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
+
+    constructor(address _USDC) {
+        USDAddress = _USDC;
+        USDC = IERC20(_USDC);
+        //s.TreasuryAddress = _treasury;
+    }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         CREATE FUNCTIONS        --------------------------------------------
@@ -57,8 +64,8 @@ contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
         uint256 priorityPoints = employeeGrossSalary / 1000;
         uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
-        s.citizens[_citizenID].totalTaxPaid += employeeTax;
-        s.citizens[_citizenID].totalPriorityPoints += priorityPoints;
+        citizens[_citizenID].totalTaxPaid += employeeTax;
+        citizens[_citizenID].totalPriorityPoints += priorityPoints;
 
         //TODO Approve transfer
 

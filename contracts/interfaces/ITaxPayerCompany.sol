@@ -1,9 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../libraries/AppStorage.sol";
+import "./IProposal.sol";
 
-interface ITaxPayerCompanyFacet {
+interface ITaxPayerCompany {
+
+    struct TaxPayerCompany {
+    uint256 companyID;
+    uint256 numberOfEmployees;
+    address admin;
+    address wallet;
+    string name;
+    mapping(uint256 => bool) employees;
+    mapping(uint256 => Proposal) currentProposals;
+    }
 
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) external;
 

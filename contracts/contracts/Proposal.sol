@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/IProposalFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "../interfaces/IProposal.sol";
 
-contract ProposalFacet is IProposalFacet {
-
-    AppStorage internal s;
+contract Proposal is IProposal {
 
     address public owner;
 
+    uint256 numberOfProposals;
+
     event ProposalCreated(Proposal _proposal);
+
+    mapping(uint256 => Proposal) proposals;
 
     constructor() {
         owner = msg.sender;

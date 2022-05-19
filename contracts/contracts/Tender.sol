@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/ITenderFacet.sol";
-import "./ProposalFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "../interfaces/ITender.sol";
+import "./Proposal.sol";
 import "hardhat/console.sol";
 
-contract TenderFacet is ITenderFacet {
-
-    AppStorage internal s;
+contract Tender is ITender {
 
     address public owner;
+
+    uint256 public numberOfTenders;
+
+    mapping(uint256 => Tender) public tenders;
     
     ProposalFacet public proposalFacet;
 
@@ -28,7 +29,7 @@ contract TenderFacet is ITenderFacet {
     event UpdateSuperAdmin(address _oldSuperAdmin, address _newSuperAdmin);
 
     constructor() {
-        s.superAdmin = msg.sender;
+        superAdmin = msg.sender;
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -38,18 +39,18 @@ contract TenderFacet is ITenderFacet {
     function createTender(Tender memory _tender) public {
 
         _tender._tenderState = TenderState.VOTING;
-        _tender.tenderID = s.numberOfTenders;
+        _tender.tenderID = numberOfTenders;
         _tender.numberOfVotes = 0;
         _tender.dateCreated = block.timestamp;
         _tender._province = Province.EASTERN_CAPE;
 
-        s.tenders[s.numberOfTenders] = _tender;
+        tenders[s.numberOfTenders] = _tender;
 
-        s.sectors[_tender.sectorID].numberOfTenders++;
+        sectors[_tender.sectorID].numberOfTenders++;
 
-        s.numberOfTenders++;
+        numberOfTenders++;
 
-        emit TenderCreated(s.tenders[s.numberOfTenders - 1]);
+        emit TenderCreated(tenders[numberOfTenders - 1]);
 
     }
 
@@ -60,9 +61,9 @@ contract TenderFacet is ITenderFacet {
 
     function viewAllTenders() public view returns (Tender[] memory) {
         
-        Tender[] memory tempTender = new Tender[](s.numberOfTenders);
+        Tender[] memory tempTender = new Tender[](numberOfTenders);
 
-        for (uint256 i = 0; i < s.numberOfTenders; i++) {
+        for (uint256 i = 0; i < numberOfTenders; i++) {
             tempTender[i] = s.tenders[i];
         }
 
@@ -70,7 +71,7 @@ contract TenderFacet is ITenderFacet {
     }
 
     function getTender(uint256 _tenderID) public view returns (Tender memory){
-        return s.tenders[_tenderID];
+        return tenders[_tenderID];
     }
 
     //----------------------------------------------------------------------------------------------------------------------
@@ -79,28 +80,28 @@ contract TenderFacet is ITenderFacet {
 
     function voteForTender(uint256 _tenderID, uint256 _citizenID) public onlyCitizen(msg.sender) {
         require(
-            s.tenders[_tenderID]._tenderState == TenderState.VOTING,
+            tenders[_tenderID]._tenderState == TenderState.VOTING,
             "TENDER NOT IN VOTING STAGE"
         );
 
-        require(s.citizens[_citizenID].totalPriorityPoints < s.tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
+        require(citizens[_citizenID].totalPriorityPoints < tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
 
         console.log("Check");
-        uint256 tenderPriorityPoints = s.tenders[_tenderID].priorityPoints;
+        uint256 tenderPriorityPoints = tenders[_tenderID].priorityPoints;
         console.log("Check");
 
-        console.log(s.citizens[_citizenID].totalPriorityPoints);
+        console.log(citizens[_citizenID].totalPriorityPoints);
         console.log(tenderPriorityPoints);
-        console.log(s.numberOfCitizens);
+        console.log(numberOfCitizens);
 
-        s.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
+        citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
         console.log("Check");
 
-        s.tenders[_tenderID].numberOfVotes++;
+        tenders[_tenderID].numberOfVotes++;
         console.log("Check");
 
 
-        emit VoteSubmitted(msg.sender, _tenderID, s.tenders[_tenderID].numberOfVotes);
+        emit VoteSubmitted(msg.sender, _tenderID, tenders[_tenderID].numberOfVotes);
         
     }
 
@@ -113,13 +114,13 @@ contract TenderFacet is ITenderFacet {
      */
     function closeVoting(uint256 _tenderID) public onlyAdmin(_tenderID) {
 
-        uint256 totalTenderVotes = s.tenders[_tenderID].numberOfVotes;
-        uint256 tenderThreshold = s.tenders[_tenderID].threshold;
+        uint256 totalTenderVotes = tenders[_tenderID].numberOfVotes;
+        uint256 tenderThreshold = tenders[_tenderID].threshold;
 
-        if (totalTenderVotes > (s.numberOfCitizens * tenderThreshold / 10000)) {
-            s.tenders[_tenderID]._tenderState = TenderState.APPROVED;
+        if (totalTenderVotes > (numberOfCitizens * tenderThreshold / 10000)) {
+            tenders[_tenderID]._tenderState = TenderState.APPROVED;
         } else {
-            s.tenders[_tenderID]._tenderState = TenderState.DECLINED;
+            tenders[_tenderID]._tenderState = TenderState.DECLINED;
         }
 
         emit VoteClosed(_tenderID);
@@ -128,18 +129,18 @@ contract TenderFacet is ITenderFacet {
 
     function setThreshold(uint256 _threshold, uint256 _tenderID) public onlyAdmin(_tenderID) {
 
-        uint256 oldThreshold = s.tenders[_tenderID].threshold;
-        s.tenders[_tenderID].threshold = _threshold;
+        uint256 oldThreshold = tenders[_tenderID].threshold;
+        tenders[_tenderID].threshold = _threshold;
 
-        emit UpdatedThreshold(oldThreshold, s.tenders[_tenderID].threshold);
+        emit UpdatedThreshold(oldThreshold, tenders[_tenderID].threshold);
 
     }
 
     function closeTender(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT || block.timestamp >= s.tenders[_tenderID].closingDate, "NOT ALLOWED TO CLOSE TENDER");
+        require(tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT || block.timestamp >= tenders[_tenderID].closingDate, "NOT ALLOWED TO CLOSE TENDER");
 
-        s.tenders[_tenderID]._tenderState == TenderState.CLOSED;    
+        tenders[_tenderID]._tenderState == TenderState.CLOSED;    
 
         emit TenderClosed(_tenderID);
 
@@ -147,9 +148,9 @@ contract TenderFacet is ITenderFacet {
 
     function openProposals(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(s.tenders[_tenderID]._tenderState == TenderState.APPROVED, "TENDER NOT APPROVED");
+        require(tenders[_tenderID]._tenderState == TenderState.APPROVED, "TENDER NOT APPROVED");
         
-        s.tenders[_tenderID]._tenderState == TenderState.PROPOSING;    
+        tenders[_tenderID]._tenderState == TenderState.PROPOSING;    
 
         emit ProposalOpened(_tenderID);
 
@@ -157,29 +158,29 @@ contract TenderFacet is ITenderFacet {
 
     function closeProposals(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(s.tenders[_tenderID]._tenderState == TenderState.PROPOSING, "NOT IN PROPOSING STATE");
+        require(tenders[_tenderID]._tenderState == TenderState.PROPOSING, "NOT IN PROPOSING STATE");
 
-        s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING;   
+        tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING;   
 
         emit ProposalClosed(_tenderID); 
     }
 
     function closeProposalVoting(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(s.tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING, "NOT CURRENT VOTING");
+        require(tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING, "NOT CURRENT VOTING");
 
         proposalFacet.calculateWinningProposals(_tenderID);
 
-        s.tenders[_tenderID]._tenderState == TenderState.AWARDED; 
+        tenders[_tenderID]._tenderState == TenderState.AWARDED; 
 
         emit ProposalVotingClosed(_tenderID);  
     }
 
     function openProjectDevelopment(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(s.tenders[_tenderID]._tenderState == TenderState.AWARDED, "NOT AWARDED");
+        require(tenders[_tenderID]._tenderState == TenderState.AWARDED, "NOT AWARDED");
 
-        s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT;
+        tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT;
 
         emit OpenDevelopment(_tenderID);
 
@@ -187,9 +188,9 @@ contract TenderFacet is ITenderFacet {
 
     function closeProjectDevelopment(uint256 _tenderID) public onlyAdmin(_tenderID){
 
-        require(s.tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT, "NOT IN DEVELOPMENT");
+        require(tenders[_tenderID]._tenderState == TenderState.DEVELOPMENT, "NOT IN DEVELOPMENT");
 
-        s.tenders[_tenderID]._tenderState == TenderState.CLOSED;
+        tenders[_tenderID]._tenderState == TenderState.CLOSED;
 
         emit CloseDevelopment(_tenderID);
 
