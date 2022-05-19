@@ -81,7 +81,7 @@ contract Proposal is IProposal {
                         winningNumberOfVotes = proposals[x].numberOfPublicVotes;
                         winningProposal = proposals[x];
                     }
-                } else if(s.proposals[x].numberOfPublicVotes > winningNumberOfVotes) {
+                } else if(proposals[x].numberOfPublicVotes > winningNumberOfVotes) {
                     winningNumberOfVotes = proposals[x].numberOfPublicVotes;
                     winningProposal = proposals[x];
                 }
