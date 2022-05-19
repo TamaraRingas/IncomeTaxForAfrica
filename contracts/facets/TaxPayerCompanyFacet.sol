@@ -24,6 +24,9 @@ contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
 
     mapping(uint256 => TaxPayerCompany) companies;
 
+    //Mapping of companyID => CitizenID => salary
+    mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
+
     constructor(address _USDC, address _treasury) {
         s.USDAddress = _USDC;
         s.USDC = IERC20(_USDC);

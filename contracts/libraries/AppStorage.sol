@@ -12,8 +12,7 @@ struct AppStorage {
     
     
 
-    //Mapping of companyID => CitizenID => salary
-    mapping(uint256 => mapping(uint256 => uint256)) employeeSalaries;
+    
 
     //Mapping of citizen addresses => id's
     mapping(address => uint256) userAddressesToIDs;
