@@ -10,6 +10,9 @@ contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
     //TODO events
     //TODO view functions
 
+    address USDAddress;
+    IERC20 USDC;
+
     uint256 numberOfCompanies;
 
     struct TaxPayerCompany {
