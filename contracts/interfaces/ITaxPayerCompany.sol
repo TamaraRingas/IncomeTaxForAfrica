@@ -16,6 +16,8 @@ interface ITaxPayerCompany {
     uint256 numberOfProposals;
     }
 
+    function createCompany(address _admin, address _wallet, string memory _name) external;
+
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) external;
 
     function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) external;

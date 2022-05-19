@@ -115,7 +115,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
   }
 
   function payPhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant{
-    require(_proposal.proposals[_proposalID]._proposalState == IProposal.ProposalState.PHASE_4, "STILL IN PHASE THREE");
+    require(_proposal.getProposal(_proposalID)._proposalState == IProposal.ProposalState.PHASE_4, "STILL IN PHASE THREE");
 
     treasuryBalance -= _proposal.getProposal(_proposalID).priceCharged/4;
 
