@@ -13,6 +13,7 @@ interface ITaxPayerCompany {
     string name;
     mapping(uint256 => bool) employees;
     mapping(uint256 => IProposal.Proposal) currentProposals;
+    uint256 numberOfProposals;
     }
 
     function payEmployeeTax(uint256 _companyID, uint256 _citizenID) external;
