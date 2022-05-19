@@ -8,6 +8,17 @@ contract ProposalFacet is IProposalFacet {
 
     address public owner;
 
+    enum ProposalState {
+        PROPOSED,
+        UNSUCCESSFULL,
+        SUCCESSFULL,
+        PHASE_1,
+        PHASE_2,
+        PHASE_3,
+        PHASE_4,
+        CLOSED
+    }
+
     struct Proposal {
     uint256 proposalID;
     uint256 tenderID;

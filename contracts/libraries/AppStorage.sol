@@ -4,17 +4,6 @@ pragma solidity 0.8.13;
 import { ITenderFacet } from "../interfaces/ITenderFacet.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
- enum ProposalState {
-        PROPOSED,
-        UNSUCCESSFULL,
-        SUCCESSFULL,
-        PHASE_1,
-        PHASE_2,
-        PHASE_3,
-        PHASE_4,
-        CLOSED
-}
-
 struct AppStorage {
 
     mapping(uint256 => Tender) tenders;
