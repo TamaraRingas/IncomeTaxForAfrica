@@ -4,11 +4,11 @@ pragma solidity 0.8.13;
 import "../interfaces/ISector.sol";
 import "hardhat/console.sol";
 
-contract SectorFacet is ISector {
+contract Sector is ISector {
 
     uint256 numberOfSectors;
     
-    struct Sector {
+    struct SectorStruct {
     uint256 sectorID;
     uint256 numberOfTenders;
     uint256 currentFunds;
@@ -18,55 +18,55 @@ contract SectorFacet is ISector {
     mapping(address => bool) sectorAdmins;
     }
 
-    mapping(uint256 => Sector) sectors;
+    mapping(uint256 => SectorStruct) sectors;
 
-    constructor() {
-        s.superAdmin = msg.sender;
-    }
+    // constructor() {
+    //     superAdmin = msg.sender;
+    // }
 
     function createSector(string memory _name) public onlySuperAdmin(){
 
-        Sector storage _sector = s.sectors[s.numberOfSectors];
+        SectorStruct storage _sector = sectors[numberOfSectors];
 
-       _sector.sectorID = s.numberOfSectors;
+       _sector.sectorID = numberOfSectors;
        _sector.numberOfTenders = 0;
        _sector.currentFunds = 0;
        _sector.budget = 0;
        _sector.budgetReached = false;
        _sector.sectorName = _name;
 
-        s.numberOfSectors++;
+        numberOfSectors++;
 
-        console.log(s.sectors[s.numberOfSectors - 1].sectorID);
+        console.log(sectors[numberOfSectors - 1].sectorID);
 
     }
 
     function getSectorName(uint256 _sectorID) public view returns (string memory){
-        return s.sectors[_sectorID].sectorName;
+        return sectors[_sectorID].sectorName;
     }
 
      modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        require(msg.sender == tenders[_tenderID].admin, "ONLY ADMIN");
         _;
     }
 
     modifier onlySuperAdmin() {
-        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
         _;
     }
 
     modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        require(msg.sender == proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
         _;
     }
 
     modifier onlySectorAdmins(uint256 _sectorID) {
-        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        require(sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
         _;
     }
 
      modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        require(msg.sender == companies[_companyID].admin, "ONLY COMPANY ADMIN");
         _;
     }
     

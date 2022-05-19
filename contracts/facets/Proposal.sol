@@ -3,7 +3,7 @@ pragma solidity 0.8.13;
 
 import "../interfaces/IProposal.sol";
 
-contract ProposalFacet is IProposal {
+contract Proposal is IProposal {
 
     address public owner;
 

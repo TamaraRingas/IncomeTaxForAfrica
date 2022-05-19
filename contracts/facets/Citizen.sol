@@ -4,7 +4,7 @@ pragma solidity 0.8.13;
 import "../interfaces/ICitizen.sol";
 import "hardhat/console.sol";
 
-contract CitizenFacet is ICitizen {
+contract Citizen is ICitizen {
 
     uint256 numberOfCitizens;
 
