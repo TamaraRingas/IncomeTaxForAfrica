@@ -101,23 +101,6 @@ struct TaxPayerCompany {
     mapping(uint256 => Proposal) currentProposals;
 }
 
-struct Citizen {
-    uint256 citizenID;
-    uint256 salary;
-
-    //Stored out of 10_000 for scale
-    uint256 taxPercentage;
-    uint256 primarySectorID;
-    uint256 secondarySectorID;
-    uint256 totalTaxPaid;
-
-    //Total taxPaid / 1000
-    uint256 totalPriorityPoints;
-    address walletAddress;
-    string firstName;
-    string secondName;
-}
-
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {

@@ -7,7 +7,22 @@ import "hardhat/console.sol";
 
 contract CitizenFacet is ICitizenFacet{
 
-    AppStorage internal s;
+    struct Citizen {
+    uint256 citizenID;
+    uint256 salary;
+
+    //Stored out of 10_000 for scale
+    uint256 taxPercentage;
+    uint256 primarySectorID;
+    uint256 secondarySectorID;
+    uint256 totalTaxPaid;
+
+    //Total taxPaid / 1000
+    uint256 totalPriorityPoints;
+    address walletAddress;
+    string firstName;
+    string secondName;
+    }
 
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
