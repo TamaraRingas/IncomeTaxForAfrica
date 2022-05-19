@@ -10,6 +10,8 @@ contract TenderFacet is ITenderFacet {
 
     address public owner;
 
+    uint256 numberOfTenders;
+
     enum Province {
     EASTERN_CAPE,
     WESTERN_CAPE,
