@@ -53,6 +53,8 @@ contract TenderFacet is ITenderFacet {
     string placeOfTender;
     
     }
+
+    mapping(uint256 => Tender) tenders;
     
     ProposalFacet public proposalFacet;
 
