@@ -161,9 +161,17 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         companies[_companyID].numberOfEmployees++;
     }
 
+    //----------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------        GETTER FUNCTION        --------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
     function getCompany(uint256 _companyID) public view returns (TaxPayerCompany memory){
         return companies[_companyID];
     }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------        MODIFIERS       --------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
 
      modifier onlyCompanyAdmin(uint256 _companyID) {
         require(msg.sender == companies[_companyID].admin, "ONLY COMPANY ADMIN");

@@ -71,9 +71,9 @@ contract Tender is ITender {
         return tempTender;
     }
 
-    function getTender(uint256 _tenderID) public view returns (Tender calldata){
-        return tenders[_tenderID];
-    }
+    // function getTender(uint256 _tenderID) public view returns (Tender calldata){
+    //     return tenders[_tenderID];
+    // }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------         GENERAL FUNCTIONALITY        ---------------------------------------
@@ -187,9 +187,17 @@ contract Tender is ITender {
 
     }
 
-    // function getTender(uint256 _tenderID) public view returns (Tender memory){
-    //     return tenders[_tenderID];
-    // }
+    //----------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------        GETTER FUNCTION        --------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
+    function getTender(uint256 _tenderID) public view returns (Tender memory){
+        return tenders[_tenderID];
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------        MODIFIERS       --------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
 
      modifier onlyCitizen(address citizen) {
         uint256 _citizenID = _citizen.getUserID(msg.sender);

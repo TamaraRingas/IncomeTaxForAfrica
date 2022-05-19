@@ -118,6 +118,10 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     _proposal.getProposal(_proposalID)._proposalState = IProposal.ProposalState.CLOSED;
   }
 
+    //----------------------------------------------------------------------------------------------------------------------
+    //-------------------------------------        MODIFIERS       --------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
   modifier onlySupervisor(uint256 _proposalID) {
       require(msg.sender == _proposal.getProposal(_proposalID).supervisor, "ONLY SUPERVISOR");
       _;
