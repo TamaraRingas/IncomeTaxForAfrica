@@ -15,15 +15,15 @@ interface IProposal {
     }
 
     struct Proposal {
-    uint256 proposalID;
-    uint256 tenderID;
-    uint256 sectorID;
-    uint256 companyID;
-    uint256 priceCharged;
-    uint256 numberOfPublicVotes;
-    address supervisor;
-    string storageHash;
-    ProposalState _proposalState;
+        uint256 proposalID;
+        uint256 tenderID;
+        uint256 sectorID;
+        uint256 companyID;
+        uint256 priceCharged;
+        uint256 numberOfPublicVotes;
+        address supervisor;
+        string storageHash;
+        ProposalState _proposalState;
     }
 
     function createProposal(Proposal calldata _proposal, address _supervisor) external;
