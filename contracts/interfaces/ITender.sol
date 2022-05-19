@@ -3,6 +3,29 @@ pragma solidity 0.8.13;
 
 interface ITender {
 
+    enum Province {
+    EASTERN_CAPE,
+    WESTERN_CAPE,
+    GAUTENG,
+    KWA_ZULU_NATAL,
+    NORTHERN_CAPE,
+    LIMPOPO,
+    MPUMALANGA,
+    NORTH_WEST,
+    FREESTATE
+    }
+
+    enum TenderState {
+        VOTING,
+        APPROVED,
+        DECLINED,
+        PROPOSING,
+        PROPOSAL_VOTING,
+        AWARDED,
+        DEVELOPMENT,
+        CLOSED
+    }
+
     struct Tender {
     uint256 tenderID;
     uint256 sectorID;
@@ -23,7 +46,7 @@ interface ITender {
     string placeOfTender;
     }
 
-    function createTender(Tender memory _tender) external;
+    function createTender(Tender calldata _tender) external;
 
     function viewAllTenders() external view returns (Tender[] calldata);
 

@@ -11,29 +11,6 @@ contract Tender is ITender {
 
     uint256 numberOfTenders;
 
-    enum Province {
-    EASTERN_CAPE,
-    WESTERN_CAPE,
-    GAUTENG,
-    KWA_ZULU_NATAL,
-    NORTHERN_CAPE,
-    LIMPOPO,
-    MPUMALANGA,
-    NORTH_WEST,
-    FREESTATE
-    }
-
-    enum TenderState {
-        VOTING,
-        APPROVED,
-        DECLINED,
-        PROPOSING,
-        PROPOSAL_VOTING,
-        AWARDED,
-        DEVELOPMENT,
-        CLOSED
-    }
-
     mapping(uint256 => Tender) tenders;
     
     ProposalFacet public proposalFacet;
