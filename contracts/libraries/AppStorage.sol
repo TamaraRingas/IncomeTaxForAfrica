@@ -48,7 +48,7 @@ struct Tender {
     TenderState _tenderState;
     uint256 numberOfVotes;
 
-    //How many votes the tender needs to succeed
+    //Percentage votes the tender needs to succeed 1000 - 10000
     uint256 threshold;
 
     //Out of 10: 10 being high priority
@@ -89,7 +89,6 @@ struct AppStorage {
 
     IERC20 USDC;
 
-    Province _province;
 }
 
 struct TaxPayerCompany {
@@ -137,7 +136,6 @@ struct Proposal {
     uint256 priceCharged;
     uint256 numberOfPublicVotes;
     address supervisor;
-    string companyName;
     string storageHash;
     ProposalState _proposalState;
 }
@@ -150,41 +148,5 @@ library LibAppStorage {
     }
 }
 
-contract Modifiers {
-
-    AppStorage internal s;
-
-    modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
-    modifier onlyCitizen(address citizen) {
-        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
-        require(_citizenID < s.numberOfCitizens, "ONLY CITIZENS");
-        _;
-    }
-
-    modifier onlySuperAdmin() {
-        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
-        _;
-    }
-
-    modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-        _;
-    }
-
-    modifier onlySectorAdmins(uint256 _sectorID) {
-        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
-        _;
-    }
-
-     modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
-        _;
-    }
-
-}
 
 

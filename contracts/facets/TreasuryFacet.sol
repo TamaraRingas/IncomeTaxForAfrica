@@ -3,13 +3,15 @@ pragma solidity 0.8.13;
 
 import "./ProposalFacet.sol";
 import "../interfaces/ITreasuryFacet.sol";
-import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import { AppStorage } from "../libraries/AppStorage.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
+contract TreasuryFacet is ITreasuryFacet, Ownable, ReentrancyGuard {
+
+  AppStorage internal s;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
@@ -108,4 +110,29 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, Modifiers, ReentrancyGuard {
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
     s.proposals[_proposalID]._proposalState = ProposalState.CLOSED;
   }
+
+   modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
+    }
 }

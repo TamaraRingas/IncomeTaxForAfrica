@@ -3,14 +3,14 @@ pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ITaxPayerCompanyFacet.sol";
-import { AppStorage, Modifiers } from "../libraries/AppStorage.sol";
+import { AppStorage } from "../libraries/AppStorage.sol";
 
-contract TaxPayerCompanyFacet is Modifiers{
+contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
 
     //TODO events
     //TODO view functions
 
-    //AppStorage internal s;
+    AppStorage internal s;
 
     event CompanyCreated(uint256 companyID);
 
@@ -144,6 +144,31 @@ contract TaxPayerCompanyFacet is Modifiers{
 
         s.companies[_companyID].employees[_citizenID] = true;
         s.companies[_companyID].numberOfEmployees++;
+    }
+
+     modifier onlyAdmin(uint256 _tenderID) {
+        require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
+        _;
+    }
+
+    modifier onlySuperAdmin() {
+        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
+        _;
+    }
+
+    modifier onlySupervisor(uint256 _proposalID) {
+        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
+        _;
+    }
+
+    modifier onlySectorAdmins(uint256 _sectorID) {
+        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
+        _;
+    }
+
+     modifier onlyCompanyAdmin(uint256 _companyID) {
+        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
+        _;
     }
 
 }
