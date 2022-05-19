@@ -120,6 +120,10 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     emit SectorBudgetUpdated(_newBudget);
   }
 
+    //----------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------  MODIFIERS        ---------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------
+
    modifier onlyAdmin(uint256 _tenderID) {
         require(msg.sender == _tender.tenders[_tenderID].admin, "ONLY ADMIN");
         _;
@@ -134,5 +138,4 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
         require(msg.sender == _proposal.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
         _;
     }
-
 }
