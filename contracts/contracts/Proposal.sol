@@ -39,7 +39,7 @@ contract Proposal is IProposal {
 
         numberOfProposals++;
 
-        _company.companies[_proposal.companyID].currentProposals[
+        _company.getCompany(_proposal.companyID).currentProposals[
             numberOfProposals - 1
         ] = _proposal;
 
@@ -128,7 +128,7 @@ contract Proposal is IProposal {
     }
 
     modifier onlyCitizen(address citizen) {
-        uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
+        uint256 _citizenID = _citizen.getUserID(msg.sender);
         require(_citizenID <= _citizen.numberOfCitizens, "ONLY CITIZENS");
         _;
     }
