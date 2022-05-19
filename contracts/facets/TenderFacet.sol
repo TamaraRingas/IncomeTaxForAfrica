@@ -8,9 +8,28 @@ import "hardhat/console.sol";
 
 contract TenderFacet is ITenderFacet {
 
-    AppStorage internal s;
-
     address public owner;
+
+    struct Tender {
+    uint256 tenderID;
+    uint256 sectorID;
+    uint256 dateCreated;
+    uint256 closingDate;
+    Province _province;
+    TenderState _tenderState;
+    uint256 numberOfVotes;
+
+    //Percentage votes the tender needs to succeed 1000 - 10000
+    uint256 threshold;
+
+    //Out of 10: 10 being high priority
+    uint256 priorityPoints;
+
+    address admin;
+
+    string placeOfTender;
+    
+    }
     
     ProposalFacet public proposalFacet;
 
