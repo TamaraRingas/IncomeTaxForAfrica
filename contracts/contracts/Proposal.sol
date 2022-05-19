@@ -43,6 +43,8 @@ contract Proposal is IProposal {
             numberOfProposals - 1
         ] = _proposal;
 
+        _company.getCompany(_proposal.companyID).numberOfProposals++;
+
         emit ProposalCreated(proposals[numberOfProposals - 1]);
     }
 

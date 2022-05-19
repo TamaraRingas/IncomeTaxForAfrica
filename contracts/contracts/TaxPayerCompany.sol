@@ -11,6 +11,7 @@ import "./Citizen.sol";
 import "./Sector.sol";
 import "./Treasury.sol";
 
+
 contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
     //TODO events
@@ -42,7 +43,6 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
     function createCompany(address _admin, address _wallet, string memory _name) public {
-
 
         TaxPayerCompany storage _company = companies[numberOfCompanies];
 
@@ -176,7 +176,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
     function getAllProposals(uint256 _companyID) public view returns (IProposal.Proposal[] memory) {
         
-        Proposal[] memory tempProposals = new Proposal[](companies);
+        IProposal.Proposal[] memory tempProposals = new IProposal.Proposal[](companies);
 
         for (uint256 i = 0; i < companies[_companyID].numberOfProposals; i++) {
              tempProposals[i] = companies[_companyID].currentProposals[i];
