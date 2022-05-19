@@ -11,7 +11,7 @@ contract Tender is ITender {
 
     uint256 public numberOfTenders;
 
-    mapping(uint256 => Tender) tenders;
+    mapping(uint256 => Tender) public tenders;
     
     ProposalFacet public proposalFacet;
 
