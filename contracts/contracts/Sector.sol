@@ -12,6 +12,8 @@ contract Sector is ISector {
 
     mapping(uint256 => Sector) sectors;
 
+    Governance public _governance;
+
     constructor() {
 
     }
@@ -28,17 +30,18 @@ contract Sector is ISector {
        _sector.sectorName = _name;
 
         numberOfSectors++;
-
-        console.log(sectors[numberOfSectors - 1].sectorID);
-
     }
 
     function getSectorName(uint256 _sectorID) public view returns (string memory){
         return sectors[_sectorID].sectorName;
     }
 
+    function getSector(uint256 _sectorID) public view returns (Sector memory){
+        return sectors[_sectorID];
+    }
+
     modifier onlySuperAdmin() {
-        require(msg.sender == Governance.superAdmin, "ONLY SUPER ADMIN");
+        require(msg.sender == _governance.superAdmin(), "ONLY SUPER ADMIN");
         _;
     }
 }

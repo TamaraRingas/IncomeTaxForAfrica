@@ -111,7 +111,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
   }
 
   function closePhaseFour(uint256 _proposalID) external onlySupervisor(_proposalID) {
-    Proposal.getProposal(_proposalID)._proposalState = IProposal.ProposalState.CLOSED;
+    _proposal.getProposal(_proposalID)._proposalState = IProposal.ProposalState.CLOSED;
   }
 
   modifier onlySupervisor(uint256 _proposalID) {
