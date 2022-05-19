@@ -22,6 +22,8 @@ contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
 
     event CompanyCreated(uint256 companyID);
 
+    mapping(uint256 => TaxPayerCompany) companies;
+
     constructor(address _USDC, address _treasury) {
         s.USDAddress = _USDC;
         s.USDC = IERC20(_USDC);
