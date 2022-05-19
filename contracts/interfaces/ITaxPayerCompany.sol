@@ -26,5 +26,5 @@ interface ITaxPayerCompany {
 
     function getCompanyWallet(uint256 _companyID) external view returns (address);
 
-    function getAllProposals(uint256 _companyID) external view returns (Proposal[] memory)
+    function getAllProposals(uint256 _companyID) external view returns (Proposal[] memory);
 }
