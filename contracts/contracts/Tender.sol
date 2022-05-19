@@ -47,7 +47,7 @@ contract Tender is ITender {
 
         tenders[numberOfTenders] = _tender;
 
-        _sector.sectors[_tender.sectorID].numberOfTenders++;
+        _sector.getSector(_tender.sectorID).numberOfTenders++;
 
         numberOfTenders++;
 
@@ -85,22 +85,12 @@ contract Tender is ITender {
             "TENDER NOT IN VOTING STAGE"
         );
 
-        require(_citizen.citizens[_citizenID].totalPriorityPoints < tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
+        require(_citizen.getCitizen(_citizenID).totalPriorityPoints < tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
 
-        console.log("Check");
         uint256 tenderPriorityPoints = tenders[_tenderID].priorityPoints;
-        console.log("Check");
 
-        console.log(Citizen.citizens[_citizenID].totalPriorityPoints);
-        console.log(tenderPriorityPoints);
-        console.log(Citizen.numberOfCitizens);
-
-        Citizen.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
-        console.log("Check");
-
+        _citizen.getCitizen(_citizenID).totalPriorityPoints -= tenderPriorityPoints;
         tenders[_tenderID].numberOfVotes++;
-        console.log("Check");
-
 
         emit VoteSubmitted(msg.sender, _tenderID, tenders[_tenderID].numberOfVotes);
         
@@ -118,7 +108,7 @@ contract Tender is ITender {
         uint256 totalTenderVotes = tenders[_tenderID].numberOfVotes;
         uint256 tenderThreshold = tenders[_tenderID].threshold;
 
-        if (totalTenderVotes > (_citizen.numberOfCitizens * tenderThreshold / 10000)) {
+        if (totalTenderVotes > (_citizen.numberOfCitizens() * tenderThreshold / 10000)) {
             tenders[_tenderID]._tenderState = TenderState.APPROVED;
         } else {
             tenders[_tenderID]._tenderState = TenderState.DECLINED;
@@ -202,8 +192,8 @@ contract Tender is ITender {
     }
 
      modifier onlyCitizen(address citizen) {
-        uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
-        require(_citizenID <= _citizen.numberOfCitizens, "ONLY CITIZENS");
+        uint256 _citizenID = _citizen.getUserID(msg.sender);
+        require(_citizenID <= _citizen.numberOfCitizens(), "ONLY CITIZENS");
         _;
     }
 

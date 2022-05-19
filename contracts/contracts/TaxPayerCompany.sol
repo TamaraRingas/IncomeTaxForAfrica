@@ -22,6 +22,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
     Citizen public _citizen;
     Sector public _sector;
+    Treasury public _treasury;
 
     event CompanyCreated(uint256 companyID);
 
@@ -65,47 +66,47 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         require(_companyID <= numberOfCompanies, "NOT A VALID COMPANY ID");
         require(_citizenID <= _citizen.numberOfCitizens(), "NOT A VALID CITIZEN ID");
 
-        uint256 employeeTaxPercentage = _citizen.citizens[_citizenID].taxPercentage;
+        uint256 employeeTaxPercentage = _citizen.getCitizen(_citizenID).taxPercentage;
         uint256 employeeGrossSalary = employeeSalaries[_companyID][_citizenID];
         uint256 employeeTax = employeeTaxPercentage * employeeGrossSalary / 10000;
         uint256 priorityPoints = employeeGrossSalary / 1000;
         uint256 employeeNetSalary = employeeGrossSalary - employeeTax;
 
-        _citizen.citizens[_citizenID].totalTaxPaid += employeeTax;
-        _citizen.citizens[_citizenID].totalPriorityPoints += priorityPoints;
+        _citizen.getCitizen(_citizenID).totalTaxPaid += employeeTax;
+        _citizen.getCitizen(_citizenID).totalPriorityPoints += priorityPoints;
 
         //TODO Approve transfer
 
         //Transferring of tax and salary to respective employee and treasury
-        require(USDC.transfer(_citizen.citizens[_citizenID].walletAddress, employeeNetSalary), "TRANSFER FAILED");
-        require(USDC.transfer(ITreasury.TreasuryAddress, employeeTax), "TRANSFER FAILED");
+        require(USDC.transfer(_citizen.getCitizen(_citizenID).walletAddress, employeeNetSalary), "TRANSFER FAILED");
+        require(USDC.transfer(_treasury.TreasuryAddress(), employeeTax), "TRANSFER FAILED");
 
         //Checks if the employees primary sector is full or there is still space for funds
         //Working on basis that the full tax has to be paid into the sector, not a portion only
-        if(_sector.sectors[_citizen.citizens[_citizenID].primarySectorID].budgetReached == false){
+        if(_sector.getSector(_citizen.getCitizen(_citizenID).primarySectorID).budgetReached == false){
             
             //Updates the sectors balance
-            _sector.sectors[_citizen.citizens[_citizenID].primarySectorID].currentFunds += employeeTax;
+            _sector.getSector(_citizen.getCitizen(_citizenID).primarySectorID).currentFunds += employeeTax;
 
             //Checks if the sector has enough funds and if so, updates the relevant boolean
-            if(_sector.sectors[_citizen.citizens[_citizenID].primarySectorID].currentFunds >= _sector.sectors[_citizen.citizens[_citizenID].primarySectorID].budget) {
-                _sector.sectors[_citizen.citizens[_citizenID].primarySectorID].budgetReached = true;
+            if(_sector.getSector(_citizen.getCitizen(_citizenID).primarySectorID).currentFunds >= _sector.getSector(_citizen.getCitizen(_citizenID).primarySectorID).budget) {
+                _sector.getSector(_citizen.getCitizen(_citizenID).primarySectorID).budgetReached = true;
             }   
         } 
         else {
             //Checks if the employees secondary sector is full or there is still space for funds
-            if(_sector.sectors[_citizen.citizens[_citizenID].secondarySectorID].budgetReached == false) {
+            if(_sector.getSector(_citizen.getCitizen(_citizenID).secondarySectorID).budgetReached == false) {
                     
                 //Updates sector balance
-                _sector.sectors[_citizen.citizens[_citizenID].secondarySectorID].currentFunds += employeeTax;
+                _sector.getSector(_citizen.getCitizen(_citizenID).secondarySectorID).currentFunds += employeeTax;
             
                     //Checks if the sector has enough funds and if so, updates the relevant boolean
-                    if(_sector.sectors[_citizen.citizens[_citizenID].secondarySectorID].currentFunds >= _sector.sectors[_citizen.citizens[_citizenID].secondarySectorID].budget) {
-                            _sector.sectors[_citizen.citizens[_citizenID].secondarySectorID].budgetReached = true;
+                    if(_sector.getSector(_citizen.getCitizen(_citizenID).secondarySectorID).currentFunds >= _sector.getSector(_citizen.getCitizen(_citizenID).secondarySectorID).budget) {
+                            _sector.getSector(_citizen.getCitizen(_citizenID).secondarySectorID).budgetReached = true;
                     }
             }else {
                 //Goes through to find a sector that has space for funds and updates its balance
-                for(uint256 x = 0; x < _sector.numberOfSectors; x++){
+                for(uint256 x = 0; x < _sector.numberOfSectors(); x++){
 
                     if(_sector.sectors[x].currentFunds < (_sector.sectors[x].budget)){
                         _sector.sectors[x].currentFunds += employeeTax;
@@ -135,21 +136,21 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         
         //Check tax tables and return correct tax percentage
         if(_newSalary >= 7000 && _newSalary < 20000){
-            _citizen.citizens[_citizenID].taxPercentage = 1500;
+            _citizen.getCitizen(_citizenID).taxPercentage = 1500;
         }else if(_newSalary >= 20000 && _newSalary < 30000) {
-            _citizen.citizens[_citizenID].taxPercentage = 2200;
+            _citizen.getCitizen(_citizenID).taxPercentage = 2200;
         }else if(_newSalary >= 30000 && _newSalary < 40000) {
-            _citizen.citizens[_citizenID].taxPercentage = 2800;
+            _citizen.getCitizen(_citizenID).taxPercentage = 2800;
         }else if(_newSalary >= 40000 && _newSalary < 50000) {
-            _citizen.citizens[_citizenID].taxPercentage = 3300;
+            _citizen.getCitizen(_citizenID).taxPercentage = 3300;
         }else if(_newSalary >= 50000 && _newSalary < 70000) {
-            _citizen.citizens[_citizenID].taxPercentage = 3700;
+            _citizen.getCitizen(_citizenID).taxPercentage = 3700;
         }else if(_newSalary >= 70000 && _newSalary < 100000) {
-            _citizen.citizens[_citizenID].taxPercentage = 4000;
+            _citizen.getCitizen(_citizenID).taxPercentage = 4000;
         }else if(_newSalary >= 100000 && _newSalary < 150000) {
-            _citizen.citizens[_citizenID].taxPercentage = 4200;
+            _citizen.getCitizen(_citizenID).taxPercentage = 4200;
         }else if(_newSalary >= 150000) {
-            _citizen.citizens[_citizenID].taxPercentage = 4300;
+            _citizen.getCitizen(_citizenID).taxPercentage = 4300;
         }
     }
 

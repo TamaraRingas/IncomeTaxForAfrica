@@ -66,5 +66,9 @@ contract Citizen is ICitizen {
         return citizens[_citizenID];
     }
 
+    function getUserID(uint256 _citizenID) public view returns (uint256){
+        return userAddressesToIDs[_citizenID];
+    }
+
     
 }
