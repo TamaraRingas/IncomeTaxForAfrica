@@ -11,6 +11,7 @@ import "./Citizen.sol";
 import "./Sector.sol";
 import "./Treasury.sol";
 
+
 contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
     //TODO events
@@ -42,7 +43,6 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
 
     function createCompany(address _admin, address _wallet, string memory _name) public {
-
 
         TaxPayerCompany storage _company = companies[numberOfCompanies];
 
@@ -80,7 +80,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
 
         //Transferring of tax and salary to respective employee and treasury
         require(USDC.transfer(_citizen.getCitizen(_citizenID).walletAddress, employeeNetSalary), "TRANSFER FAILED");
-        require(USDC.transfer(_treasury.TreasuryAddress(), employeeTax), "TRANSFER FAILED");
+        require(USDC.transfer(_treasury.treasuryAddress(), employeeTax), "TRANSFER FAILED");
 
         //Checks if the employees primary sector is full or there is still space for funds
         //Working on basis that the full tax has to be paid into the sector, not a portion only
@@ -174,9 +174,9 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         return companies[_companyID].wallet;
     }
 
-    function getAllProposals(uint256 _companyID) public view returns (Proposal[] memory) {
+    function getAllProposals(uint256 _companyID) public view returns (IProposal.Proposal[] memory) {
         
-        Proposal[] memory tempProposals = new Proposal[](companies);
+        IProposal.Proposal[] memory tempProposals = new IProposal.Proposal[](companies);
 
         for (uint256 i = 0; i < companies[_companyID].numberOfProposals; i++) {
              tempProposals[i] = companies[_companyID].currentProposals[i];
