@@ -49,7 +49,7 @@ contract Tender is ITender {
         _tender.dateCreated = block.timestamp;
         _tender._province = Province.EASTERN_CAPE;
 
-        tenders[s.numberOfTenders] = _tender;
+        tenders[numberOfTenders] = _tender;
 
         _sector.sectors[_tender.sectorID].numberOfTenders++;
 
@@ -69,7 +69,7 @@ contract Tender is ITender {
         Tender[] memory tempTender = new Tender[](numberOfTenders);
 
         for (uint256 i = 0; i < numberOfTenders; i++) {
-            tempTender[i] = s.tenders[i];
+            tempTender[i] = tenders[i];
         }
 
         return tempTender;
@@ -95,11 +95,11 @@ contract Tender is ITender {
         uint256 tenderPriorityPoints = tenders[_tenderID].priorityPoints;
         console.log("Check");
 
-        console.log(citizens[_citizenID].totalPriorityPoints);
+        console.log(Citizen.citizens[_citizenID].totalPriorityPoints);
         console.log(tenderPriorityPoints);
-        console.log(numberOfCitizens);
+        console.log(Citizen.numberOfCitizens);
 
-        citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
+        Citizen.citizens[_citizenID].totalPriorityPoints -= tenderPriorityPoints;
         console.log("Check");
 
         tenders[_tenderID].numberOfVotes++;
