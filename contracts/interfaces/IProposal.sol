@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../libraries/AppStorage.sol";
-
-interface IProposalFacet {
+interface ProposalFacet {
 
     function createProposal(Proposal memory _proposal, address _supervisor) external;
 
