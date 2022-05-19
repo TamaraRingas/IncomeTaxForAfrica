@@ -9,7 +9,7 @@ struct AppStorage {
     
     
     
-    mapping(uint256 => Sector) sectors;
+    
     mapping(uint256 => TaxPayerCompany) companies;
 
     //Mapping of companyID => CitizenID => salary

@@ -19,6 +19,8 @@ contract SectorFacet is ISectorFacet{
     mapping(address => bool) sectorAdmins;
     }
 
+    mapping(uint256 => Sector) sectors;
+    
     constructor() {
         s.superAdmin = msg.sender;
     }
