@@ -2,11 +2,12 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/ICitizen.sol";
+import "./Sector.sol";
 import "hardhat/console.sol";
 
 contract Citizen is ICitizen {
 
-    uint256 numberOfCitizens;
+    uint256 public numberOfCitizens;
 
     mapping(uint256 => Citizen) citizens;
 
@@ -16,13 +17,13 @@ contract Citizen is ICitizen {
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
 
-    constructor() {
-        s.superAdmin = msg.sender;
-    }
+    // constructor() {
+    //     s.superAdmin = msg.sender;
+    // }
 
     function selectSectors(uint256 _citizenID, uint256 _primarySectorID, uint256 _secondarySectorID) public {
 
-        console.log(s.numberOfSectors);
+        console.log(numberOfSectors);
 
         require(_primarySectorID != _secondarySectorID, "SECTORS CANNOT BE THE SAME");
         require(_primarySectorID <= s.numberOfSectors, "INVALID PRIMARY SECTOR ID");
