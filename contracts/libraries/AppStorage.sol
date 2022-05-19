@@ -2,7 +2,7 @@
 pragma solidity 0.8.13;
 
 import { ITenderFacet } from "../interfaces/ITenderFacet.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 struct AppStorage {
 
@@ -20,7 +20,7 @@ struct AppStorage {
     
     address TreasuryAddress;
 
-    address superAdmin;
+    
 
     IERC20 USDC;
 

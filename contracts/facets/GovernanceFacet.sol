@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GovernanceFacet is IGovernanceFacet, Ownable, ReentrancyGuard {
 
-  AppStorage internal s;
+  address superAdmin;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
