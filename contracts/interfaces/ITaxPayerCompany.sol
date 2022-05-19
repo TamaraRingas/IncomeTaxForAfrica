@@ -21,5 +21,5 @@ interface ITaxPayerCompany {
 
     function addEmployee(uint256 _citizenID, uint256 _companyID) external;
 
-    function getCompany(uint256 _companyID) external view returns (TaxPayerCompany memory);
+    // function getCompany(uint256 _companyID) external view returns (TaxPayerCompany memory);
 }
