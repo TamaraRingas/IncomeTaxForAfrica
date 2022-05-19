@@ -7,8 +7,8 @@ import "hardhat/console.sol";
 
 contract SectorFacet is ISectorFacet{
 
-    AppStorage internal s;
-
+    uint256 numberOfSectors;
+    
     struct Sector {
     uint256 sectorID;
     uint256 numberOfTenders;
@@ -20,7 +20,7 @@ contract SectorFacet is ISectorFacet{
     }
 
     mapping(uint256 => Sector) sectors;
-    
+
     constructor() {
         s.superAdmin = msg.sender;
     }
