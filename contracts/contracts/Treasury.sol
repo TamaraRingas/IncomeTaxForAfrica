@@ -22,6 +22,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
   Proposal public _proposal;
   TaxPayerCompany public _company;
+
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
@@ -65,7 +66,9 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     treasuryBalance -= _proposal.getProposal(_proposalID).priceCharged/4;
 
     IProposal.Proposal memory p = _proposal.getProposal(_proposalID);
+
     uint256 _companyID = p.companyID;
+    
     ITaxPayerCompany.TaxPayerCompany memory c = _company.getCompany(_companyID);
     USDC.transfer(c.wallet, _proposal.getProposal(_proposalID).priceCharged/4);
 

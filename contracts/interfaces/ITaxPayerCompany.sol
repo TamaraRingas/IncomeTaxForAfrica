@@ -20,4 +20,6 @@ interface ITaxPayerCompany {
     function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) external;
 
     function addEmployee(uint256 _citizenID, uint256 _companyID) external;
+
+    function getCompany(uint256 _companyID) external view returns (TaxPayerCompany memory);
 }
