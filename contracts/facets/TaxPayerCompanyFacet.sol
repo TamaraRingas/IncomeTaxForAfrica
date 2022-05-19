@@ -10,7 +10,15 @@ contract TaxPayerCompanyFacet is ITaxPayerCompanyFacet{
     //TODO events
     //TODO view functions
 
-    AppStorage internal s;
+    struct TaxPayerCompany {
+    uint256 companyID;
+    uint256 numberOfEmployees;
+    address admin;
+    address wallet;
+    string name;
+    mapping(uint256 => bool) employees;
+    mapping(uint256 => Proposal) currentProposals;
+    }
 
     event CompanyCreated(uint256 companyID);
 

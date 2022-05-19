@@ -91,16 +91,6 @@ struct AppStorage {
 
 }
 
-struct TaxPayerCompany {
-    uint256 companyID;
-    uint256 numberOfEmployees;
-    address admin;
-    address wallet;
-    string name;
-    mapping(uint256 => bool) employees;
-    mapping(uint256 => Proposal) currentProposals;
-}
-
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
