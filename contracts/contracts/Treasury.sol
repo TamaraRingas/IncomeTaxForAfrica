@@ -69,7 +69,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
     uint256 _companyID = p.companyID;
 
-    USDC.transfer(_company.getWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
+    USDC.transfer(_company.getCompanyWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
 
     emit PhaseOnePaid(_proposalID, _proposal.getProposal(_proposalID).priceCharged/4, block.timestamp);
   }
@@ -87,7 +87,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
     uint256 _companyID = p.companyID;
 
-    USDC.transfer(_company.getWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
+    USDC.transfer(_company.getCompanyWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
 
     emit PhaseTwoPaid(_proposalID, _proposal.getProposal(_proposalID).priceCharged/4, block.timestamp);
   }
@@ -105,7 +105,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
     uint256 _companyID = p.companyID;
 
-    USDC.transfer(_company.getWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
+    USDC.transfer(_company.getCompanyWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
 
     emit PhaseThreePaid(_proposalID, _proposal.getProposal(_proposalID).priceCharged/4, block.timestamp);
   }
@@ -123,7 +123,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
     uint256 _companyID = p.companyID;
 
-    USDC.transfer(_company.getWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
+    USDC.transfer(_company.getCompanyWallet(_companyID), _proposal.getProposal(_proposalID).priceCharged/4);
 
     emit PhaseFourPaid(_proposalID, _proposal.getProposal(_proposalID).priceCharged/4, block.timestamp);
   }
