@@ -2,6 +2,8 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/ITender.sol";
+import "./Sector.sol";
+import "./Citizen.sol";
 import "./Proposal.sol";
 import "hardhat/console.sol";
 
@@ -9,11 +11,14 @@ contract Tender is ITender {
 
     address public owner;
 
+    Sector public _sector;
+    Citizen public _citizen;
+
     uint256 public numberOfTenders;
 
     mapping(uint256 => Tender) public tenders;
     
-    ProposalFacet public proposalFacet;
+    Proposal public _proposalContract;
 
     event TenderCreated(Tender _tender);
     event VoteSubmitted(address _voter, uint256 _tenderVotedFor, uint256 _tendersNumberOfVotes);
@@ -46,7 +51,7 @@ contract Tender is ITender {
 
         tenders[s.numberOfTenders] = _tender;
 
-        sectors[_tender.sectorID].numberOfTenders++;
+        _sector.sectors[_tender.sectorID].numberOfTenders++;
 
         numberOfTenders++;
 
@@ -84,7 +89,7 @@ contract Tender is ITender {
             "TENDER NOT IN VOTING STAGE"
         );
 
-        require(citizens[_citizenID].totalPriorityPoints < tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
+        require(_citizen.citizens[_citizenID].totalPriorityPoints < tenders[_tenderID].priorityPoints, "NOT ENOUGH PRIORITY POINTS");
 
         console.log("Check");
         uint256 tenderPriorityPoints = tenders[_tenderID].priorityPoints;
@@ -117,7 +122,7 @@ contract Tender is ITender {
         uint256 totalTenderVotes = tenders[_tenderID].numberOfVotes;
         uint256 tenderThreshold = tenders[_tenderID].threshold;
 
-        if (totalTenderVotes > (numberOfCitizens * tenderThreshold / 10000)) {
+        if (totalTenderVotes > (_citizen.numberOfCitizens * tenderThreshold / 10000)) {
             tenders[_tenderID]._tenderState = TenderState.APPROVED;
         } else {
             tenders[_tenderID]._tenderState = TenderState.DECLINED;
@@ -169,7 +174,7 @@ contract Tender is ITender {
 
         require(tenders[_tenderID]._tenderState == TenderState.PROPOSAL_VOTING, "NOT CURRENT VOTING");
 
-        proposalFacet.calculateWinningProposals(_tenderID);
+        _proposalContract.calculateWinningProposals(_tenderID);
 
         tenders[_tenderID]._tenderState == TenderState.AWARDED; 
 
@@ -197,33 +202,13 @@ contract Tender is ITender {
     }
 
      modifier onlyCitizen(address citizen) {
-        uint256 _citizenID = s.userAddressesToIDs[msg.sender];
-        require(_citizenID <= s.numberOfCitizens, "ONLY CITIZENS");
+        uint256 _citizenID = _citizen.userAddressesToIDs[msg.sender];
+        require(_citizenID <= _citizen.numberOfCitizens, "ONLY CITIZENS");
         _;
     }
 
      modifier onlyAdmin(uint256 _tenderID) {
         require(msg.sender == s.tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
-    modifier onlySuperAdmin() {
-        require(msg.sender == s.superAdmin, "ONLY SUPER ADMIN");
-        _;
-    }
-
-    modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == s.proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-        _;
-    }
-
-    modifier onlySectorAdmins(uint256 _sectorID) {
-        require(s.sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
-        _;
-    }
-
-     modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == s.companies[_companyID].admin, "ONLY COMPANY ADMIN");
         _;
     }
 
