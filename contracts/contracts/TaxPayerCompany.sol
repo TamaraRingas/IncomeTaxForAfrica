@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../interfaces/ITaxPayerCompany.sol";
 import "../interfaces/ITreasury.sol";
+import "../interfaces/IProposal.sol";
 import "./Proposal.sol";
 import "./Citizen.sol";
 import "./Sector.sol";
@@ -162,11 +163,23 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     }
 
     //----------------------------------------------------------------------------------------------------------------------
-    //-------------------------------------        GETTER FUNCTION        --------------------------------
+    //-------------------------------------        GETTER FUNCTIONS        --------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
     function getCompany(uint256 _companyID) public view returns (TaxPayerCompany memory){
         return companies[_companyID];
+    }
+
+    function getCompanyAdmin(uint256 _companyID) public view returns (address){
+        return companies[_companyID].admin;
+    }
+
+    function getCompanyWallet(uint256 _companyID) public view returns (address){
+        return companies[_companyID].wallet;
+    }
+
+    function getCompanyProposals(uint256 _companyID) public view returns (IProposal.Proposal memory){
+        return companies[_companyID].currentProposals;
     }
 
     //----------------------------------------------------------------------------------------------------------------------
