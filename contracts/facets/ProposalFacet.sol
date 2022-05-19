@@ -33,6 +33,8 @@ contract ProposalFacet is IProposalFacet {
 
     event ProposalCreated(Proposal _proposal);
 
+    mapping(uint256 => Proposal) proposals;
+
     constructor() {
         owner = msg.sender;
     }
