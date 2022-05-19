@@ -9,7 +9,7 @@ struct AppStorage {
     
 
     
-    uint256 numberOfCitizens;
+    
     uint256 numberOfSectors;
     uint256 numberOfCompanies;
     uint256 numberOfTenders;

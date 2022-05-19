@@ -7,6 +7,8 @@ import "hardhat/console.sol";
 
 contract CitizenFacet is ICitizenFacet{
 
+    uint256 numberOfCitizens;
+
     struct Citizen {
     uint256 citizenID;
     uint256 salary;
