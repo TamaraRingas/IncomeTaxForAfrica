@@ -6,9 +6,19 @@ import { AppStorage } from "../libraries/AppStorage.sol";
 
 contract ProposalFacet is IProposalFacet {
 
-    AppStorage internal s;
-
     address public owner;
+
+    struct Proposal {
+    uint256 proposalID;
+    uint256 tenderID;
+    uint256 sectorID;
+    uint256 companyID;
+    uint256 priceCharged;
+    uint256 numberOfPublicVotes;
+    address supervisor;
+    string storageHash;
+    ProposalState _proposalState;
+    }
 
     event ProposalCreated(Proposal _proposal);
 

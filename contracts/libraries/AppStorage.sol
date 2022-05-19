@@ -118,18 +118,6 @@ struct Citizen {
     string secondName;
 }
 
-struct Proposal {
-    uint256 proposalID;
-    uint256 tenderID;
-    uint256 sectorID;
-    uint256 companyID;
-    uint256 priceCharged;
-    uint256 numberOfPublicVotes;
-    address supervisor;
-    string storageHash;
-    ProposalState _proposalState;
-}
-
 library LibAppStorage {
     function diamondStorage() internal pure returns (AppStorage storage ds) {
         assembly {
