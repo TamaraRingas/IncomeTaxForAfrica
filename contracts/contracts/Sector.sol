@@ -12,9 +12,9 @@ contract Sector is ISector {
 
     mapping(uint256 => Sector) sectors;
 
-    // constructor() {
-    //     superAdmin = msg.sender;
-    // }
+    constructor() {
+
+    }
 
     function createSector(string memory _name) public onlySuperAdmin(){
 
@@ -38,7 +38,7 @@ contract Sector is ISector {
     }
 
     modifier onlySuperAdmin() {
-        require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
+        require(msg.sender == Governance.superAdmin, "ONLY SUPER ADMIN");
         _;
     }
 }
