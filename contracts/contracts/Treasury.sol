@@ -5,6 +5,7 @@ import "./Proposal.sol";
 import "./TaxPayerCompany.sol";
 import "../interfaces/ITreasury.sol";
 import "../interfaces/IProposal.sol";
+import "../interfaces/ITaxPayerCompany.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
