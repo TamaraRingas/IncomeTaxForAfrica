@@ -4,7 +4,7 @@ pragma solidity 0.8.13;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ITaxPayerCompany.sol";
 
-contract TaxPayerCompanyFacet is ITaxPayerCompany{
+contract TaxPayerCompany is ITaxPayerCompany {
 
     //TODO events
     //TODO view functions
