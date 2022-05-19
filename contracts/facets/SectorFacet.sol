@@ -9,6 +9,16 @@ contract SectorFacet is ISectorFacet{
 
     AppStorage internal s;
 
+    struct Sector {
+    uint256 sectorID;
+    uint256 numberOfTenders;
+    uint256 currentFunds;
+    uint256 budget;
+    string sectorName;
+    bool budgetReached;
+    mapping(address => bool) sectorAdmins;
+}
+
     constructor() {
         s.superAdmin = msg.sender;
     }
