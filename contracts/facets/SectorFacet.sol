@@ -17,7 +17,7 @@ contract SectorFacet is ISectorFacet{
     string sectorName;
     bool budgetReached;
     mapping(address => bool) sectorAdmins;
-}
+    }
 
     constructor() {
         s.superAdmin = msg.sender;
