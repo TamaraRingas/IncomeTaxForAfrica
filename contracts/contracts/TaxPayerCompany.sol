@@ -41,7 +41,7 @@ contract TaxPayerCompany is ITaxPayerCompany {
     function createCompany(address _admin, address _wallet, string memory _name) public {
 
 
-        TaxPayerCompany storage _company = s.companies[s.numberOfCompanies];
+        TaxPayerCompany storage _company = companies[numberOfCompanies];
 
         _company.companyID = numberOfCompanies;
         _company.numberOfEmployees = 0;
