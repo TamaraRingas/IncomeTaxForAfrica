@@ -7,30 +7,7 @@ contract Proposal is IProposal {
 
     address public owner;
 
-    enum ProposalState {
-        PROPOSED,
-        UNSUCCESSFULL,
-        SUCCESSFULL,
-        PHASE_1,
-        PHASE_2,
-        PHASE_3,
-        PHASE_4,
-        CLOSED
-    }
-
     uint256 numberOfProposals;
-
-    struct Proposal {
-    uint256 proposalID;
-    uint256 tenderID;
-    uint256 sectorID;
-    uint256 companyID;
-    uint256 priceCharged;
-    uint256 numberOfPublicVotes;
-    address supervisor;
-    string storageHash;
-    ProposalState _proposalState;
-    }
 
     event ProposalCreated(Proposal _proposal);
 
