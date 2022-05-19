@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-interface IGovernanceFacet {
+interface IGovernance {
   
   function setSuperAdmin(address _newSuperAdmin) external;
 
