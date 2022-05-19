@@ -174,7 +174,7 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         return companies[_companyID].admin;
     }
 
-    function getCompanyWallet(uint256 _companyID) public view returns (address){
+    function getWallet(uint256 _companyID) public view returns (address){
         return companies[_companyID].wallet;
     }
 
