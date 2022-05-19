@@ -8,23 +8,6 @@ contract Citizen is ICitizen {
 
     uint256 numberOfCitizens;
 
-    struct Citizen {
-    uint256 citizenID;
-    uint256 salary;
-
-    //Stored out of 10_000 for scale
-    uint256 taxPercentage;
-    uint256 primarySectorID;
-    uint256 secondarySectorID;
-    uint256 totalTaxPaid;
-
-    //Total taxPaid / 1000
-    uint256 totalPriorityPoints;
-    address walletAddress;
-    string firstName;
-    string secondName;
-    }
-
     mapping(uint256 => Citizen) citizens;
 
     //Mapping of citizen addresses => id's
