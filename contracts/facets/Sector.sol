@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/ISectorFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "../interfaces/ISector.sol";
 import "hardhat/console.sol";
 
-contract SectorFacet is ISectorFacet{
+contract SectorFacet is ISector {
 
     uint256 numberOfSectors;
     
