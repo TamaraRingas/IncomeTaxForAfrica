@@ -13,7 +13,7 @@ contract TaxPayerCompany is ITaxPayerCompany {
     address USDAddress;
     IERC20 USDC;
 
-    uint256 numberOfCompanies;
+    uint256 public numberOfCompanies;
 
     event CompanyCreated(uint256 companyID);
 
