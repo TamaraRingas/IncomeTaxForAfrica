@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TreasuryFacet is ITreasury, Ownable, ReentrancyGuard {
 
-  uint256 treasuryBalance;
+  uint256 public treasuryBalance;
 
   address USDAddress;
   IERC20 USDC;
