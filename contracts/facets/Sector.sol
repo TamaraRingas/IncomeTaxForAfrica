@@ -3,6 +3,7 @@ pragma solidity 0.8.13;
 
 import "../interfaces/ISector.sol";
 import "./Tender.sol";
+import "./Governance.sol";
 import "hardhat/console.sol";
 
 contract Sector is ISector {
@@ -36,29 +37,8 @@ contract Sector is ISector {
         return sectors[_sectorID].sectorName;
     }
 
-     modifier onlyAdmin(uint256 _tenderID) {
-        require(msg.sender == tenders[_tenderID].admin, "ONLY ADMIN");
-        _;
-    }
-
     modifier onlySuperAdmin() {
         require(msg.sender == superAdmin, "ONLY SUPER ADMIN");
         _;
     }
-
-    modifier onlySupervisor(uint256 _proposalID) {
-        require(msg.sender == proposals[_proposalID].supervisor, "ONLY SUPERVISOR");
-        _;
-    }
-
-    modifier onlySectorAdmins(uint256 _sectorID) {
-        require(sectors[_sectorID].sectorAdmins[msg.sender] == true, "ONLY SECTOR ADMINS");
-        _;
-    }
-
-     modifier onlyCompanyAdmin(uint256 _companyID) {
-        require(msg.sender == companies[_companyID].admin, "ONLY COMPANY ADMIN");
-        _;
-    }
-    
 }
