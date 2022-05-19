@@ -15,8 +15,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
-  address superAdmin;
-  address USDAddress;
+  address public superAdmin;
+  address public USDAddress;
   IERC20 USDC;
 
   Citizen public _citizen;

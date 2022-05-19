@@ -5,7 +5,7 @@ import "./IProposal.sol";
 
 interface ITreasury {
 
-  function getProposalStateDetails(uint256 _proposalID) external view returns (IProposal.ProposalState);
+  //function getProposalStateDetails(uint256 _proposalID) external view returns (IProposal.ProposalState);
 
   function getTreasuryBalance() external view returns (uint256);
 

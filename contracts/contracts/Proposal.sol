@@ -16,7 +16,7 @@ contract Proposal is IProposal {
 
     event ProposalCreated(Proposal _proposal);
 
-    mapping(uint256 => Proposal) proposals;
+    mapping(uint256 => Proposal) public proposals;
 
     constructor() {
         owner = msg.sender;
