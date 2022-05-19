@@ -16,13 +16,7 @@ struct AppStorage {
 
     
 
-    address USDAddress;
     
-    address TreasuryAddress;
-
-    
-
-    IERC20 USDC;
 
 }
 

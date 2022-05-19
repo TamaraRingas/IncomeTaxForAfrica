@@ -13,6 +13,9 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, ReentrancyGuard {
 
   uint256 treasuryBalance;
 
+  address USDAddress;
+  IERC20 USDC;
+
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
@@ -36,7 +39,6 @@ contract TreasuryFacet is ITreasuryFacet, Ownable, ReentrancyGuard {
   constructor (address _USDC) {
     s.USDAddress = _USDC;
     s.USDC = IERC20(_USDC);
-    s.TreasuryAddress = address(this);
   }
 
     //----------------------------------------------------------------------------------------------------------------------
