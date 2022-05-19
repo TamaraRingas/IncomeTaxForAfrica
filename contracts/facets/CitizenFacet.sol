@@ -24,6 +24,8 @@ contract CitizenFacet is ICitizenFacet{
     string secondName;
     }
 
+    mapping(uint256 => Citizen) citizens;
+
     event SectorsSelected(uint256 _citizenID, uint256 _primarySector, uint256 _secondarySector);
     event CitizenRegistered(uint256 _citizenID, uint256 _numberOfCitizens);
 

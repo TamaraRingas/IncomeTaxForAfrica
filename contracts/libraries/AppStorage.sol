@@ -8,7 +8,7 @@ struct AppStorage {
 
     
     
-    mapping(uint256 => Citizen) citizens;
+    
     mapping(uint256 => Sector) sectors;
     mapping(uint256 => TaxPayerCompany) companies;
 
