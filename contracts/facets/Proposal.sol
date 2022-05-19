@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.13;
 
-import "../interfaces/IProposalFacet.sol";
-import { AppStorage } from "../libraries/AppStorage.sol";
+import "../interfaces/IProposal.sol";
 
-contract ProposalFacet is IProposalFacet {
+contract ProposalFacet is IProposal {
 
     address public owner;
 
