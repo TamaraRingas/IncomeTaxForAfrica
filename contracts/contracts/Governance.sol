@@ -87,7 +87,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
         require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
         require(_companyID <= _company.numberOfCompanies(), "NOT A VALID COMPANY ID");
 
-        address previousAdmin =  _company.getCompany().admin;
+        address previousAdmin = _company.getCompany().admin;
         _company.getCompany(_companyID).admin = _newAdmin;
 
         emit ChangeCompanyAdmin(_companyID, previousAdmin, _newAdmin, block.timestamp);
