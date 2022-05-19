@@ -35,7 +35,7 @@ contract CitizenFacet is ICitizenFacet{
     function register(Citizen memory _citizen) public {
         //Check they are a SA citizen through chainlink
 
-        console.log(s.numberOfTenders);
+        console.log(s.numberOfSectors);
 
         _citizen.citizenID = s.numberOfCitizens;
         _citizen.taxPercentage = 0;
