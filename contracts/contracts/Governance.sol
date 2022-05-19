@@ -24,7 +24,6 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
   Tender public _tender;
   Sector public _sector;
   TaxPayerCompany public _company;
-  Treasury public _treasury;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
@@ -109,7 +108,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
   function fundTreasury(uint256 _amount) public onlySuperAdmin() nonReentrant {
 
-    USDC.transfer(_treasury.TreasuryAddress, _amount);
+    USDC.transfer(Treasury.treasuryBalance, _amount);
 
     emit TreasuryBalanceUpdated(_amount);
   }
