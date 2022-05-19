@@ -3,7 +3,7 @@ pragma solidity 0.8.13;
 
 
 
-interface ITreasuryFacet {
+interface ITreasury {
 
   function getProposalStateDetails(uint256 _proposalID) external view returns (ProposalState);
 
