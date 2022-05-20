@@ -7,6 +7,8 @@ import "./TaxPayerCompany.sol";
 import "./Citizen.sol";
 
 contract Proposal is IProposal {
+
+    using CompanyLib for TaxPayerCompany;
     TaxPayerCompany public _company;
     Citizen public _citizen;
 
