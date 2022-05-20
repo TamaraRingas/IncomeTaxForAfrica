@@ -2,6 +2,7 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/IProposal.sol";
+import "../interfaces/ICitizen.sol";
 import "../libraries/CompanyLib.sol";
 import "./TaxPayerCompany.sol";
 import "./Citizen.sol";
@@ -48,7 +49,7 @@ contract Proposal is IProposal {
 
         //mapping(uint256 => IProposal.Proposal) currentProposals;
 
-        _company.getCompany(_proposal.companyID).numberOfProposals++;
+        //_company.getCompany(_proposal.companyID).numberOfProposals++;
 
         emit ProposalCreated(proposals[numberOfProposals - 1]);
     }
@@ -61,7 +62,8 @@ contract Proposal is IProposal {
         public
         onlyCitizen(msg.sender)
     {
-        uint256 _citizenID = _citizen.getUserID(msg.sender).userAddressesToIDs;
+        
+        uint256 _citizenID = _citizen.getUserID(msg.sender);
 
         require(
             proposals[_proposalID]._proposalState == ProposalState.PROPOSED,
@@ -145,7 +147,7 @@ contract Proposal is IProposal {
 
     modifier onlyCitizen(address citizen) {
         uint256 _citizenID = _citizen.getUserID(msg.sender);
-        require(_citizenID <= _citizen.numberOfCitizens, "ONLY CITIZENS");
+        require(_citizenID <= _citizen.numberOfCitizens(), "ONLY CITIZENS");
         _;
     }
 }

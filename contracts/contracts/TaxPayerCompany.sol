@@ -133,8 +133,6 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) public onlyCompanyAdmin (_companyID){
         require(_newSalary > 0, "SALARY TOO SMALL");
 
-        //Need to check if is an employee
-
         updateEmployeeTax(_citizenID, _newSalary);
 
         employeeSalaries[_companyID][_citizenID] = _newSalary;
@@ -167,12 +165,12 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         }
     }
 
-    function addEmployee(uint256 _citizenID, uint256 _companyID) public {
-        //Requires
+    // function addEmployee(uint256 _citizenID, uint256 _companyID) public {
+    //     //Requires
 
-        companies[_companyID].employees[_citizenID] = true;
-        companies[_companyID].numberOfEmployees++;
-    }
+    //     companies[_companyID].employees[_citizenID] = true;
+    //     companies[_companyID].numberOfEmployees++;
+    // }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-------------------------------------        GETTER FUNCTIONS        --------------------------------
@@ -190,16 +188,16 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
         return companies[_companyID].wallet;
     }
 
-    function getAllProposals(uint256 _companyID) public view returns (IProposal.Proposal[] memory) {
+    // function getAllProposals(uint256 _companyID) public view returns (IProposal.Proposal[] memory) {
         
-        IProposal.Proposal[] memory tempProposals = new IProposal.Proposal[](companies);
+    //     IProposal.Proposal[] memory tempProposals = new IProposal.Proposal[](companies);
 
-        for (uint256 i = 0; i < companies[_companyID].numberOfProposals; i++) {
-             tempProposals[i] = companies[_companyID].currentProposals[i];
-        }
+    //     for (uint256 i = 0; i < companies[_companyID].numberOfProposals; i++) {
+    //          tempProposals[i] = companies[_companyID].currentProposals[i];
+    //     }
 
-        return tempProposals;
-    }
+    //     return tempProposals;
+    // }
 
     //----------------------------------------------------------------------------------------------------------------------
     //-------------------------------------        MODIFIERS       --------------------------------

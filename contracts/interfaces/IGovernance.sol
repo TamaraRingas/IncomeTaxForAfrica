@@ -9,7 +9,7 @@ interface IGovernance {
 
   function setSectorAdmin(uint256 _sectorID, address _newAdmin) external;
 
-  function changeCompanyAdmin(uint256 _companyID, address _newAdmin) external;
+  //function changeCompanyAdmin(uint256 _companyID, address _newAdmin) external;
   
   function setSupervisor(uint256 _proposalID, address _newSupervisor) external;
 

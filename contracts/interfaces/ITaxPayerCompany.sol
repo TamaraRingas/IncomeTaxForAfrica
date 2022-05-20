@@ -12,8 +12,8 @@ interface ITaxPayerCompany {
     address admin;
     address wallet;
     string name;
-    mapping(uint256 => bool) employees;
-    mapping(uint256 => IProposal.Proposal) currentProposals;
+    //mapping(uint256 => bool) employees;
+    //mapping(uint256 => IProposal.Proposal) currentProposals;
     uint256 numberOfProposals;
     }
 
@@ -23,13 +23,11 @@ interface ITaxPayerCompany {
 
     function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) external;
 
-    function addEmployee(uint256 _citizenID, uint256 _companyID) external;
+    //function addEmployee(uint256 _citizenID, uint256 _companyID) external;
 
     //function getCompany(uint256 _companyID) external returns (Company memory);
 
     function getCompanyAdmin(uint256 _companyID) external view returns (address);
 
     function getCompanyWallet(uint256 _companyID) external view returns (address);
-
-    function getAllProposals(uint256 _companyID) external view returns (IProposal.Proposal[] memory);
 }

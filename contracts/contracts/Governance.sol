@@ -78,20 +78,20 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
   function setSectorAdmin(uint256 _sectorID, address _newAdmin) public onlyOwner {
     require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
 
-    _sector.getSector(_sectorID).sectorAdmins[_newAdmin] = true; 
+    _sector.getSector(_sectorID).sectorAdmin = _newAdmin; 
 
     emit SetSectorAdmin(_sectorID, _newAdmin, block.timestamp);
   }
 
-  function changeCompanyAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
-        require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
-        require(_companyID <= _company.numberOfCompanies(), "NOT A VALID COMPANY ID");
+  // function changeCompanyAdmin(uint256 _companyID, address _newAdmin) public onlyAdmin (_companyID) {
+  //       require(_newAdmin != address(0), "CANNOT BE ZERO ADDRESS");
+  //       require(_companyID <= _company.numberOfCompanies(), "NOT A VALID COMPANY ID");
 
-        address previousAdmin = _company.getCompany().admin;
-        _company.getCompany(_companyID).admin = _newAdmin;
+  //       address previousAdmin = _company.getCompanyAdmin(_companyID);
+  //       _company.getCompany(_companyID).admin = _newAdmin;
 
-        emit ChangeCompanyAdmin(_companyID, previousAdmin, _newAdmin, block.timestamp);
-  }
+  //       emit ChangeCompanyAdmin(_companyID, previousAdmin, _newAdmin, block.timestamp);
+  // }
   
   function setSupervisor(uint256 _proposalID, address _newSupervisor) public onlySupervisor(_proposalID) {
     require(_newSupervisor != address(0), "CANNOT BE ZERO ADDRESS");
@@ -110,7 +110,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
   function fundTreasury(uint256 _amount) public onlySuperAdmin() nonReentrant {
 
-    USDC.transfer(_treasury.treasuryBalance(), _amount);
+    USDC.transfer(_treasury.treasuryAddress(), _amount);
 
     emit TreasuryBalanceUpdated(_amount);
   }

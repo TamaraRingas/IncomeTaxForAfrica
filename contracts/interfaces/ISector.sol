@@ -11,7 +11,6 @@ interface ISector {
         string sectorName;
         bool budgetReached;
         address sectorAdmin;
-        //mapping(address => bool) sectorAdmins;
     }
 
     function createSector(string calldata _name) external;

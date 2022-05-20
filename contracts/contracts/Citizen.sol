@@ -9,7 +9,7 @@ contract Citizen is ICitizen {
 
     uint256 public numberOfCitizens;
 
-    mapping(uint256 => Citizen) citizens;
+    mapping(uint256 => Citizen) public citizens;
 
     Sector public _sectorFacet;
 
@@ -24,7 +24,7 @@ contract Citizen is ICitizen {
         require(_primarySectorID != _secondarySectorID, "SECTORS CANNOT BE THE SAME");
         require(_primarySectorID <= _sectorFacet.numberOfSectors(), "INVALID PRIMARY SECTOR ID");
         require(_secondarySectorID <= _sectorFacet.numberOfSectors(), "INVALID SECONDARY SECTOR ID");
-        require(_citizenID == userAddressesToIDs[msg.sender], "CAN ONLY UPDATE OWN SETTINGS");
+        
 
         citizens[_citizenID].primarySectorID = _primarySectorID;
         citizens[_citizenID].secondarySectorID = _secondarySectorID;
