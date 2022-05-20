@@ -2,6 +2,7 @@
 pragma solidity 0.8.13;
 
 import "../interfaces/IProposal.sol";
+import "../libraries/CompanyLib.sol";
 import "./TaxPayerCompany.sol";
 import "./Citizen.sol";
 
