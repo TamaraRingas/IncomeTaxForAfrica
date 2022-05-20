@@ -8,6 +8,7 @@ interface ITaxPayerCompany {
     struct TaxPayerCompany {
     uint256 companyID;
     uint256 numberOfEmployees;
+    uint256 proposalID;
     address admin;
     address wallet;
     string name;
@@ -23,6 +24,8 @@ interface ITaxPayerCompany {
     function updateEmployeeSalary(uint256 _citizenID, uint256 _newSalary, uint256 _companyID) external;
 
     function addEmployee(uint256 _citizenID, uint256 _companyID) external;
+
+    //function getCompany(uint256 _companyID) external returns (Company memory);
 
     function getCompanyAdmin(uint256 _companyID) external view returns (address);
 
