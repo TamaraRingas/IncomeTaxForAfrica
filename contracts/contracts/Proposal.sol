@@ -39,9 +39,11 @@ contract Proposal is IProposal {
 
         numberOfProposals++;
 
-        _company.getCompany(_proposal.companyID).currentProposals[
-            numberOfProposals - 1
-        ] = _proposal;
+        // _company.getCompany(_proposal.companyID).currentProposals[
+        //     numberOfProposals - 1
+        // ] = _proposal;
+
+        //mapping(uint256 => IProposal.Proposal) currentProposals;
 
         _company.getCompany(_proposal.companyID).numberOfProposals++;
 
