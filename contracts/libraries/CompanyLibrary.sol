@@ -3,7 +3,7 @@ pragma solidity 0.8.13;
 
 import "../interfaces/IProposal.sol";
 
-library CompanyLibrary {
+library CompanyLib {
 
   struct TaxPayerCompany {
     uint256 companyID;
