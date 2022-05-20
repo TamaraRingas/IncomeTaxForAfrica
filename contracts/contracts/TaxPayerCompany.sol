@@ -3,6 +3,7 @@ pragma solidity 0.8.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "../libraries/CompanyLib.sol";
 import "../interfaces/ITaxPayerCompany.sol";
 import "../interfaces/ITreasury.sol";
 import "../interfaces/IProposal.sol";
@@ -14,6 +15,8 @@ import "./Treasury.sol";
 
 
 contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
+
+    using CompanyLib for TaxPayerCompany;
 
     //TODO events
     //TODO view functions
@@ -174,6 +177,10 @@ contract TaxPayerCompany is ITaxPayerCompany, ReentrancyGuard {
     //----------------------------------------------------------------------------------------------------------------------
     //-------------------------------------        GETTER FUNCTIONS        --------------------------------
     //----------------------------------------------------------------------------------------------------------------------
+
+    // function getCompany(uint256 _companyID) public view returns (TaxPayerCompany memory){
+    //     return companies[_companyID];
+    // }
 
     function getCompanyAdmin(uint256 _companyID) public view returns (address){
         return companies[_companyID].admin;
