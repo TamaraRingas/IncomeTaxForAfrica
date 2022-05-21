@@ -132,7 +132,7 @@ describe.only("Governance Tests", function () {
 
   describe("Setting Supervisor", function () {
 
-    it("Correctly creates citizen", async () => {
+    it("Reverts if zero address", async () => {
 
   
 
