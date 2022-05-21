@@ -34,7 +34,7 @@ const USDC = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("Governance Tests", function () {
+describe("Governance Tests", function () {
   beforeEach(async () => {
     [
       owner,
@@ -61,7 +61,6 @@ describe.only("Governance Tests", function () {
     proposalAdminAddress = await proposalAdmin.getAddress();
 
     // Deploy core
-    
     GovernanceContract = await ethers.getContractFactory("Governance");
     GovernanceInstance = await GovernanceContract.connect(owner).deploy(constants.POLYGON.USDC);
 
@@ -78,7 +77,7 @@ describe.only("Governance Tests", function () {
     ProposalInstance = await ProposalContract.connect(superAdmin).deploy();
 
     TreasuryContract = await ethers.getContractFactory("Treasury");
-    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy();
+    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
 
 
     // Creating USDC token instance
@@ -100,7 +99,7 @@ describe.only("Governance Tests", function () {
     endTime = startTime + constants.TEST.oneMonth;
   });
 
-  describe("Set superAdmin", function () {
+  describe.only("Set superAdmin", function () {
 
     it("Reverts if zero address", async () => {
       await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(Test.zeroAddr).to.be.revertedWith("CANNOT BE ZERO ADDRESS"));
