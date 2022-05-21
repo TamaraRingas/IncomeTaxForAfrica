@@ -20,11 +20,6 @@ const CONSTANTS = {
     aUSDC: "0x625E7708f30cA75bfd92586e17077590C60eb4cD",
     USDC_WHALE: "0xADBaB4F38Ff9DCD71886f43B148bcad4A3081fB9",
   },
- 
-  ART: {
-    decimals: 18,
-    total: 100000000, //  100 million
-  },
   DEPLOY: {
     fees: {
       protocol: 1000,
