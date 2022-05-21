@@ -36,7 +36,7 @@ const USDC = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("Governance Tests", function () {
+describe("Governance Tests", function () {
   beforeEach(async () => {
     [
       owner,
@@ -51,7 +51,7 @@ describe.only("Governance Tests", function () {
       tenderAdmin,
       proposalAdmin,
     ] = await ethers.getSigners();
-    
+
     ownerAddress = await owner.getAddress();
     superAdminAddress = await superAdmin.getAddress();
     supervisorAddress = await supervisor.getAddress();
@@ -66,7 +66,9 @@ describe.only("Governance Tests", function () {
 
     // Deploy core
     GovernanceContract = await ethers.getContractFactory("Governance");
-    GovernanceInstance = await GovernanceContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
+    GovernanceInstance = await GovernanceContract.connect(superAdmin).deploy(
+      constants.POLYGON.USDC
+    );
 
     SectorContract = await ethers.getContractFactory("Sector");
     SectorInstance = await SectorContract.connect(superAdmin).deploy();
@@ -81,8 +83,9 @@ describe.only("Governance Tests", function () {
     ProposalInstance = await ProposalContract.connect(superAdmin).deploy();
 
     TreasuryContract = await ethers.getContractFactory("Treasury");
-    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
-
+    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy(
+      constants.POLYGON.USDC
+    );
 
     // Creating USDC token instance
     await hre.network.provider.request({
@@ -104,75 +107,79 @@ describe.only("Governance Tests", function () {
   });
 
   describe("Set superAdmin", function () {
-
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+      await expect(
+        GovernanceInstance.connect(superAdmin).setSuperAdmin(
+          constants.TEST.zeroAddr
+        )
+      ).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
     it("Reverts if not Super Admin", async () => {
-      await expect(GovernanceInstance.connect(citizenTwo).setSuperAdmin(citizenOneAddress)).to.be.revertedWith("ONLY SUPER ADMIN");
+      await expect(
+        GovernanceInstance.connect(citizenTwo).setSuperAdmin(citizenOneAddress)
+      ).to.be.revertedWith("ONLY SUPER ADMIN");
     });
 
     it("Correctly Updates Super Admin", async () => {
-      await GovernanceInstance.connect(superAdmin).setSuperAdmin(citizenOneAddress);
+      await GovernanceInstance.connect(superAdmin).setSuperAdmin(
+        citizenOneAddress
+      );
 
-     // await expect(await GovernanceInstance.connect(citizenTwo).getSuperAdmin().to.be.equal(citizenOneAddress));
-      assert.equal(await GovernanceInstance.connect(citizenTwo).getSuperAdmin(),citizenOneAddress);
+      // await expect(await GovernanceInstance.connect(citizenTwo).getSuperAdmin().to.be.equal(citizenOneAddress));
+      assert.equal(
+        await GovernanceInstance.connect(citizenTwo).getSuperAdmin(),
+        citizenOneAddress
+      );
     });
 
     it("Emits Event Correctly", async () => {
-      await expect(await GovernanceInstance.connect(superAdmin).setSuperAdmin(citizenOneAddress).to.emit(SetSuperAdmin));
-  
-
+      await expect(
+        await GovernanceInstance.connect(superAdmin)
+          .setSuperAdmin(citizenOneAddress)
+          .to.emit(SetSuperAdmin)
+      );
     });
-    
-
-    
-
   });
 
   describe("Setting Tender Admin", function () {
-
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setTenderAdmin(1, constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+      await expect(
+        GovernanceInstance.connect(superAdmin).setTenderAdmin(
+          1,
+          constants.TEST.zeroAddr
+        )
+      ).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
-
   });
 
   describe("Setting Sector Admin", function () {
-
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setSectorAdmin(1, constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+      await expect(
+        GovernanceInstance.connect(superAdmin).setSectorAdmin(
+          1,
+          constants.TEST.zeroAddr
+        )
+      ).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
-
   });
 
   describe("Setting Supervisor", function () {
-
-    it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(supervisor).setSupervisor(1, constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+    it.only("Reverts if zero address", async () => {
+      await expect(
+        GovernanceInstance.connect(supervisor).setSupervisor(
+          1,
+          constants.TEST.zeroAddr
+        )
+      ).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
-
   });
 
   describe("Funding Treasury", function () {
-
-    it(" ", async () => {
-
-  
-
-    });
-
+    it(" ", async () => {});
   });
 
   describe("Updating Budget", function () {
-
-    it(" ", async () => {
-
-  
-
-    });
-
+    it(" ", async () => {});
   });
-
 });

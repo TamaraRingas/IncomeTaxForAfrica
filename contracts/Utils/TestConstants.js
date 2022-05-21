@@ -35,9 +35,9 @@ const CONSTANTS = {
       primarySectorID: 1,
       secondarySectorID: 2,
       firstname: "John",
-      secondName: "Doe", //1 week in seconds
+      secondName: "Doe", // 1 week in seconds
     },
-    zeroAddr: "0x0000000000000000000000000000000000000000",
+    zeroAddr: ethers.constants.AddressZero,
     projectID: 1,
     projectOne: "Project1",
     projectTwo: "Project2",
