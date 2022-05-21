@@ -36,7 +36,7 @@ const DAI = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe("Treasury Tests", function () {
+describe.only("Treasury Tests", function () {
   beforeEach(async () => {
     [
       superAdmin,
@@ -87,8 +87,12 @@ describe("Treasury Tests", function () {
     endTime = startTime + constants.TEST.oneMonth;
   });
 
-  it("This works", async () => {
-    
+  describe("Getting Proposal State Details", function () {
+
+    it("Shoulds return state correctly", async () => {
+      
+    });
+
   });
 
 });

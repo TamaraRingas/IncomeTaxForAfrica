@@ -34,7 +34,7 @@ const USDC = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("Governance Tests", function () {
+describe("Governance Tests", function () {
   beforeEach(async () => {
     [
       owner,
