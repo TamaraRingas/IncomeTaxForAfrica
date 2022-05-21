@@ -8,7 +8,6 @@ const {
   addWhaleBalance,
   transferUSDC,
   approveUSDC,
-  createGrantTest,
   calcAdminFee,
   calcAmountAfterFees,
   createGrantObject,
@@ -88,8 +87,8 @@ describe("Company Facet Tests", function () {
       params: [constants.POLYGON.USDC_WHALE],
     });
 
-    daiWhale = await ethers.getSigner(constants.POLYGON.DAI_WHALE);
-    whaleAddress = await daiWhale.getAddress();
+    USDCWhale = await ethers.getSigner(constants.POLYGON.USDC_WHALE);
+    whaleAddress = await USDCWhale.getAddress();
 
     // Give whale some ETH
     await superAdmin.sendTransaction({
