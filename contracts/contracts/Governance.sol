@@ -17,7 +17,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
   address public superAdmin;
   address public USDAddress;
-  
+
   IERC20 USDC;
 
   Citizen public _citizen;
@@ -126,7 +126,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     //-----------------------------------------  GETTER FUNCTION        ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  function getSuperAdmin() external view returns (address) {
+  function getSuperAdmin() public view returns (address) {
     return superAdmin;
   }
 
