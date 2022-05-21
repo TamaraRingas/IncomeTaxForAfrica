@@ -74,8 +74,8 @@ describe.only("Treasury Tests", function () {
       params: [constants.POLYGON.DAI_WHALE],
     });
 
-    daiWhale = await ethers.getSigner(constants.POLYGON.DAI_WHALE);
-    whaleAddress = await daiWhale.getAddress();
+    USDCWhale = await ethers.getSigner(constants.POLYGON.USDC_WHALE);
+    whaleAddress = await USDCWhale.getAddress();
 
     // Give whale some ETH
     await superAdmin.sendTransaction({
@@ -97,7 +97,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase One", function () {
 
-    it("Should revert if not suervisor", async () => {
+    it("Should revert if not supervisor", async () => {
        await expect(TreasuryInstance.connect(citizenTwo).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
     });
 
@@ -113,7 +113,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase Two", function () {
 
-    it("Should revert if not suervisor", async () => {
+    it("Should revert if not supervisor", async () => {
       
     });
 
@@ -129,7 +129,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase Three", function () {
 
-    it("Should revert if not suervisor", async () => {
+    it("Should revert if not supervisor", async () => {
       
     });
 
@@ -145,7 +145,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase Four", function () {
 
-    it("Should revert if not suervisor", async () => {
+    it("Should revert if not supervisor", async () => {
       
     });
 
