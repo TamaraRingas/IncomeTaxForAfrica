@@ -105,6 +105,12 @@ describe("Governance Tests", function () {
       await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
+    it("Reverts if not Super Amin", async () => {
+      await expect(GovernanceInstance.connect(citizenTwo).setSuperAdmin(citizenOneAddress)).to.be.revertedWith("ONLY SUPER ADMIN")
+    });
+
+    
+
   });
 
   describe("Setting Tender Admin", function () {
