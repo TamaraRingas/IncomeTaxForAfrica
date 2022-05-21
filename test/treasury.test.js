@@ -103,9 +103,25 @@ describe.only("Treasury Tests", function () {
 
   });
 
+  describe("Closing Phase One", function () {
+
+    it(" ", async () => {
+      
+    });
+
+  });
+
   describe("Paying Phase Two", function () {
 
     it("Shoulds revert if not suervisor", async () => {
+      
+    });
+
+  });
+
+  describe("Closing Phase Two", function () {
+
+    it(" ", async () => {
       
     });
 
@@ -119,9 +135,25 @@ describe.only("Treasury Tests", function () {
 
   });
 
+  describe("Closing Phase Three", function () {
+
+    it(" ", async () => {
+      
+    });
+
+  });
+
   describe("Paying Phase Four", function () {
 
     it("Shoulds revert if not suervisor", async () => {
+      
+    });
+
+  });
+
+  describe("Closing Phase Four", function () {
+
+    it(" ", async () => {
       
     });
 
