@@ -122,7 +122,7 @@ describe.only("Governance Tests", function () {
 
   describe("Setting Sector Admin", function () {
 
-    it("Correctly creates citizen", async () => {
+    it("Reverts if zero address", async () => {
 
   
 
