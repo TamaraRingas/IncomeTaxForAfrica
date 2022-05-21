@@ -21,7 +21,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
 
   Proposal public _proposal;
   TaxPayerCompany public _company;
-  ITaxPayerCompany public _Icompany;
+  //ITaxPayerCompany public _Icompany;
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  EVENTS        ---------------------------------------
