@@ -29,7 +29,6 @@ let CitizenContract, CitizenInstance;
 let startTime, endTime;
 
 const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json");
-//const { assert } = require("console");
 const USDC = new ethers.Contract(
   constants.POLYGON.USDC,
   ERC20_ABI.abi,
