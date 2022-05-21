@@ -105,7 +105,7 @@ describe("Governance Tests", function () {
       await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
-    it("Reverts if not Super Amin", async () => {
+    it("Reverts if not Super Admin", async () => {
       await expect(GovernanceInstance.connect(citizenTwo).setSuperAdmin(citizenOneAddress)).to.be.revertedWith("ONLY SUPER ADMIN")
     });
 
