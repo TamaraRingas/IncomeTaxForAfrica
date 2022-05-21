@@ -43,7 +43,7 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
     //-----------------------------------------  CONSTRUCTOR         ---------------------------------------
     //----------------------------------------------------------------------------------------------------------------------
 
-  constructor (address _USDC, address _IProposal) {
+  constructor (address _USDC) {
     USDAddress = _USDC;
     USDC = IERC20(_USDC);
   }
