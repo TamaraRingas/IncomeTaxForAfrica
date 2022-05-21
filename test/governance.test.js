@@ -100,53 +100,12 @@ describe("Company Facet Tests", function () {
     endTime = startTime + constants.TEST.oneMonth;
   });
 
-  describe("Creating company", function () {
+  describe("Set superAdmin", function () {
 
-    it("Reverts if sectors are the same", async () => {
-
+    it("Reverts if zero address", async () => {
       
-      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
+  
 
-      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-
-      await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 1, 1)).to.be.revertedWith("SECTORS CANNOT BE THE SAME");
-
-    
-    });
-
-    it("Reverts if primary sector is not valid", async () => {
-
-        let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-        await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-
-        await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 5, 2)).to.be.revertedWith("INVALID PRIMARY SECTOR ID");
-    
-    });
-
-    it("Reverts if secondary sector is not valid", async () => {
-
-        let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-        await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-        
-        await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 2, 5)).to.be.revertedWith("INVALID SECONDARY SECTOR ID");
-    
-    });
-
-    it("Reverts if caller isnt updating their own settings", async () => {
-
-      let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
-
-      await CitizenInstance.connect(superAdmin).register(testCitizenOne);
-      
-      //await expect(CitizenInstance.connect(superAdmin).selectSectors(0, 0, 1)).to.be.revertedWith("CAN ONLY UPDATE OWN SETTINGS");
-    
-    });
-
-    it("Correctly updates sectors", async () => {
-
-    
     });
 
   });
