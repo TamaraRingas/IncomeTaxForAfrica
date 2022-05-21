@@ -70,6 +70,14 @@ describe.only("Treasury Tests", function () {
     ProposalContract = await ethers.getContractFactory("Proposal");
     ProposalInstance = await ProposalContract.connect(superAdmin).deploy();
 
+    SectorContract = await ethers.getContractFactory("SectorFacet");
+    SectorInstance = await SectorContract.connect(superAdmin).deploy();
+
+    await SectorInstance.connect(superAdmin).createSector("Health");
+    await SectorInstance.connect(superAdmin).createSector("Education");
+    await SectorInstance.connect(superAdmin).createSector("Road");
+    await SectorInstance.connect(superAdmin).createSector("Mining");
+
     // Creating DAI token instance
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
