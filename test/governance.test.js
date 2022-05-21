@@ -6,8 +6,8 @@ const {
   currentTime,
   fastForward,
   addWhaleBalance,
-  transferDAI,
-  approveDAI,
+  transferUSDC,
+  approveUSDC,
   createGrantTest,
   calcAdminFee,
   calcAmountAfterFees,
@@ -30,8 +30,8 @@ let CitizenContract, CitizenInstance;
 let startTime, endTime;
 
 const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json");
-const DAI = new ethers.Contract(
-  constants.POLYGON.DAI,
+const USDC = new ethers.Contract(
+  constants.POLYGON.USDC,
   ERC20_ABI.abi,
   ethers.provider
 );
@@ -82,10 +82,10 @@ describe("Company Facet Tests", function () {
     TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy();
 
 
-    // Creating DAI token instance
+    // Creating USDC token instance
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
-      params: [constants.POLYGON.DAI_WHALE],
+      params: [constants.POLYGON.USDC_WHALE],
     });
 
     daiWhale = await ethers.getSigner(constants.POLYGON.DAI_WHALE);
