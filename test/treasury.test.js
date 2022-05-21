@@ -104,15 +104,20 @@ describe.only("Treasury Tests", function () {
        await expect(TreasuryInstance.connect(superAdmin).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
     });
 
-    it(" ", async () => {
+    it("Should Transfer Funds Successfully", async () => {
       
     });
+    
 
   });
 
   describe("Closing Phase One", function () {
 
     it("Should revert if not supervisor", async () => {
+      
+    });
+
+    it("Should Update Phase Correctly ", async () => {
       
     });
 
@@ -124,6 +129,14 @@ describe.only("Treasury Tests", function () {
       
     });
 
+    it("Should Transfer Funds Successfully", async () => {
+      
+    });
+
+    it("Should Emit Correct Event", async () => {
+      
+    });
+
   });
 
   describe("Closing Phase Two", function () {
@@ -132,7 +145,11 @@ describe.only("Treasury Tests", function () {
       
     });
     
-    it(" ", async () => {
+    it("Should Update Phase Correctly ", async () => {
+      
+    });
+
+    it("Should Emit Correct Event", async () => {
       
     });
 
@@ -144,7 +161,11 @@ describe.only("Treasury Tests", function () {
       
     });
 
-    it(" ", async () => {
+    it("Should Transfer Funds Successfully", async () => {
+      
+    });
+
+    it("Should Emit Correct Event", async () => {
       
     });
 
@@ -152,11 +173,15 @@ describe.only("Treasury Tests", function () {
 
   describe("Closing Phase Three", function () {
 
-    it(" ", async () => {
+    it("Should revert if not supervisor", async () => {
       
     });
 
-    it(" ", async () => {
+    it("Should Update Phase Correctly ", async () => {
+      
+    });
+
+    it("Should Emit Correct Event", async () => {
       
     });
 
@@ -168,7 +193,11 @@ describe.only("Treasury Tests", function () {
       
     });
 
-    it(" ", async () => {
+    it("Should Transfer Funds Successfully", async () => {
+      
+    });
+
+    it("Should Emit Correct Event", async () => {
       
     });
 
@@ -176,14 +205,16 @@ describe.only("Treasury Tests", function () {
 
   describe("Closing Phase Four", function () {
 
-    it(" ", async () => {
+    it("Should revert if not supervisor", async () => {
       
     });
 
-    it(" ", async () => {
+    it("Should Update Phase Correctly ", async () => {
       
     });
 
+    it("Should Emit Correct Event", async () => {
+      
+    });
   });
-
 });
