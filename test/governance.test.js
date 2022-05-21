@@ -103,7 +103,7 @@ describe("Company Facet Tests", function () {
   describe("Set superAdmin", function () {
 
     it("Reverts if zero address", async () => {
-      
+      await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin());
   
 
     });
