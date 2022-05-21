@@ -83,14 +83,14 @@ describe("Tender Facet Tests", function () {
     await SectorInstance.connect(superAdmin).createSector("Mining");
 
 
-    // Creating DAI token instance
+    // Creating USDC token instance
     await hre.network.provider.request({
       method: "hardhat_impersonateAccount",
-      params: [constants.POLYGON.DAI_WHALE],
+      params: [constants.POLYGON.USDC_WHALE],
     });
 
-    daiWhale = await ethers.getSigner(constants.POLYGON.DAI_WHALE);
-    whaleAddress = await daiWhale.getAddress();
+    USDCWhale = await ethers.getSigner(constants.POLYGON.USDC_WHALE);
+    whaleAddress = await USDCWhale.getAddress();
 
     // Give whale some ETH
     await superAdmin.sendTransaction({
@@ -145,8 +145,6 @@ describe("Tender Facet Tests", function () {
       console.log("check test");
 
       await expect(TenderInstance.connect(superAdmin).voteForTender(0, 0)).to.be.revertedWith("TENDER NOT IN VOTING STAGE");
-
-
     });
 
     it("Reverts if sender does not have enough priority points", async () => {
