@@ -130,7 +130,7 @@ describe.only("Governance Tests", function () {
 
   });
 
-  describe("Add employee", function () {
+  describe("Setting Supervisor", function () {
 
     it("Correctly creates citizen", async () => {
 
