@@ -106,11 +106,11 @@ describe("Governance Tests", function () {
     });
 
     it("Reverts if not Super Admin", async () => {
-      await expect(GovernanceInstance.connect(citizenTwo).setSuperAdmin(citizenOneAddress)).to.be.revertedWith("ONLY SUPER ADMIN")
+      await expect(GovernanceInstance.connect(citizenTwo).setSuperAdmin(citizenOneAddress)).to.be.revertedWith("ONLY SUPER ADMIN");
     });
 
     it("Correctly Updates Super Admin", async () => {
-
+      await GovernanceInstance.connect(superAdmin).setSuperAdmin(citizenOneAddress);
   
 
     });
