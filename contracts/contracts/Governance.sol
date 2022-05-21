@@ -17,6 +17,7 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
   address public superAdmin;
   address public USDAddress;
+  
   IERC20 USDC;
 
   Citizen public _citizen;
