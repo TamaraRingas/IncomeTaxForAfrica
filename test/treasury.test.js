@@ -36,7 +36,7 @@ const DAI = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe.only("ArtizenCore Basic Tests", function () {
+describe.only("Treasury Tests", function () {
   beforeEach(async () => {
     [
       superAdmin,
@@ -62,8 +62,11 @@ describe.only("ArtizenCore Basic Tests", function () {
     proposalAdminAddress = await proposalAdmin.getAddress();
 
     // Deploy core
-    CitizenContract = await ethers.getContractFactory("CitizenFacet");
-    CitizenInstance = await CitizenContract.connect(superAdmin).deploy();
+    TreasuryContract = await ethers.getContractFactory("Treasury");
+    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy();
+
+    ProposalContract = await ethers.getContractFactory("Proposal");
+    ProposalInstance = await ProposalContract.connect(superAdmin).deploy();
 
     // Creating DAI token instance
     await hre.network.provider.request({
