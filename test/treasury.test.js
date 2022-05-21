@@ -22,6 +22,7 @@ let employeeOne, employeeTwo, employeeThree;
 let companyAdmin, tenderAdmin, proposalAdmin;
 
 let superAdminAddress;
+let supervisorAddress;
 let citizenOneAddress, citizenTwoAddress;
 let employeeOneAddress, employeeTwoAddress, employeeThreeAddress;
 let companyAdminAddress, tenderAdminAddress, proposalAdminAddress;
@@ -31,8 +32,8 @@ let TreasuryContract, TreasuryInstance;
 let startTime, endTime;
 
 const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json");
-const DAI = new ethers.Contract(
-  constants.POLYGON.DAI,
+const USDC = new ethers.Contract(
+  constants.POLYGON.USDC,
   ERC20_ABI.abi,
   ethers.provider
 );
@@ -52,6 +53,7 @@ describe.only("Treasury Tests", function () {
     ] = await ethers.getSigners();
 
     superAdminAddress = await superAdmin.getAddress();
+    supervisorAddress = await supervisor.getAddress();
     citizenOneAddress = await citizenOne.getAddress();
     citizenTwoAddress = await citizenTwo.getAddress();
     employeeOneAddress = await employeeOne.getAddress();
@@ -98,7 +100,8 @@ describe.only("Treasury Tests", function () {
   describe("Paying Phase One", function () {
 
     it("Should revert if not supervisor", async () => {
-       await expect(TreasuryInstance.connect(citizenTwo).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
+      console.log(citizenOneAddress);
+       await expect(TreasuryInstance.connect(superAdmin).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
     });
 
   });
