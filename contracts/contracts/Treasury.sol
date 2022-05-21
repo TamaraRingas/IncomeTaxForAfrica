@@ -56,9 +56,9 @@ contract Treasury is ITreasury, Ownable, ReentrancyGuard {
      return _proposal.getProposal(_proposalID)._proposalState;
   }
 
-  //   //----------------------------------------------------------------------------------------------------------------------
-  //   //-----------------------------------------         ONLY SUPERVISOR FUNCTIONALITY        ---------------------------------------
-  //   //----------------------------------------------------------------------------------------------------------------------
+  //   ----------------------------------------------------------------------------------------------------------------------
+  //   -----------------------------------------         ONLY SUPERVISOR FUNCTIONALITY        ---------------------------------------
+  //   ----------------------------------------------------------------------------------------------------------------------
 
   function payPhaseOne(uint256 _proposalID) external onlySupervisor(_proposalID) nonReentrant {
     require(_proposal.getProposal(_proposalID)._proposalState == IProposal.ProposalState.PHASE_1, "NOT PHASE_1");
