@@ -62,7 +62,7 @@ describe("Governance Tests", function () {
 
     // Deploy core
     GovernanceContract = await ethers.getContractFactory("Governance");
-    GovernanceInstance = await GovernanceContract.connect(owner).deploy(constants.POLYGON.USDC);
+    GovernanceInstance = await GovernanceContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
 
     SectorContract = await ethers.getContractFactory("Sector");
     SectorInstance = await SectorContract.connect(superAdmin).deploy();
@@ -102,9 +102,7 @@ describe("Governance Tests", function () {
   describe.only("Set superAdmin", function () {
 
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(Test.zeroAddr).to.be.revertedWith("CANNOT BE ZERO ADDRESS"));
-  
-
+      await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
