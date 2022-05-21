@@ -95,4 +95,36 @@ describe.only("Treasury Tests", function () {
 
   });
 
+  describe("Paying Phase One", function () {
+
+    it("Shoulds revert if not suervisor", async () => {
+      
+    });
+
+  });
+
+  describe("Paying Phase Two", function () {
+
+    it("Shoulds revert if not suervisor", async () => {
+      
+    });
+
+  });
+
+  describe("Paying Phase Three", function () {
+
+    it("Shoulds revert if not suervisor", async () => {
+      
+    });
+
+  });
+
+  describe("Paying Phase Four", function () {
+
+    it("Shoulds revert if not suervisor", async () => {
+      
+    });
+
+  });
+
 });
