@@ -15,11 +15,13 @@ const {
 } = require("../contracts/Utils/TestUtils");
 const { BigNumber } = require("ethers");
 let superAdmin;
+let supervisor;
 let citizenOne, citizenTwo;
 let employeeOne, employeeTwo, employeeThree;
 let companyAdmin, tenderAdmin, proposalAdmin;
 
 let superAdminAddress;
+let supervisorAddress;
 let citizenOneAddress, citizenTwoAddress;
 let employeeOneAddress, employeeTwoAddress, employeeThreeAddress;
 let companyAdminAddress, tenderAdminAddress, proposalAdminAddress;
@@ -34,11 +36,12 @@ const USDC = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe("Governance Tests", function () {
+describe.only("Governance Tests", function () {
   beforeEach(async () => {
     [
       owner,
       superAdmin,
+      supervisor,
       citizenOne,
       citizenTwo,
       employeeOne,
@@ -51,6 +54,7 @@ describe("Governance Tests", function () {
     
     ownerAddress = await owner.getAddress();
     superAdminAddress = await superAdmin.getAddress();
+    supervisorAddress = await supervisor.getAddress();
     citizenOneAddress = await citizenOne.getAddress();
     citizenTwoAddress = await citizenTwo.getAddress();
     employeeOneAddress = await employeeOne.getAddress();

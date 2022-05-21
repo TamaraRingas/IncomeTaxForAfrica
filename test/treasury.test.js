@@ -104,11 +104,15 @@ describe.only("Treasury Tests", function () {
        await expect(TreasuryInstance.connect(superAdmin).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
     });
 
+    it(" ", async () => {
+      
+    });
+
   });
 
   describe("Closing Phase One", function () {
 
-    it(" ", async () => {
+    it("Should revert if not supervisor", async () => {
       
     });
 
@@ -124,6 +128,10 @@ describe.only("Treasury Tests", function () {
 
   describe("Closing Phase Two", function () {
 
+    it("Should revert if not supervisor", async () => {
+      
+    });
+    
     it(" ", async () => {
       
     });
@@ -136,9 +144,17 @@ describe.only("Treasury Tests", function () {
       
     });
 
+    it(" ", async () => {
+      
+    });
+
   });
 
   describe("Closing Phase Three", function () {
+
+    it(" ", async () => {
+      
+    });
 
     it(" ", async () => {
       
@@ -152,9 +168,17 @@ describe.only("Treasury Tests", function () {
       
     });
 
+    it(" ", async () => {
+      
+    });
+
   });
 
   describe("Closing Phase Four", function () {
+
+    it(" ", async () => {
+      
+    });
 
     it(" ", async () => {
       
