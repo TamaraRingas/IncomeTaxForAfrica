@@ -1,4 +1,4 @@
-const { expect } = require("chai");
+const { expect, assert } = require("chai");
 const { ethers } = require("hardhat");
 const hre = require("hardhat");
 const { constants } = require("../contracts/Utils/TestConstants");
@@ -29,6 +29,7 @@ let CitizenContract, CitizenInstance;
 let startTime, endTime;
 
 const ERC20_ABI = require("../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json");
+//const { assert } = require("console");
 const USDC = new ethers.Contract(
   constants.POLYGON.USDC,
   ERC20_ABI.abi,
@@ -111,12 +112,13 @@ describe("Governance Tests", function () {
 
     it("Correctly Updates Super Admin", async () => {
       await GovernanceInstance.connect(superAdmin).setSuperAdmin(citizenOneAddress);
-  
 
+     // await expect(await GovernanceInstance.connect(citizenTwo).getSuperAdmin().to.be.equal(citizenOneAddress));
+      assert.equal(await GovernanceInstance.connect(citizenTwo).getSuperAdmin(),citizenOneAddress);
     });
 
     it("Emits Event Correctly", async () => {
-
+      await expect(await GovernanceInstance.connect(superAdmin).setSuperAdmin(citizenOneAddress).to.emit(SetSuperAdmin));
   
 
     });
@@ -129,9 +131,7 @@ describe("Governance Tests", function () {
   describe("Setting Tender Admin", function () {
 
     it("Reverts if zero address", async () => {
-
-  
-
+      await expect(GovernanceInstance.connect(superAdmin).setTenderAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
@@ -139,9 +139,7 @@ describe("Governance Tests", function () {
   describe("Setting Sector Admin", function () {
 
     it("Reverts if zero address", async () => {
-
-  
-
+      await expect(GovernanceInstance.connect(superAdmin).setSectorAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
@@ -149,9 +147,7 @@ describe("Governance Tests", function () {
   describe("Setting Supervisor", function () {
 
     it("Reverts if zero address", async () => {
-
-  
-
+      await expect(GovernanceInstance.connect(superAdmin).setSupervisor(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
