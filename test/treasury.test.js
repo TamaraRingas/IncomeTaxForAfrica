@@ -63,7 +63,7 @@ describe.only("Treasury Tests", function () {
 
     // Deploy core
     TreasuryContract = await ethers.getContractFactory("Treasury");
-    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy();
+    TreasuryInstance = await TreasuryContract.connect(superAdmin).deploy(constants.POLYGON.USDC);
 
     ProposalContract = await ethers.getContractFactory("Proposal");
     ProposalInstance = await ProposalContract.connect(superAdmin).deploy();
