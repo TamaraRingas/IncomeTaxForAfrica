@@ -35,7 +35,7 @@ const USDC = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe("Governance Tests", function () {
+describe.only("Governance Tests", function () {
   beforeEach(async () => {
     [
       owner,
@@ -100,7 +100,7 @@ describe("Governance Tests", function () {
     endTime = startTime + constants.TEST.oneMonth;
   });
 
-  describe.only("Set superAdmin", function () {
+  describe("Set superAdmin", function () {
 
     it("Reverts if zero address", async () => {
       await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
@@ -131,7 +131,7 @@ describe("Governance Tests", function () {
   describe("Setting Tender Admin", function () {
 
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setTenderAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+      await expect(GovernanceInstance.connect(superAdmin).setTenderAdmin(1, constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
@@ -139,7 +139,7 @@ describe("Governance Tests", function () {
   describe("Setting Sector Admin", function () {
 
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setSectorAdmin(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+      await expect(GovernanceInstance.connect(superAdmin).setSectorAdmin(1, constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
@@ -147,7 +147,7 @@ describe("Governance Tests", function () {
   describe("Setting Supervisor", function () {
 
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setSupervisor(constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
+      await expect(GovernanceInstance.connect(supervisor).setSupervisor(1, constants.TEST.zeroAddr)).to.be.revertedWith("CANNOT BE ZERO ADDRESS");
     });
 
   });
