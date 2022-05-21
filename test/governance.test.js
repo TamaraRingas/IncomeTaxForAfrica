@@ -34,7 +34,7 @@ const USDC = new ethers.Contract(
   ERC20_ABI.abi,
   ethers.provider
 );
-describe("Company Facet Tests", function () {
+describe.only("Governance Tests", function () {
   beforeEach(async () => {
     [
       owner,
@@ -103,16 +103,16 @@ describe("Company Facet Tests", function () {
   describe("Set superAdmin", function () {
 
     it("Reverts if zero address", async () => {
-      await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin());
+      await expect(GovernanceInstance.connect(superAdmin).setSuperAdmin(Test.zeroAddr).to.be.revertedWith("CANNOT BE ZERO ADDRESS"));
   
 
     });
 
   });
 
-  describe("Paying tax", function () {
+  describe("Setting Tender Admin", function () {
 
-    it("Correctly creates citizen", async () => {
+    it("Reverts if zero address", async () => {
 
   
 
@@ -120,7 +120,7 @@ describe("Company Facet Tests", function () {
 
   });
 
-  describe("Updating employee salary and tax percentage", function () {
+  describe("Setting Sector Admin", function () {
 
     it("Correctly creates citizen", async () => {
 
