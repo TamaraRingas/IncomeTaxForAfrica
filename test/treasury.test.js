@@ -89,7 +89,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Getting Proposal State Details", function () {
 
-    it("Shoulds return state correctly", async () => {
+    it("Should return state correctly", async () => {
       
     });
 
@@ -97,8 +97,8 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase One", function () {
 
-    it("Shoulds revert if not suervisor", async () => {
-      
+    it("Should revert if not suervisor", async () => {
+       await expect(TreasuryInstance.connect(citizenTwo).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
     });
 
   });
@@ -113,7 +113,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase Two", function () {
 
-    it("Shoulds revert if not suervisor", async () => {
+    it("Should revert if not suervisor", async () => {
       
     });
 
@@ -129,7 +129,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase Three", function () {
 
-    it("Shoulds revert if not suervisor", async () => {
+    it("Should revert if not suervisor", async () => {
       
     });
 
@@ -145,7 +145,7 @@ describe.only("Treasury Tests", function () {
 
   describe("Paying Phase Four", function () {
 
-    it("Shoulds revert if not suervisor", async () => {
+    it("Should revert if not suervisor", async () => {
       
     });
 
