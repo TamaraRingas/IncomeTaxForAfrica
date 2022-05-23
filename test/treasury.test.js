@@ -109,11 +109,11 @@ describe.only("Treasury Tests", function () {
 
     it("Should revert if not supervisor", async () => {
       console.log(citizenOneAddress);
-       await expect(TreasuryInstance.connect(superAdmin).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
+      await expect(TreasuryInstance.connect(superAdmin).payPhaseOne(citizenOneAddress)).to.be.revertedWith("ONLY SUPERVISOR");
     });
 
     it("Should Transfer Funds Successfully", async () => {
-      
+      const originalBalance = ProposalInstance.connect(citizenOne).createProposal();
     });
     
 
