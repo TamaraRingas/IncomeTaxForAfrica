@@ -13,6 +13,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+// TODO remove
+import "hardhat/console.sol";
+
 contract Governance is IGovernance, Ownable, ReentrancyGuard {
 
   address public superAdmin;
@@ -48,7 +51,22 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     USDAddress = _USDC;
     USDC = IERC20(_USDC);
     superAdmin = msg.sender;
+
+    _proposal = new Proposal();
+
+    _proposal.createProposal(IProposal.Proposal({
+      proposalID: 0,
+      tenderID:0,
+      sectorID:0,
+      companyID:0,
+      priceCharged:0,
+      numberOfPublicVotes:0,
+      supervisor:msg.sender,
+      storageHash:"",
+      _proposalState: IProposal.ProposalState.PROPOSED
+    }), msg.sender);
   }
+
 
     //----------------------------------------------------------------------------------------------------------------------
     //-----------------------------------------  ACCESS FUNCTIONS       ---------------------------------------
@@ -145,6 +163,8 @@ contract Governance is IGovernance, Ownable, ReentrancyGuard {
     }
 
     modifier onlySupervisor(uint256 _proposalID) {
+        IProposal.Proposal memory currentProposal = _proposal.getProposal(_proposalID);
+        console.log(currentProposal.supervisor);
         require(msg.sender == _proposal.getProposal(_proposalID).supervisor, "ONLY SUPERVISOR");
         _;
     }

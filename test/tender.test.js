@@ -132,7 +132,7 @@ describe("Tender Facet Tests", function () {
 
   describe("Voting on a tender", function () {
 
-    it.only("Reverts if tender is not in voting state", async () => {
+    it("Reverts if tender is not in voting state", async () => {
 
       let testCitizenOne = await createCitizenObject("John", "Doe", 1, 2, citizenOneAddress);
 
